@@ -3469,3 +3469,87 @@ a {
 .back-button__icon {
   fill: white !important;
 }
+
+.gameboard-wrap{
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center; 
+}
+
+#board {
+  display: flex;
+  flex-wrap: wrap;
+  position:absolute; 
+  overflow:hidden;
+  background:transparent;
+}
+#board div {
+  box-shadow: 0 0 1px 0 #000 inset;
+  opacity:0; 
+}
+#board > div:hover{
+  /* background:#111; */
+}
+#board-real {
+  display: flex;
+  flex-wrap: wrap;
+}
+#board-real > div:hover{
+  /* background: #e3f2fd; */
+  opacity: 1;
+  background: #fff;
+}
+#board-real-preview {
+  position:absolute; 
+  display: flex;
+  flex-wrap: wrap;
+}
+#board-real div {
+  box-shadow: 0 0 1px 0 #000 inset;
+  /* border-right: 1px dotted rgba(1, 1, 1, 0.1);
+  border-top: 1px dotted rgba(1, 1, 1, 0.1); */
+}
+
+#board-real-preview div{
+  box-shadow: 0 0 0 1px #000 inset;
+}
+
+#board-piece {
+  border-radius: 5px;
+  background: #ffffff;
+
+  padding: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: scroll;
+}
+#board-piece .piece-item {
+  padding: 10px;
+}
+#board-piece .piece-item div.on {
+  box-shadow: 0 0 0 1px #000 inset;
+}
+.action-sheet {
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.pull-left {
+  float: left !important;
+}
+.pull-right {
+  float: right !important;
+}
+.previewImage {
+  transition:visibility 0.3s linear, opacity 0.3s linear;
+  opacity:0;
+}
+.previewImage.on {
+  transition:visibility 0.3s linear, opacity 0.3s linear;
+  visibility: visible;
+  opacity:1;
+}

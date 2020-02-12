@@ -1,7 +1,7 @@
 <template>
   <v-ons-page>
-    <v-ons-toolbar>
-      <div class="center">{{ title }}</div>
+    <v-ons-toolbar class="primary">
+      <div class="center white--text">{{ title }}</div>
     </v-ons-toolbar>
 
     <v-ons-tabbar 
@@ -28,7 +28,7 @@ export default {
       tabs: [
         {
           icon: 'ion-ios-home',
-          label: 'Home',
+          label: 'Game',
           page: homePage,
           props: {
             myProp: 'This is a page prop!'

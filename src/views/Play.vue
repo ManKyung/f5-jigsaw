@@ -1,56 +1,79 @@
 <template>
   <v-ons-page>
     <v-ons-toolbar class="primary">
-      <!-- <div class="left">
+      <div class="left">
         <v-ons-back-button></v-ons-back-button>
-      </div>-->
-      <div class="center white--text">JigSaw Puzzle</div>
+      </div>
       <div class="right">
-        <v-ons-toolbar-button @click="actionSheetVisible = true">
+        <v-ons-toolbar-button @click="actionSheetVisible = !actionSheetVisible">
           <v-ons-icon icon="md-image-o" class="white--text"></v-ons-icon>
         </v-ons-toolbar-button>
       </div>
     </v-ons-toolbar>
-    <v-ons-action-sheet
+    <!-- <v-ons-action-sheet
       :visible.sync="actionSheetVisible"
       cancelable
       title="JigSaw Puzzle Preview Image"
     >
-    <div>
-      <img ref="preview" :src="dImage" class="w-100 h-100" />
-    </div>
-    </v-ons-action-sheet>
-    <div id="board-real" :style="`position:absolute; max-height:${boardHeight}px; overflow:hidden`">
-      <div
-        v-for="(item, index) in realBoardItems"
-        :key="index"
-        :style="`width: ${pWidth}px; height:${pHeight}px`"
-        :board-id="`${index}`"
-      >
-        <div :id="item.id" :style="item.style"></div>
+      <div>
+        <img ref="preview" class="w-100" :src="`/src/assets/img/${category}/${src}`" />
       </div>
-    </div>
-    <draggable
-      id="board"
-      ref="board"
-      group="board"
-      :list="boardItems"
-      @add="boardAdd"
-      @choose="boardChoose"
-      @update="boardUpdate"
-      :move="checkMove"
-      :style="`opacity:0; max-height:${boardHeight}px; overflow:hidden;`"
-    >
-      <div
-        v-for="(item, index) in boardItems"
-        :key="index"
-        :style="`width: ${pWidth}px; height:${pHeight}px`"
-        :board-id="`${index}`"
-      >
-        <div :id="item.id" :style="item.style"></div>
-      </div>
-    </draggable>
+    </v-ons-action-sheet>-->
+    <div class="gameboard-wrap">
+      <div>
+        <img
+          ref="preview"
+          class="w-100 previewImage"
+          :class="actionSheetVisible ? 'on' : ''"
+          style="position:absolute;"
+          :src="imageSrc"
+        />
 
+        <draggable
+          id="board"
+          ref="board"
+          group="board"
+          :list="boardItems"
+          @add="boardAdd"
+          @choose="boardChoose"
+          @update="boardUpdate"
+          :move="checkMove"
+          :style="`max-height:${boardHeight}px; `"
+        >
+          <div
+            v-for="(item, index) in boardItems"
+            :key="index"
+            :style="`width: ${pWidth}px; height:${pHeight}px`"
+          >
+            <div v-if="item.style" :style="item.style"></div>
+          </div>
+        </draggable>
+
+        <div id="board-real" :style="`max-height:${boardHeight}px; overflow:hidden`">
+          <div
+            v-for="(item, index) in realBoardItems"
+            :key="index"
+            :style="`width: ${pWidth}px; height:${pHeight}px`"
+          >
+            <div v-if="item.style" :style="item.style"></div>
+          </div>
+        </div>
+
+        <!-- <draggable
+          id="board-piece"
+          group="board"
+          :list="pieceItems"
+          @add="pieceAdd"
+          @choose="pieceChoose"
+          @update="pieceUpdate"
+          :move="checkMove"
+        >
+          <div class="piece-item" v-for="(item, index) in pieceItems" :key="index">
+            <div :id="`${index}`" :style="item.style"></div>
+          </div>
+        </draggable>-->
+      </div>
+    </div>
     <draggable
       id="board-piece"
       group="board"
@@ -59,154 +82,125 @@
       @choose="pieceChoose"
       @update="pieceUpdate"
       :move="checkMove"
+      v-dragscroll.x="{ active: isMove }"
     >
-      <div class="piece-item" v-for="(item, index) in pieceItems" :key="index">
+      <div
+        class="piece-item"
+        v-for="(item, index) in pieceItems"
+        :key="index"
+      >
         <div :id="`${index}`" :style="item.style"></div>
       </div>
     </draggable>
-    <!-- <v-ons-action-sheet
-      :visible.sync="actionSheetVisible"
-      cancelable
-      title="JigSaw Puzzle Preview Image"
-    >
-    <div>
-      <img ref="preview" :src="dImage" class="w-100 h-100" />
-    </div>
-    </v-ons-action-sheet>
-      <img ref="preview" :src="dImage" class="w-100" />
-    <div id="board" ref="board">
-      <div
-        v-for="(item, index) in boardItems"
-        :key="index"
-        :style="`width: ${pWidth}px; height:${pHeight}px`"
-        :board-id="`${index}`"
-        @drop="drop"
-        @dragover="dragover"
-        @dragenter="dragenter"
-        @dragleave="dragleave"
-      >
-        <div
-          :id="item.id"
-          :style="item.style"
-          draggable="true"
-          @dragstart="boardDrag"
-        ></div>
-      </div>
-    </div>
-    <div id="board-piece" >
-      <div v-for="(item, index) in pieceItems" :key="index" :id="`piece-wrap-${index}`" class="piece-item">
-        <div
-          :id="`${index}`"
-          :style="item.style"
-          draggable="true"
-          class="draggable"
-          @dragstart="pieceDrag"
-        ></div>
-      </div>
-    </div>
-    
-    <div>
-      <draggable class="list-group" group="people" @change="log">
-        d
-      </draggable>
-    </div>
-
-    <div class="col-3">
-      <h3>Draggable 2</h3>
-      <draggable class="list-group" :list="list2" group="people" @change="log">
-        <div
-          class="list-group-item"
-          v-for="(element, index) in list2"
-          :key="element.name"
-        >
-          {{ element.name }} {{ index }}
-        </div>
-      </draggable>
-    </div>-->
   </v-ons-page>
 </template>
-
 <style>
-#board {
-  display: flex;
-  flex-wrap: wrap;
-}
-#board div {
-  box-shadow: 0 0 1px 0 #000 inset;
-  /* border-right: 1px dotted rgba(1, 1, 1, 0.1);
-  border-top: 1px dotted rgba(1, 1, 1, 0.1); */
-}
-#board div.hover {
-  background: #e3f2fd;
-}
-#board-real {
-  position: absolute;
-  display: flex;
-  flex-wrap: wrap;
-}
-#board-real div {
-  box-shadow: 0 0 1px 0 #000 inset;
-  /* border-right: 1px dotted rgba(1, 1, 1, 0.1);
-  border-top: 1px dotted rgba(1, 1, 1, 0.1); */
-}
-#board-real div.hover {
-  background: #e3f2fd;
-}
-
-#board-piece {
-  border-radius: 5px;
-  background: #60b99a;
-
-  padding: 10px;
-  display: flex;
-  flex-wrap: nowrap;
-  overflow: auto;
-}
-#board-piece .piece-item {
-  padding: 10px;
-}
-/* .piece-item {
-  color: #fff;
-  text-align: center;
-} */
-.action-sheet {
-  left: 0;
-  right: 0;
-  bottom: 0;
+#board-real div:hover {
+  background: tomato;
 }
 </style>
 <script>
-import dImage from "@/assets/images/2.jpg";
 import draggable from "@/assets/js/vuedraggable";
+import { dragscroll } from "vue-dragscroll";
 export default {
+  directives: {
+    dragscroll
+  },
+  props: {
+    category: {
+      type: String,
+      default: "animal"
+    },
+    src: {
+      type: String,
+      default: "1.jpg"
+    },
+    pCount: {
+      type: Number,
+      default: 4
+    },
+    id: {
+      type: Number,
+      default: 1
+    }
+  },
+  // props: ["category", "id", "src", "pCount"],
   name: "play",
   components: {
     draggable
   },
   data() {
     return {
-      dImage,
+      carouselIndex: 0,
+      previewImage: null,
+      imageSrc: "",
       pieceItems: [],
       boardItems: [],
       realBoardItems: [],
       selectedPiece: {},
-      pieceNumber: 8,
+      pieceCount: 0,
       pWidth: 0,
       pHeight: 0,
       boardHeight: 0,
       moveIndex: 0,
       moveItem: {},
       actionSheetVisible: true,
+      isMove: true,
+      longpress: false,
+      presstimer: null,
+      longtarget: null
     };
+  },
+  created() {
+    this.imageSrc = require(`../assets/img/${this.category}/${this.src}`);
+    this.pieceCount = this.pCount;
   },
   mounted() {
     setTimeout(() => {
       this.setBoard();
       this.setPieceItem();
       document.body._gestureDetector.dispose();
-    }, 10);
+    }, 100);
+
+    setTimeout(() => {
+      this.actionSheetVisible = false;
+
+      let pieceDom = document.getElementsByClassName("piece-item");
+      for (let i = 0; i < pieceDom.length; i++) {
+        pieceDom[i].addEventListener("mousedown", this.start);
+        pieceDom[i].addEventListener("touchstart", this.start);
+
+        pieceDom[i].addEventListener("mouseout", this.cancel);
+        pieceDom[i].addEventListener("touchend", this.cancel);
+        pieceDom[i].addEventListener("touchleave", this.cancel);
+        pieceDom[i].addEventListener("touchcancel", this.cancel);
+      }
+    }, 1000);
   },
   methods: {
+    start(e) {
+      if (e.type === "click" && e.button !== 0) {
+        return;
+      }
+
+      var _vm = this;
+      e.srcElement.classList.add('on')
+      if (this.presstimer === null) {
+        this.presstimer = setTimeout(function() {
+          _vm.isMove = false;
+        }, 300);
+      }
+
+      return false;
+    },
+    cancel(e) {
+      if (this.presstimer !== null) {
+        clearTimeout(this.presstimer);
+          this.isMove = true;
+          e.srcElement.classList.remove('on')
+        this.presstimer = null;
+      }
+    },
     objClone(obj) {
       if (obj === null || typeof obj !== "object") return obj;
       var copy = obj.constructor();
@@ -221,134 +215,56 @@ export default {
       this.selectedPiece = this.realBoardItems[e.oldIndex];
     },
     boardAdd(e) {
-      console.log('add', this.selectedPiece)
-      if(this.realBoardItems[e.newIndex] === 0){
+      if (this.realBoardItems[e.newIndex] === 0) {
         this.$set(this.realBoardItems, e.newIndex, this.selectedPiece);
         this.boardItems = this.objClone(this.realBoardItems);
-      } else {
-
       }
     },
     boardUpdate(e) {
-      console.log('boardUpdate', e)
-      if(this.realBoardItems[e.newIndex] === 0){
+      if (this.realBoardItems[e.newIndex] === 0) {
         this.$set(this.realBoardItems, e.newIndex, this.selectedPiece);
         this.$set(this.realBoardItems, e.oldIndex, 0);
         this.boardItems = this.objClone(this.realBoardItems);
       }
     },
     pieceChoose(e) {
+      // this.isMove = true;
       this.selectedPiece = this.pieceItems[e.oldIndex];
+      // setTimeout(() => {
+      //   this.isMove = true
+      // }, 3000)
+      // console.log(this.isMove, e)
     },
     pieceAdd(e) {
       this.$set(this.pieceItems, e.newIndex, this.selectedPiece);
       this.$set(this.realBoardItems, e.oldIndex, 0);
 
       this.boardItems = this.objClone(this.realBoardItems);
-      // this.boardItems = this.objClone(this.realBoardItems);
-      // this.selectedPiece = this.boardItems[e.oldIndex];
-      console.log('pieceAdd', this.selectedPiece)
     },
-    pieceUpdate(e) {
-      // this.selectedPiece = this.pieceItems[e.oldIndex];
-      // console.log('pieceUpdate', this.selectedPiece)
-    },
-    pieceRemove(e){
-      console.log(e)
-    },
+    pieceUpdate(e) {},
+    pieceRemove(e) {},
     checkMove(e) {},
-    previewImage() {},
-    // dragover(e) {
-    //   e.preventDefault();
-    // },
-    // dragleave(e) {
-    //   e.srcElement.classList.remove("hover");
-    // },
-    // dragenter(e) {
-    //   e.srcElement.classList.add("hover");
-    //   e.preventDefault();
-    // },
-    // boardDrag(e) {
-    //   let boardId = e.srcElement.parentElement.getAttribute("board-id");
-    //   e.dataTransfer.setData("isBoardMove", true);
-    //   e.dataTransfer.setData("board-move-id", boardId);
-    // },
-    // pieceDrag(e) {
-    //   console.log(e.detail);
-    //   if (e.detail === undefined) {
-    //     return;
-    //   }
-    //   let targetId = e.target.id;
-    //   let style = this.pieceItems[targetId].style;
-
-    //   console.log(style);
-    //   e.dataTransfer.setData("piece-id", targetId);
-    //   e.dataTransfer.setData("style", style);
-    // },
-    // drop(e) {
-    //   console.log(e);
-    //   e.srcElement.classList.remove("hover");
-    //   let boardId = e.srcElement.getAttribute("board-id");
-
-    //   let pieceId = e.dataTransfer.getData("piece-id");
-    //   let isBoardMove = e.dataTransfer.getData("isBoardMove");
-    //   let style = e.dataTransfer.getData("style");
-
-    //   if (isBoardMove) {
-    //     let boardMoveId = e.dataTransfer.getData("board-move-id");
-    //     if (boardId !== null) {
-    //       this.boardItems[boardId] = this.boardItems[boardMoveId];
-    //       this.boardItems[boardMoveId] = {};
-    //       this.$set(this.boardItems, boardMoveId, {});
-    //     }
-    //   } else {
-    //     if (boardId) {
-    //       this.boardItems[boardId] = {
-    //         style: style,
-    //         id: pieceId
-    //       };
-    //     } else {
-    //       return;
-    //     }
-    //     this.pieceItems.splice(Number(pieceId), 1);
-    //   }
-
-    //   console.log(this.boardItems);
-
-    //   //
-
-    //   // console.log(e)
-    //   e.preventDefault();
-    //   // let targetId = e.dataTransfer.getData("target-id");
-    //   // e.target.appendChild(document.getElementById(targetId));
-
-    //   // let wrapId = e.dataTransfer.getData("target-wrap-id");
-    //   // if(wrapId !== ''){
-    //   //   document.getElementById(wrapId).classList.add('d-none')
-    //   // }
-    // },
     setBoard() {
-      this.perviewImage = this.$refs.preview;
-      this.pWidth = this.perviewImage.clientWidth / this.pieceNumber;
-      this.pHeight = this.perviewImage.clientHeight / this.pieceNumber;
-      this.boardHeight = this.perviewImage.clientHeight;
-      for (let i = 0; i < this.pieceNumber * this.pieceNumber; i++) {
+      this.previewImage = this.$refs.preview;
+      this.pWidth = this.previewImage.clientWidth / this.pieceCount;
+      this.pHeight = this.previewImage.clientHeight / this.pieceCount;
+      this.boardHeight = this.previewImage.clientHeight;
+      for (let i = 0; i < this.pieceCount * this.pieceCount; i++) {
         this.realBoardItems.push(0);
         this.boardItems.push(0);
       }
     },
     setPieceItem() {
-      // let board = document.getElementById("board-piece");
       let temp = [];
-      for (let i = 0; i < this.pieceNumber; i++) {
-        for (let j = 0; j < this.pieceNumber; j++) {
+      for (let i = 0; i < this.pieceCount; i++) {
+        for (let j = 0; j < this.pieceCount; j++) {
           let item = {};
           item.class = "piece-item";
           item.style = `width: ${this.pWidth}px; height: ${
             this.pHeight
-          }px; background: url(${dImage}); background-size:${
-            this.perviewImage.clientWidth
-          }px ${this.perviewImage.clientHeight}px; background-position: -${j *
+          }px; background: url(${this.imageSrc}); background-size:${
+            this.previewImage.clientWidth
+          }px ${this.previewImage.clientHeight}px; background-position: -${j *
             this.pWidth}px -${i * this.pHeight}px;`;
 
           temp.push(item);
