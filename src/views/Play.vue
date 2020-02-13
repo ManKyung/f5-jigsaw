@@ -37,13 +37,16 @@
           @add="boardAdd"
           @choose="boardChoose"
           @update="boardUpdate"
-          :move="checkMove"
+          :move="boardMove"
+          @click="aaa"
           :style="`max-height:${boardHeight}px; `"
         >
           <div
             v-for="(item, index) in boardItems"
             :key="index"
-            :style="`width: ${pWidth}px; height:${pHeight}px`"
+            :id="`board-${index}`"
+            class="board-item"
+            :style="`width: ${pWidth}px; height:${pHeight}px;`"
           >
             <div v-if="item.style" :style="item.style"></div>
           </div>
@@ -81,14 +84,14 @@
       @add="pieceAdd"
       @choose="pieceChoose"
       @update="pieceUpdate"
+      @remove="pieceRemove"
       :move="checkMove"
       v-dragscroll.x="{ active: isMove }"
     >
-      <div
-        class="piece-item"
-        v-for="(item, index) in pieceItems"
-        :key="index"
-      >
+      <div class="piece-item" v-for="(item, index) in pieceItems" :key="index"
+      v-long-press="300"
+    @long-press-start="onLongPressStart"
+    @long-press-stop="onLongPressStop">
         <div :id="`${index}`" :style="item.style"></div>
       </div>
     </draggable>
@@ -102,9 +105,11 @@
 <script>
 import draggable from "@/assets/js/vuedraggable";
 import { dragscroll } from "vue-dragscroll";
+import LongPress from 'vue-directive-long-press'
 export default {
   directives: {
-    dragscroll
+    dragscroll,
+    'long-press': LongPress
   },
   props: {
     category: {
@@ -127,7 +132,7 @@ export default {
   // props: ["category", "id", "src", "pCount"],
   name: "play",
   components: {
-    draggable
+    draggable,
   },
   data() {
     return {
@@ -148,7 +153,8 @@ export default {
       isMove: true,
       longpress: false,
       presstimer: null,
-      longtarget: null
+      longtarget: null,
+      isBoardAdd: false
     };
   },
   created() {
@@ -156,93 +162,134 @@ export default {
     this.pieceCount = this.pCount;
   },
   mounted() {
+    console.log("mounted");
     setTimeout(() => {
       this.setBoard();
       this.setPieceItem();
       document.body._gestureDetector.dispose();
-    }, 100);
+    }, 200);
 
     setTimeout(() => {
       this.actionSheetVisible = false;
 
-      let pieceDom = document.getElementsByClassName("piece-item");
-      for (let i = 0; i < pieceDom.length; i++) {
-        pieceDom[i].addEventListener("mousedown", this.start);
-        pieceDom[i].addEventListener("touchstart", this.start);
-
-        pieceDom[i].addEventListener("mouseout", this.cancel);
-        pieceDom[i].addEventListener("touchend", this.cancel);
-        pieceDom[i].addEventListener("touchleave", this.cancel);
-        pieceDom[i].addEventListener("touchcancel", this.cancel);
-      }
+      // let boardItemDom = document.getElementsByClassName("board-item");
+      // for (let i = 0; i < boardItemDom.length; i++) {
+      //   boardItemDom[i].addEventListener("mousemove", () => {
+      //     console.log(12)
+      //   });
+      // }
+      //   pieceDom[i].addEventListener("mouseout", this.cancel);
+      //   pieceDom[i].addEventListener("touchend", this.cancel);
+      //   // pieceDom[i].addEventListener("touchleave", this.cancel);
+      //   pieceDom[i].addEventListener("touchcancel", this.cancel);
+      // }
     }, 1000);
   },
+  beforeDestroy(){
+    // let pieceDom = document.getElementsByClassName("piece-item");
+    // for (let i = 0; i < pieceDom.length; i++) {
+    //   pieceDom[i].addEventListener("mousedown", this.start);
+    //   pieceDom[i].addEventListener("touchstart", this.start);
+
+    //   // pieceDom[i].addEventListener("mouseup", this.cancel);
+    //   // pieceDom[i].addEventListener("touchend", this.cancel);
+    //   // pieceDom[i].addEventListener("touchleave", this.cancel);
+    //   // pieceDom[i].addEventListener("touchcancel", this.cancel);
+    // }
+    console.log('destory')
+  },
   methods: {
+    aaa(){
+      console.log(12)
+    },
+    onLongPressStart () {
+      console.log('ep start')
+      this.isMove = false;
+      // triggers after 300ms of mousedown
+    },
+    onLongPressStop () {
+      this.isMove = true;
+      console.log('ep stop')
+     // triggers on mouseup of document
+    },
     start(e) {
       if (e.type === "click" && e.button !== 0) {
         return;
       }
-
-      var _vm = this;
-      e.srcElement.classList.add('on')
+          this.isMove = true;
+      console.log("start");
+      // var _vm = this;
+      e.srcElement.classList.add("on");
       if (this.presstimer === null) {
+          console.log(this.presstimer);
         this.presstimer = setTimeout(function() {
-          _vm.isMove = false;
-        }, 300);
+          console.log("start");
+        }, 200);
       }
 
       return false;
     },
     cancel(e) {
+      console.log(this.presstimer);
       if (this.presstimer !== null) {
         clearTimeout(this.presstimer);
-          this.isMove = true;
-          e.srcElement.classList.remove('on')
+        this.isMove = true;
+      console.log("cancel");
+        e.srcElement.classList.remove("on");
         this.presstimer = null;
       }
     },
-    objClone(obj) {
-      if (obj === null || typeof obj !== "object") return obj;
-      var copy = obj.constructor();
-      for (var attr in obj) {
-        if (obj.hasOwnProperty(attr)) {
-          copy[attr] = obj[attr];
-        }
-      }
-      return copy;
-    },
     boardChoose(e) {
+      let a = document.getElementById(`board-${e.oldIndex}`);
+      a.style.opacity = '1';
+      a.children[0].style.opacity = '0.5';
+      console.log(a.children[0].style)
+
+
       this.selectedPiece = this.realBoardItems[e.oldIndex];
     },
     boardAdd(e) {
+      this.isBoardAdd = false;
+      console.log(e.newIndex);
       if (this.realBoardItems[e.newIndex] === 0) {
         this.$set(this.realBoardItems, e.newIndex, this.selectedPiece);
         this.boardItems = this.objClone(this.realBoardItems);
+        this.isBoardAdd = true;
       }
     },
     boardUpdate(e) {
+      console.log(e.newIndex);
       if (this.realBoardItems[e.newIndex] === 0) {
         this.$set(this.realBoardItems, e.newIndex, this.selectedPiece);
         this.$set(this.realBoardItems, e.oldIndex, 0);
         this.boardItems = this.objClone(this.realBoardItems);
       }
     },
+    boardMove(e){
+      console.log(e)
+      // console.log(e.relatedContext.index)
+    },
     pieceChoose(e) {
-      // this.isMove = true;
+      console.log('choose')
       this.selectedPiece = this.pieceItems[e.oldIndex];
-      // setTimeout(() => {
-      //   this.isMove = true
-      // }, 3000)
-      // console.log(this.isMove, e)
     },
     pieceAdd(e) {
       this.$set(this.pieceItems, e.newIndex, this.selectedPiece);
       this.$set(this.realBoardItems, e.oldIndex, 0);
 
       this.boardItems = this.objClone(this.realBoardItems);
+      this.isMove = true;
     },
-    pieceUpdate(e) {},
-    pieceRemove(e) {},
+    pieceUpdate(e) {
+      this.isMove = true;
+    },
+    pieceRemove(e) {
+      if (!this.isBoardAdd) {
+        // 중복으로 추가되지 않은 경우 롤백처리
+        this.pieceItems.splice(e.oldIndex, 0, this.selectedPiece);
+      }
+      this.isMove = true;
+    },
     checkMove(e) {},
     setBoard() {
       this.previewImage = this.$refs.preview;
@@ -271,6 +318,16 @@ export default {
         }
       }
       this.pieceItems = temp;
+    },
+    objClone(obj) {
+      if (obj === null || typeof obj !== "object") return obj;
+      var copy = obj.constructor();
+      for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) {
+          copy[attr] = obj[attr];
+        }
+      }
+      return copy;
     }
   }
 };

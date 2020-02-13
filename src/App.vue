@@ -11,15 +11,15 @@
 
 <script>
 
-// import PlayPage from "@/views/Play";
-import MainPage from "@/views/Main";
+import PlayPage from "@/views/Play";
+// import MainPage from "@/views/Main";
 // import { initAd, showBanner } from "@/api/admob.js";
 export default {
   name: "app",
   data() {
     return {
-      pageStack: [MainPage]
-      // pageStack: [PlayPage]
+      // pageStack: [MainPage]
+      pageStack: [PlayPage]
     };
   },
   created() {
