@@ -1,25 +1,25 @@
 <template>
   <v-ons-page>
-    <v-ons-toolbar class="primary">
-      <div class="center white--text">{{ title }}</div>
+    <v-ons-toolbar class="white" style="min-height:64px;">
+      <div class="left pl-3 pt-1 fo w-100" style="font-size:42px;">{{title}}</div>
+      <div class="right pt-2">
+        <v-ons-button modifier="quiet" v-if="title === 'My'" @click="goPage">
+          <v-ons-icon icon="ion-ios-settings" style="color:black; font-size:28px"></v-ons-icon>
+        </v-ons-button>
+      </div>
     </v-ons-toolbar>
 
-    <v-ons-tabbar 
-      :tabs="tabs"
-      :visible="true"
-      :index.sync="activeIndex"
-      @push-page="pushPage"
-    >
-    </v-ons-tabbar>
+    <v-ons-tabbar :tabs="tabs" :visible="true" :index.sync="activeIndex" @push-page="pushPage"></v-ons-tabbar>
   </v-ons-page>
 </template>
 
 <script>
 // import stagePage from "./Stage";
-import homePage from './tabs/Home'
-import categoryPage from './tabs/Category'
-import rankPage from './tabs/Rank'
-import settingPage from './tabs/Setting'
+import settingPage from '@/views/Setting';
+import homePage from "./tabs/Home";
+import categoryPage from "./tabs/Category";
+// import rankPage from './tabs/Rank'
+import myPage from "./tabs/My";
 export default {
   name: "app-main",
   data() {
@@ -27,45 +27,41 @@ export default {
       activeIndex: 0,
       tabs: [
         {
-          icon: 'ion-ios-home',
-          label: 'Game',
+          icon: "ion-ios-home",
           page: homePage,
-          props: {
-            myProp: 'This is a page prop!'
-          },
+          title: "Daily Puzzle",
           key: "homePage"
         },
         {
-          icon: 'ion-ios-cube',
-          label: 'Category',
+          icon: "ion-ios-cube",
+          title: "Category",
           page: categoryPage,
           key: "categoryPage"
         },
         {
-          icon: 'ion-ios-trophy',
-          label: 'Rank',
-          page: rankPage,
-          key: "rankPage"
-        },
-        {
-          icon: 'ion-ios-apps',
-          label: 'Settings',
-          page: settingPage,
-          key: "settingPage"
+          icon: "ion-ios-person",
+          title: "My",
+          page: myPage,
+          key: "myPage"
         }
       ]
     };
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
-    pushPage(obj){
+    pushPage(obj) {
       this.$emit("push-page", obj);
-    }
+    },
+    goPage() {
+      this.$emit("push-page", {
+        ...settingPage,
+        onsNavigatorProps: {}
+      });
+    },
   },
   computed: {
     title() {
-      return this.tabs[this.activeIndex].label;
+      return this.tabs[this.activeIndex].title;
     }
   }
 };

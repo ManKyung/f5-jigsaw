@@ -1,8 +1,8 @@
 <template>
-  <v-ons-page>
+  <v-ons-page class="mt-5">
 
     <div v-for="(items, category) in categories" :key="category">
-      <div>{{items.nameKR}}</div>
+      <div class="pl-3 py-5">{{items.nameKR}}</div>
       <v-ons-row>
         <v-ons-col style="width:50%">
           <v-ons-carousel
@@ -12,13 +12,13 @@
             item-width="48%"
           >
             <v-ons-carousel-item style="width:48%"  v-for="(item, index) in items.data" :key="index" >
-              <div class="pa-2" style="text-align: center; font-size: 30px; margin-top: 20px; color: #fff;">
+              <v-ons-card class="pa-0">
                 <img
                   @click="goPage(category, item.id, item.src)"
                   :src="item.imageSrc"
                   class="w-100"
                 />
-              </div>
+              </v-ons-card>
             </v-ons-carousel-item>
           </v-ons-carousel>
         </v-ons-col>

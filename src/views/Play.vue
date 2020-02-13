@@ -216,25 +216,20 @@ export default {
       if (e.type === "click" && e.button !== 0) {
         return;
       }
-          this.isMove = true;
-      console.log("start");
+      this.isMove = true;
       // var _vm = this;
       e.srcElement.classList.add("on");
       if (this.presstimer === null) {
-          console.log(this.presstimer);
         this.presstimer = setTimeout(function() {
-          console.log("start");
         }, 200);
       }
 
       return false;
     },
     cancel(e) {
-      console.log(this.presstimer);
       if (this.presstimer !== null) {
         clearTimeout(this.presstimer);
         this.isMove = true;
-      console.log("cancel");
         e.srcElement.classList.remove("on");
         this.presstimer = null;
       }
@@ -243,14 +238,11 @@ export default {
       let a = document.getElementById(`board-${e.oldIndex}`);
       a.style.opacity = '1';
       a.children[0].style.opacity = '0.5';
-      console.log(a.children[0].style)
-
 
       this.selectedPiece = this.realBoardItems[e.oldIndex];
     },
     boardAdd(e) {
       this.isBoardAdd = false;
-      console.log(e.newIndex);
       if (this.realBoardItems[e.newIndex] === 0) {
         this.$set(this.realBoardItems, e.newIndex, this.selectedPiece);
         this.boardItems = this.objClone(this.realBoardItems);
@@ -258,7 +250,6 @@ export default {
       }
     },
     boardUpdate(e) {
-      console.log(e.newIndex);
       if (this.realBoardItems[e.newIndex] === 0) {
         this.$set(this.realBoardItems, e.newIndex, this.selectedPiece);
         this.$set(this.realBoardItems, e.oldIndex, 0);

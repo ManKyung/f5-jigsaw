@@ -10,16 +10,18 @@
 </template>
 
 <script>
-
-import PlayPage from "@/views/Play";
-// import MainPage from "@/views/Main";
+// import settingPage from "@/views/Setting";
+// import PlayPage from "@/views/Play";
+// import clickSound from "@/assets/mp3/click.mp3";
+import MainPage from "@/views/Main";
 // import { initAd, showBanner } from "@/api/admob.js";
 export default {
   name: "app",
   data() {
     return {
-      // pageStack: [MainPage]
-      pageStack: [PlayPage]
+      pageStack: [MainPage]
+      // pageStack: [settingPage]
+      // pageStack: [PlayPage]
     };
   },
   created() {
@@ -31,16 +33,28 @@ export default {
     });
   },
   mounted() {
+    // window.document.addEventListener("click", () => {
+    //   this.play();
+    // });
+    // window.document.addEventListener("touchstart", () => {
+    //   this.play();
+    // }); 
     setTimeout(() => {
-      this.$ons.GestureDetector(document.getElementById('navigator')).dispose();
-    }, 10)
+      this.$ons.GestureDetector(document.getElementById("navigator")).dispose();
+    }, 10);
     document.addEventListener("deviceready", function() {
       // initAd();
-
       // setTimeout(() => {
       //   showBanner();
       // }, 500);
     });
+  },
+  methods: {
+    play() {
+      console.log('click')
+      let audio = new Audio(clickSound);
+      audio.play();
+    }
   }
 };
 </script>

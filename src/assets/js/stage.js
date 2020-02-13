@@ -1,6 +1,6 @@
 export default {
   'animal': {
-    nameKR: '동물',
+    nameKR: 'Animal',
     data: [
       {
         id: 1,
@@ -33,7 +33,7 @@ export default {
     ]
   },
   'scenery': {
-    nameKR: '풍경',
+    nameKR: 'Scenery',
     data: [
       {
         id: 1,

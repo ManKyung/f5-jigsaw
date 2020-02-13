@@ -1,3 +1,25 @@
+@font-face{ 
+  font-family:'NanumOenSonJabIDoYeBbeo'; 
+  src:url('font.ttf') format('truetype');
+}
+
+* {
+  font-family: NanumOenSonJabIDoYeBbeo;
+  font-size:32px;
+  font-weight: bold;
+}
+
+.fo {
+  font-family: NanumOenSonJabIDoYeBbeo;
+  font-size:32px;
+  font-weight: bold;
+}
+
+img {
+  display: block;
+  border-radius: 8px;
+}
+
 html {
   touch-action: manipulation;
   box-sizing: content-box;
@@ -2635,9 +2657,6 @@ a {
   text-align: justify !important;
 }
 
-
-
-
 .pa-0 {
   padding: 0px !important;
 }
@@ -3467,7 +3486,7 @@ a {
   display: block;
 }
 .back-button__icon {
-  fill: white !important;
+  fill: black !important;
 }
 
 .gameboard-wrap{
@@ -3552,4 +3571,15 @@ a {
   transition:visibility 0.3s linear, opacity 0.3s linear;
   visibility: visible;
   opacity:1;
+}
+
+.page__background{
+  background: #fdfeff;
+}
+.tabbar{
+  box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12) !important;
+}
+
+:checked + .tabbar__button { 
+  color: #6c5ce7
 }

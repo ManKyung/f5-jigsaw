@@ -1,10 +1,10 @@
 <template>
   <v-ons-page>
-    <v-ons-toolbar class="primary">
-      <div class="left">
-        <v-ons-back-button></v-ons-back-button>
-      </div>
-      <div class="center white--text">Game Option</div>
+    
+    <v-ons-toolbar class="white" style="min-height:64px;">
+      <v-ons-back-button class="pl-4 pt-2">
+      </v-ons-back-button>
+      <div class="pl-3 fo w-100" style="font-size:42px;">Option</div>
     </v-ons-toolbar>
 
     <div
