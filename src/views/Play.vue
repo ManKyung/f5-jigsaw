@@ -1,15 +1,19 @@
 <template>
   <v-ons-page>
-    <v-ons-toolbar class="primary">
-      <div class="left">
-        <v-ons-back-button></v-ons-back-button>
-      </div>
-      <div class="right">
-        <v-ons-toolbar-button @click="actionSheetVisible = !actionSheetVisible">
-          <v-ons-icon icon="md-image-o" class="white--text"></v-ons-icon>
+    <v-ons-toolbar class="white" style="min-height:64px; background-image: none;">
+      <div class="left pt-2 w-100">
+      <v-ons-back-button class="pl-4">
+      </v-ons-back-button></div>
+      <div class="right pt-2">
+        <v-ons-toolbar-button :style="actionSheetVisible ? 'color:#6c5ce7' : 'color:#111'" @click="actionSheetVisible = !actionSheetVisible">
+          <v-ons-icon icon="ion-ios-image"></v-ons-icon>
         </v-ons-toolbar-button>
       </div>
     </v-ons-toolbar>
+    <div class="left pt-2">
+    </div>
+      <div class="right pt-2">
+    </div>
     <!-- <v-ons-action-sheet
       :visible.sync="actionSheetVisible"
       cancelable
@@ -19,7 +23,7 @@
         <img ref="preview" class="w-100" :src="`/src/assets/img/${category}/${src}`" />
       </div>
     </v-ons-action-sheet>-->
-    <div class="gameboard-wrap">
+    <div class="gameboard-wrap pt-5">
       <div>
         <img
           ref="preview"
@@ -257,7 +261,6 @@ export default {
       }
     },
     boardMove(e){
-      console.log(e)
       // console.log(e.relatedContext.index)
     },
     pieceChoose(e) {

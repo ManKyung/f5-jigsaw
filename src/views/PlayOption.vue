@@ -7,6 +7,7 @@
       <div class="pl-3 fo w-100" style="font-size:42px;">Option</div>
     </v-ons-toolbar>
 
+    <div class="pt-5">
     <div
       id="board-real-preview"
       :style="`max-height:${boardHeight}px; overflow:hidden`"
@@ -45,6 +46,8 @@
     <v-ons-col class="pa-3">
       <v-ons-button modifier="large" class="w-100" @click="goPage">Play</v-ons-button>
     </v-ons-col>
+
+    </div>
   </v-ons-page>
 </template>
 
