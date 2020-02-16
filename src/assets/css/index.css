@@ -1,3 +1,11 @@
+/*
+primary color : #6c5ce7
+reverse color : #fb8c00
+*/
+::-webkit-scrollbar {
+  /* width: 5px; */
+}
+
 @font-face{ 
   font-family:'NanumOenSonJabIDoYeBbeo'; 
   src:url('font.ttf') format('truetype');
@@ -17,24 +25,23 @@
 
 img {
   display: block;
-  border-radius: 8px;
 }
 
 html {
   touch-action: manipulation;
   box-sizing: content-box;
 }
-a {
-  color: #3880ff !important;
+/* a {
+  color: #6c5ce7 !important;
   text-decoration: none;
-}
+} */
 .primary{
-  background-color: #3880ff !important;
-  border-color: #3880ff !important;
+  background-color: #6c5ce7 !important;
+  border-color: #6c5ce7 !important;
 }
 .primary--text{
-  color: #3880ff !important;
-  caret-color: #3880ff !important;
+  color: #6c5ce7 !important;
+  caret-color: #6c5ce7 !important;
 }
 .black {
   background-color: #000000 !important;
@@ -3485,8 +3492,414 @@ a {
 .d-block {
   display: block;
 }
-.back-button__icon {
-  fill: black !important;
+
+.button {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  font-family: -apple-system, 'Helvetica Neue', 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  height: auto;
+  text-decoration: none;
+  padding: 4px 10px;
+  font-size: 17px;
+  line-height: 32px;
+  letter-spacing: 0;
+  color: white;
+  vertical-align: middle;
+  background-color: #6c5ce7;
+  border: 0 solid currentColor;
+  border-radius: 3px;
+  transition: none;
+}
+.button::-moz-focus-inner {
+  outline: 0;
+}
+.button:hover {
+  transition: none;
+}
+.button:active {
+  background-color: #6c5ce7;
+  transition: none;
+  opacity: 0.8;
+}
+.button:focus {
+  outline: 0;
+}
+.button:disabled, .button[disabled] {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+
+.button--outline {
+  background-color: transparent;
+  border: 1px solid #6c5ce7;
+  color: #6c5ce7;
+}
+.button--outline:active {
+  background-color: rgb(179, 214, 255);
+  border: 1px solid #6c5ce7;
+  color: #6c5ce7;
+  opacity: 1;
+}
+.button--outline:hover {
+  border: 1px solid #6c5ce7;
+  transition: 0;
+}
+/*~
+  name: Light Button
+  category: Button
+  elements: ons-button
+  markup: |
+    <button class="button button--light">Button</button>
+    <button class="button button--light" disabled>Button</button>
+*/
+.button--light {
+  background-color: transparent;
+  color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.button--light:active {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  opacity: 1;
+}
+/*~
+  name: Quiet Button
+  category: Button
+  elements: ons-button
+  markup: |
+    <button class="button--quiet">Button</button>
+    <button class="button--quiet" disabled>Button</button>
+*/
+.button--quiet {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  font-family: -apple-system, 'Helvetica Neue', 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  height: auto;
+  text-decoration: none;
+  padding: 4px 10px;
+  font-size: 17px;
+  line-height: 32px;
+  letter-spacing: 0;
+  color: white;
+  vertical-align: middle;
+  background-color: #6c5ce7;
+  border: 0 solid currentColor;
+  border-radius: 3px;
+  transition: none;
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+  background: transparent;
+  color: #6c5ce7;
+  border: none;
+}
+.button--quiet:disabled,
+.button--quiet[disabled] {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+  border: none;
+}
+.button--quiet:hover {
+  transition: none;
+}
+.button--quiet:focus {
+  outline: 0;
+}
+.button--quiet:active {
+  background-color: transparent;
+  border: none;
+  transition: none;
+  opacity: 0.2;
+  color: #6c5ce7;
+}
+/*~
+  name: Call To Action Button
+  category: Button
+  elements: ons-button
+  markup: |
+    <button class="button--cta">Button</button>
+    <button class="button--cta" disabled>Button</button>
+*/
+.button--cta {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  font-family: -apple-system, 'Helvetica Neue', 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  height: auto;
+  text-decoration: none;
+  padding: 4px 10px;
+  font-size: 17px;
+  line-height: 32px;
+  letter-spacing: 0;
+  color: white;
+  vertical-align: middle;
+  background-color: #6c5ce7;
+  border: 0 solid currentColor;
+  border-radius: 3px;
+  transition: none;
+  border: none;
+  background-color: #25a6d9;
+  color: white;
+}
+.button--cta:hover {
+  transition: none;
+}
+.button--cta:focus {
+  outline: 0;
+}
+.button--cta:active {
+  color: white;
+  background-color: #25a6d9;
+  transition: none;
+  opacity: 0.2;
+}
+.button--cta:disabled,
+.button--cta[disabled] {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+/*
+  name: Large Button
+  category: Button
+  elements: ons-button
+  markup: |
+    <button class="button button--large" style="width: 95%; margin: 0 auto;">Button</button>
+*/
+.button--large {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 36px;
+  padding: 4px 12px;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.button--large:active {
+  background-color: #6c5ce7;
+  transition: none;
+  opacity: 0.2;
+  transition: none;
+}
+.button--large:disabled,
+.button--large[disabled] {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+.button--large:hover {
+  transition: none;
+}
+.button--large:focus {
+  outline: 0;
+}
+/*~
+  name: Large Quiet Button
+  category: Button
+  elements: ons-button
+  markup: |
+    <button class="button--large--quiet" style="width: 95%; margin: 0 auto;">Button</button>
+*/
+.button--large--quiet { /* stylelint-disable-line */
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  font-family: -apple-system, 'Helvetica Neue', 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  height: auto;
+  text-decoration: none;
+  padding: 4px 10px;
+  font-size: 17px;
+  line-height: 32px;
+  letter-spacing: 0;
+  color: white;
+  vertical-align: middle;
+  background-color: #6c5ce7;
+  border: 0 solid currentColor;
+  border-radius: 3px;
+  transition: none;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 36px;
+  padding: 4px 12px;
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+  color: #6c5ce7;
+  text-align: center;
+}
+.button--large--quiet:active { /* stylelint-disable-line */
+  transition: none;
+  opacity: 0.2;
+  color: #6c5ce7;
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+.button--large--quiet:disabled, .button--large--quiet[disabled] { /* stylelint-disable-line */
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+.button--large--quiet:hover { /* stylelint-disable-line */
+  transition: none;
+}
+.button--large--quiet:focus { /* stylelint-disable-line */
+  outline: 0;
+}
+/*~
+  name: Large Call To Action Button
+  category: Button
+  elements: ons-button
+  markup: |
+    <button class="button--large--cta" style="width: 95%; margin: 0 auto;">Button</button>
+*/
+.button--large--cta { /* stylelint-disable-line */
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  font-family: -apple-system, 'Helvetica Neue', 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  height: auto;
+  text-decoration: none;
+  padding: 4px 10px;
+  font-size: 17px;
+  line-height: 32px;
+  letter-spacing: 0;
+  color: white;
+  vertical-align: middle;
+  background-color: #6c5ce7;
+  border: 0 solid currentColor;
+  border-radius: 3px;
+  transition: none;
+  border: none;
+  background-color: #25a6d9;
+  color: white;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 36px;
+  padding: 4px 12px;
+  width: 100%;
+  text-align: center;
+  display: block;
+}
+.button--large--cta:hover { /* stylelint-disable-line */
+  transition: none;
+}
+.button--large--cta:focus { /* stylelint-disable-line */
+  outline: 0;
+}
+.button--large--cta:active { /* stylelint-disable-line */
+  color: white;
+  background-color: #25a6d9;
+  transition: none;
+  opacity: 0.2;
+}
+.button--large--cta:disabled, .button--large--cta[disabled] { /* stylelint-disable-line */
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
 }
 
 .gameboard-wrap{
@@ -3495,18 +3908,19 @@ a {
   -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: center;
-  align-items: center; 
+  align-items: center;
+  position: relative;
 }
 
 #board {
   display: flex;
   flex-wrap: wrap;
-  position:absolute; 
+  /* position:absolute;  */
   overflow:hidden;
   background:transparent;
 }
 #board div {
-  box-shadow: 0 0 1px 0 #000 inset;
+  box-shadow: inset 0 0 1px 0 #000;
   opacity:0; 
 }
 #board > div:hover{
@@ -3533,24 +3947,9 @@ a {
 }
 
 #board-real-preview div{
-  box-shadow: 0 0 0 1px #000 inset;
+  box-shadow: 0 0 2px 0 #000 inset;
 }
 
-#board-piece {
-  border-radius: 5px;
-  background: #ffffff;
-
-  padding: 10px;
-  display: flex;
-  flex-wrap: nowrap;
-  overflow: scroll;
-}
-#board-piece .piece-item {
-  padding: 10px;
-}
-#board-piece .piece-item div.on {
-  box-shadow: 0 0 0 1px #000 inset;
-}
 .action-sheet {
   left: 0;
   right: 0;
@@ -3582,4 +3981,72 @@ a {
 
 :checked + .tabbar__button { 
   color: #6c5ce7
+}
+
+.game-background {
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  height: 100%;
+  opacity: 0.8;
+}
+.game-page > .page__content{
+  display:flex;
+  flex-direction: column;
+  top: 0 !important;
+  padding-top:0 !important;
+  margin-top:64px !important;
+}
+.game-top {
+  flex: 1;
+}
+.game-container {
+  flex: 8;
+  /* top:50%; */
+  position: relative;
+}
+.game-bottom {
+  flex: 1;
+  border-top: 1px solid #ddd;
+}
+
+#board .board-item {
+  transition:0.2s;
+  transform: scale(1);
+}
+#board .board-item.on {
+  box-shadow: 0 0 1px 0 #000 inset;
+  transition:0.2s;
+  transform: scale(1.2);
+}
+#board-piece {
+  background: #ffffff;
+  padding: 5px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+}
+#board-piece .piece-item {
+  padding: 10px;
+  transition:0.2s;
+  transform: scale(1);
+}
+
+#board-piece .piece-item div.on {
+  box-shadow: 0 0 1px 0 #000 inset;
+  transition:0.2s;
+  transform: scale(1.2);
+}
+
+.preview-wrap{
+  position:absolute; z-index:100;
+}
+.preview-wrap.on{
+  position:absolute; z-index:105;
+}
+.board-wrap{
+  position:absolute; z-index:103;
+}
+.board-real-wrap{
+  position:absolute; z-index:102;
 }

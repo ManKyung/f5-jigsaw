@@ -2,7 +2,7 @@
   <v-ons-page>
     
     <v-ons-toolbar class="white" style="min-height:64px;">
-      <v-ons-back-button class="pl-4 pt-2">
+      <v-ons-back-button class="pt-2">
       </v-ons-back-button>
       <div class="pl-3 fo w-100" style="font-size:42px;">Option</div>
     </v-ons-toolbar>
@@ -35,10 +35,10 @@
       </v-ons-carousel-item>
     </v-ons-carousel>
     <div class="text-center">
-    <v-ons-button style="width:50px; " @click="pieceCount > 2 && pieceCount--">
+    <v-ons-button style="width:50px;" @click="pieceCount > 2 && pieceCount--">
       <v-ons-icon icon="md-chevron-left"></v-ons-icon>
     </v-ons-button>
-    <v-ons-button style="width:50px; "  @click="pieceCount < 15 && pieceCount++">
+    <v-ons-button style="width:50px;" @click="pieceCount < 15 && pieceCount++">
       <v-ons-icon icon="md-chevron-right"></v-ons-icon>
     </v-ons-button>
     </div>
@@ -50,9 +50,16 @@
     </div>
   </v-ons-page>
 </template>
-
+<style>
+.back-button__icon {
+  fill: black !important;
+}
+</style>
 <script>
-import playPage from './Play.vue'
+import jigsawPage from './Play/Jigsaw.vue'
+import sliderPage from './Play/Slider.vue'
+import switchPage from './Play/Switch.vue'
+import rotationPage from './Play/Rotation.vue'
 export default {
   props: ["category", "id", "src"],
   name: "playOption",
@@ -68,12 +75,15 @@ export default {
       pHeight: 0,
       boardHeight: 0,
       imageSrc: '',
+      gameType: this.$store.state.gameSet.type,
+      my: this.$store.state.gameSet.my,
     };
   },
   created(){
     this.imageSrc = require(`../assets/img/${this.category}/${this.src}`);
   },
   mounted() {
+    console.log(this.my)
     setTimeout(() => {
       this.setBoard();
     }, 100);
@@ -85,15 +95,25 @@ export default {
   },
   methods: {
     goPage() {
-      this.$emit("push-page", {
-        ...playPage,
-        onsNavigatorProps: {
-          category: this.category,
-          id: this.id,
-          src: this.src,
-          pCount: this.pieceCount,
-        }
-      });
+      let params = {
+        gameType: this.gameType,
+        category: this.category,
+        id: this.id,
+        src: this.src,
+        pCount: this.pieceCount,
+      }
+
+      this.$store.commit('gameSet/setMy', params)
+
+      if(this.gameType === 'jigsaw'){
+        this.$emit("push-page", { ...jigsawPage, onsNavigatorProps: params });
+      } else if(this.gameType === 'slider'){
+        this.$emit("push-page", { ...sliderPage, onsNavigatorProps: params });
+      } else if(this.gameType === 'switch'){
+        this.$emit("push-page", { ...switchPage, onsNavigatorProps: params });
+      } else if(this.gameType === 'rotation'){
+        this.$emit("push-page", { ...rotationPage, onsNavigatorProps: params });
+      }
     },
     setBoard(pieceCount) {
       pieceCount = pieceCount === undefined ? this.pieceCount : pieceCount;
@@ -103,6 +123,7 @@ export default {
       this.boardHeight = this.perviewImage.clientHeight;
 
       let len = pieceCount * pieceCount;
+      this.boardItems = [];
       for (let i = 0; i < len; i++) {
         this.boardItems.push(0);
       }

@@ -18,7 +18,6 @@
 import settingPage from '@/views/Setting';
 import homePage from "./tabs/Home";
 import categoryPage from "./tabs/Category";
-// import rankPage from './tabs/Rank'
 import myPage from "./tabs/My";
 export default {
   name: "app-main",

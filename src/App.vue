@@ -10,8 +10,13 @@
 </template>
 
 <script>
+// import backgroundPage from "@/views/settings/Background";
 // import settingPage from "@/views/Setting";
-// import PlayPage from "@/views/Play";
+// import jigsawPage from "@/views/play/Jigsaw";
+// import rotationPage from "@/views/play/Rotation";
+// import switchPage from "@/views/play/Switch";
+// import clearPage from "@/views/play/Clear";
+// import sliderPage from "@/views/play/Slider";
 // import clickSound from "@/assets/mp3/click.mp3";
 import MainPage from "@/views/Main";
 // import { initAd, showBanner } from "@/api/admob.js";
@@ -20,8 +25,12 @@ export default {
   data() {
     return {
       pageStack: [MainPage]
+      // pageStack: [backgroundPage]
       // pageStack: [settingPage]
-      // pageStack: [PlayPage]
+      // pageStack: [clearPage]
+      // pageStack: [jigsawPage]
+      // pageStack: [rotationPage]
+      // pageStack: [sliderPage]
     };
   },
   created() {
@@ -31,8 +40,13 @@ export default {
         document.getElementsByTagName("body").style.transform = "rotate(90deg)";
       }
     });
+
+    this.$store.commit('gameSet/setGameInit');
   },
   mounted() {
+    // console.log(this.$store.state.gameSet.background)
+    // console.log(this.$store.state.gameSet.backgroundBorder)
+    // console.log(this.$store.state.gameSet.type)
     // window.document.addEventListener("click", () => {
     //   this.play();
     // });

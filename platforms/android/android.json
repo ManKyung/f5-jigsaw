@@ -19,7 +19,7 @@
   },
   "installed_plugins": {
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "io.cordova.helloworld"
+      "PACKAGE_NAME": "com.f5game.jigsaw"
     }
   },
   "dependent_plugins": {},
