@@ -113,7 +113,6 @@ export default {
   name: "switch-play",
   data() {
     return {
-      carouselIndex: 0,
       previewImage: null,
       imageSrc: "",
       realBoardItems: [],
@@ -123,14 +122,14 @@ export default {
       boardHeight: 0,
       actionSheetVisible: true,
       paddingTop: 0,
-      background: localStorage["background"]
+      background: this.$store.state.gameSet.background,
+      borderColor: this.$store.state.gameSet.backgroundBorder
     };
   },
   created() {
     this.imageSrc = require(`../../assets/img/${this.category}/${this.src}`);
     this.pieceCount = this.pCount;
     this.background = require(`../../assets/img/background/${this.background}.jpg`);
-    // this.background = require(`../../assets/img/background/default.jpg`);
   },
   mounted() {
     setTimeout(() => {
@@ -140,19 +139,20 @@ export default {
 
     setTimeout(() => {
       this.actionSheetVisible = false;
-      // this.isClear()
     }, 1000);
 
   },
   methods: {
     isClear(){
-      this.$emit("push-page", {
-        ...clearPage,
-        onsNavigatorProps: {
-          category: this.category,
-          id: this.id,
+      let len = this.realBoardItems.length;
+
+      for(let i = 0 ; i < len ; i++){
+        if(i !== this.realBoardItems[i].id) {
+          return false;
         }
-      });
+      }
+
+      return true;
     },
     changePiece(i) {
       let curDom = document.getElementById(`piece-${i}`);
@@ -176,6 +176,16 @@ export default {
         this.selectedIndex = -1;
         curDom.classList.remove("on");
         selecDom.classList.remove("on");
+      
+        if(this.isClear()) {
+          this.$emit("push-page", {
+            ...clearPage,
+            onsNavigatorProps: {
+              category: this.category,
+              id: this.id,
+            }
+          });
+        }
       }
     },
     setBoard() {
@@ -191,6 +201,7 @@ export default {
       for (let i = 0; i < this.pieceCount; i++) {
         for (let j = 0; j < this.pieceCount; j++) {
           let item = {};
+          item.id = i * this.pieceCount + j;
           item.class = "piece-item";
           item.style = `width: ${this.pWidth}px; height: ${
             this.pHeight
@@ -202,13 +213,6 @@ export default {
         }
       }
       this.realBoardItems = this.shuffle(temp);
-
-      for (const i in this.realBoardItems) {
-        if (this.realBoardItems[i].class === undefined) {
-          this.emptyIndex = Number(i);
-          break;
-        }
-      }
     },
     shuffle(a) {
       for (let i = a.length - 1; i > 0; i--) {
@@ -216,16 +220,6 @@ export default {
         [a[i], a[j]] = [a[j], a[i]];
       }
       return a;
-    },
-    objClone(obj) {
-      if (obj === null || typeof obj !== "object") return obj;
-      var copy = obj.constructor();
-      for (var attr in obj) {
-        if (obj.hasOwnProperty(attr)) {
-          copy[attr] = obj[attr];
-        }
-      }
-      return copy;
     }
   }
 };

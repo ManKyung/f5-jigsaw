@@ -3988,7 +3988,7 @@ html {
   background-repeat: no-repeat !important;
   background-size: cover !important;
   height: 100%;
-  opacity: 0.8;
+  opacity: 1;
 }
 .game-page > .page__content{
   display:flex;
@@ -4028,14 +4028,10 @@ html {
 }
 #board-piece .piece-item {
   padding: 10px;
-  transition:0.2s;
-  transform: scale(1);
 }
 
 #board-piece .piece-item div.on {
   box-shadow: 0 0 1px 0 #000 inset;
-  transition:0.2s;
-  transform: scale(1.2);
 }
 
 .preview-wrap{

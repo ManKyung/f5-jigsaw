@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import clearTestPage from "@/views/clearTest";
 // import backgroundPage from "@/views/settings/Background";
 // import settingPage from "@/views/Setting";
 // import jigsawPage from "@/views/play/Jigsaw";
@@ -18,13 +19,14 @@
 // import clearPage from "@/views/play/Clear";
 // import sliderPage from "@/views/play/Slider";
 // import clickSound from "@/assets/mp3/click.mp3";
-import MainPage from "@/views/Main";
+// import MainPage from "@/views/Main";
 // import { initAd, showBanner } from "@/api/admob.js";
 export default {
   name: "app",
   data() {
     return {
-      pageStack: [MainPage]
+      // pageStack: [MainPage]
+      pageStack: [clearTestPage]
       // pageStack: [backgroundPage]
       // pageStack: [settingPage]
       // pageStack: [clearPage]

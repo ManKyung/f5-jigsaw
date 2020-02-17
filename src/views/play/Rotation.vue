@@ -52,6 +52,7 @@
 </style>
 
 <script>
+import clearPage from '@/views/play/Clear';
 export default {
   props: {
     category: {
@@ -83,7 +84,8 @@ export default {
       boardHeight: 0,
       actionSheetVisible: true,
       paddingTop: 0,
-      background: localStorage["background"]
+      background: this.$store.state.gameSet.background,
+      borderColor: this.$store.state.gameSet.backgroundBorder
     };
   },
   created() {
@@ -102,11 +104,32 @@ export default {
     }, 1000);
   },
   methods: {
+    isClear(){
+      let len = this.realBoardItems.length;
+
+      for(let i = 0 ; i < len ; i++){
+        if(this.realBoardItems[i].angle !== 0) {
+          return false;
+        }
+      }
+
+      return true;
+    },
     transPiece(i){
       let angle = this.realBoardItems[i].angle + 90;
       angle = angle / 360 === 1 ? 0 : angle;
       this.realBoardItems[i].angle = angle;
-      this.realBoardItems[i].style = `${this.realBoardItems[i].style}; transform:rotate(${angle}deg);`
+      this.realBoardItems[i].style = `${this.realBoardItems[i].style}; transform:rotate(${angle}deg);`;
+
+      if(this.isClear()){
+        this.$emit("push-page", {
+          ...clearPage,
+          onsNavigatorProps: {
+            category: this.category,
+            id: this.id,
+          }
+        });
+      }
     },
     setBoard() {
       this.previewImage = this.$refs.preview;

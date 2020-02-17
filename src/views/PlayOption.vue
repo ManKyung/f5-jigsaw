@@ -83,7 +83,6 @@ export default {
     this.imageSrc = require(`../assets/img/${this.category}/${this.src}`);
   },
   mounted() {
-    console.log(this.my)
     setTimeout(() => {
       this.setBoard();
     }, 100);

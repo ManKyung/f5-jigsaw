@@ -52,6 +52,7 @@
 </style>
 
 <script>
+import clearPage from '@/views/play/Clear';
 export default {
   props: {
     category: {
@@ -77,13 +78,15 @@ export default {
       previewImage: null,
       imageSrc: "",
       realBoardItems: [],
+      emptyItem: {},
       pieceCount: 0,
       pWidth: 0,
       pHeight: 0,
       boardHeight: 0,
       actionSheetVisible: true,
       paddingTop: 0,
-      background: localStorage["background"],
+      background: this.$store.state.gameSet.background,
+      borderColor: this.$store.state.gameSet.backgroundBorder,
       emptyIndex: 0
     };
   },
@@ -104,7 +107,19 @@ export default {
   },
   methods: {
     isClear(){
-      
+      let len = this.realBoardItems.length;
+      if(this.emptyIndex !== len - 1) {
+        return false;
+      }
+
+      for(let i = 0 ; i < len - 1 ; i++){
+        if(i !== this.realBoardItems[i].id) {
+          return false;
+        }
+      }
+
+      this.realBoardItems[len - 1] = this.emptyItem;
+      return true;
     },
     getNearIndex(i){
       let pieceCount = this.pieceCount
@@ -137,6 +152,16 @@ export default {
           this.emptyIndex = i;
         }
       }
+
+      if(this.isClear()) {
+        this.$emit("push-page", {
+          ...clearPage,
+          onsNavigatorProps: {
+            category: this.category,
+            id: this.id,
+          }
+        });
+      }
     },
     setBoard() {
       this.previewImage = this.$refs.preview;
@@ -153,10 +178,8 @@ export default {
       for (let i = 0; i < this.pieceCount; i++) {
         for (let j = 0; j < this.pieceCount; j++) {
           let item = {};
-          if (i === this.pieceCount - 1 && j === this.pieceCount - 1) {
-          temp.push(item);
-            continue;
-          }
+
+          item.id = i * this.pieceCount + j;
           item.class = "piece-item";
           item.style = `width: ${this.pWidth}px; height: ${
             this.pHeight
@@ -164,10 +187,17 @@ export default {
             this.previewImage.clientWidth
           }px ${this.previewImage.clientHeight}px; background-position: -${j *
             this.pWidth}px -${i * this.pHeight}px;`;
-          temp.push(item);
+
+          if (i === this.pieceCount - 1 && j === this.pieceCount - 1) {
+            temp.push({});
+            this.emptyItem = item;
+          } else {
+            temp.push(item);
+          }
         }
       }
       this.realBoardItems = this.shuffle(temp);
+      // this.realBoardItems = temp;
 
       for(const i in this.realBoardItems){
         if(this.realBoardItems[i].class === undefined){

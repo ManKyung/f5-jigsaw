@@ -15,18 +15,16 @@ export default new Vuex.Store({
       },
       mutations: {
         setMy(state, value) {
-          let my = state.my.length === 0 ? [] : JSON.parse(state.my);
-
+          let my = state.my.length === 0 ? [] : state.my;
           let result = my.filter(item => {
             return (item.type === value.type && item.category === value.category && item.src === value.src)
           })
-
           if(result.length === 0){
             my.push(value)
           }
-
-          state.my = JSON.stringify(my)
-          localStorage['game-my'] = state.my;
+          
+          state.my = my
+          localStorage['game-my'] = JSON.stringify(state.my);
         },
         // jigsaw, switch, slider, rotation
         setGameType(state, value) {
@@ -46,7 +44,7 @@ export default new Vuex.Store({
           state.type = localStorage['game-type'] === undefined ? 'jigsaw' : localStorage['game-type'];
           state.background = localStorage['background'] === undefined ? 'default' : localStorage['background'];
           state.backgroundBorder = localStorage['background-border'] === undefined ? '#000' : localStorage['background-border'];
-          state.my = localStorage['game-my'] === undefined ? [] : localStorage['game-my'];
+          state.my = localStorage['game-my'] === undefined ? [] : JSON.parse(localStorage['game-my']);
         }
       }
     }

@@ -151,8 +151,8 @@ export default {
       longtarget: null,
       isBoardAdd: false,
       paddingTop: 0,
-      background: localStorage["background"],
-      borderColor: localStorage["background-border"]
+      background: this.$store.state.gameSet.background,
+      borderColor: this.$store.state.gameSet.backgroundBorder
     };
   },
   created() {

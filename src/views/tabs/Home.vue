@@ -1,6 +1,6 @@
 <template>
   <v-ons-page class="mt-5">
-    <div v-for="(items, category) in categories" :key="category">
+    <div v-for="(items, category) in categories" :key="category" :class="category === 'scenery' ? 'pb-10' : ''">
       <div class="pl-3 py-5">{{items.nameKR}}</div>
       <v-ons-row>
         <v-ons-col style="width:50%">

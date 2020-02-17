@@ -37,21 +37,30 @@ export default {
   data() {
     return {
       isExpanded: false,
-      items: JSON.parse(this.$store.state.gameSet.my),
+      items: this.$store.state.gameSet.my,
       myItems: []
     };
   },
   mounted(){
     setTimeout(() => {
+      this.myInit()
+    }, 300)
+  },
+  watch: {
+    items() {
+      this.myInit()
+    }
+  },
+  methods: {
+    myInit(){
+      this.items = this.$store.state.gameSet.my;
       let temp = [];
       for (let i = 0; i < this.items.length; i++) {
         this.items[i].imageSrc = require(`../../assets/img/${this.items[i].category}/${this.items[i].src}`);
         temp.push(this.items[i])
       }
       this.myItems = temp;
-    }, 300)
-  },
-  methods: {
+    },
     goPage(item) {
       let params = {
         type: item.gameType,
