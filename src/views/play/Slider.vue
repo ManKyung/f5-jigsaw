@@ -38,6 +38,23 @@
           </div>
         </div>
       </div>
+
+      <v-ons-modal :visible="modalClear" @click="modalClear = false">
+        <div class="clear-wrap w-100" :class="isClearOn ? 'on' : ''">
+        <v-ons-row>
+          <v-ons-col class="c-text"></v-ons-col>
+          <v-ons-col class="c-text">C</v-ons-col>
+          <v-ons-col class="c-text">L</v-ons-col>
+          <v-ons-col class="c-text">E</v-ons-col>
+          <v-ons-col class="c-text">A</v-ons-col>
+          <v-ons-col class="c-text">R</v-ons-col>
+          <v-ons-col class="c-text"></v-ons-col>
+        </v-ons-row>
+        <div class="pt-12 px-4">
+          <v-ons-button modifier="large">NEXT</v-ons-button>
+        </div>
+        </div>
+      </v-ons-modal>
     </div>
   </v-ons-page>
 </template>
@@ -52,7 +69,7 @@
 </style>
 
 <script>
-import clearPage from '@/views/play/Clear';
+// import clearPage from '@/views/play/Clear';
 export default {
   props: {
     category: {
@@ -87,7 +104,9 @@ export default {
       paddingTop: 0,
       background: this.$store.state.gameSet.background,
       borderColor: this.$store.state.gameSet.backgroundBorder,
-      emptyIndex: 0
+      emptyIndex: 0,
+      modalClear: false,
+      isClearOn: false
     };
   },
   created() {
@@ -154,13 +173,20 @@ export default {
       }
 
       if(this.isClear()) {
-        this.$emit("push-page", {
-          ...clearPage,
-          onsNavigatorProps: {
-            category: this.category,
-            id: this.id,
-          }
-        });
+        setTimeout(() => {
+          this.modalClear = true;
+        }, 1000)
+        setTimeout(() => {
+          this.isClearOn = true;
+        }, 1200)
+        
+        // this.$emit("push-page", {
+        //   ...clearPage,
+        //   onsNavigatorProps: {
+        //     category: this.category,
+        //     id: this.id,
+        //   }
+        // });
       }
     },
     setBoard() {
@@ -196,8 +222,8 @@ export default {
           }
         }
       }
-      this.realBoardItems = this.shuffle(temp);
-      // this.realBoardItems = temp;
+      // this.realBoardItems = this.shuffle(temp);
+      this.realBoardItems = temp;
 
       for(const i in this.realBoardItems){
         if(this.realBoardItems[i].class === undefined){

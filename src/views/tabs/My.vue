@@ -8,11 +8,16 @@
       >
         <v-ons-col>
           <v-ons-card class="pa-0 ma-0">
+            <div>
+              <div style="position: absolute; background: rgba(0,0,0, 0.6)">
+                <div style="font-size:2vh; color:white">{{item.gameType}} / {{item.pCount}}</div>
+              </div>
             <img
               @click="goPage(item)"
               :src="item.imageSrc"
               class="home-img"
             />
+            </div>
           </v-ons-card>
         </v-ons-col>
       </v-ons-row>

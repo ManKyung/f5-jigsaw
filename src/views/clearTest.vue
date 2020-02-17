@@ -3,70 +3,79 @@
 
     <v-ons-button @click="aa">click</v-ons-button>
 
-    <div class="c-text a pl-0" :class="isClick ? 'on' : ''">C</div>
-    <div class="c-text b pl-2" :class="isClick ? 'on' : ''">L</div>
-    <div class="c-text c pl-4" :class="isClick ? 'on' : ''">E</div>
-    <div class="c-text d pl-6" :class="isClick ? 'on' : ''">A</div>
-    <div class="c-text e pl-8" :class="isClick ? 'on' : ''">R</div>
+    <v-ons-modal style="display: flex;" :visible="modalVisible" @click="modalVisible = false">
+      <v-ons-row class="clear-wrap" :class="isClick ? 'on' : ''">
+        <v-ons-col class="c-text"></v-ons-col>
+        <v-ons-col class="c-text">C</v-ons-col>
+        <v-ons-col class="c-text">L</v-ons-col>
+        <v-ons-col class="c-text">E</v-ons-col>
+        <v-ons-col class="c-text">A</v-ons-col>
+        <v-ons-col class="c-text">R</v-ons-col>
+        <v-ons-col class="c-text"></v-ons-col>
+      </v-ons-row>
+      <div class="pt-12 px-4">
+        <v-ons-button modifier="large">NEXT</v-ons-button>
+      </div>
+    </v-ons-modal>
 
   </v-ons-page>
 </template>
 
 <style>
-
-.c-text {
+.clear-wrap {
   position:fixed;
-  display: inline-block;
-  padding-left: 20px;
-  bottom: -100px;
+  bottom: 0px;
 }
-.c-text.a.on {
+.clear-wrap.on {
   position:fixed;
-  display: inline-block;
+  bottom: 50%;
+  transition: 0.3s;
+  transition-timing-function: cubic-bezier(0,1.95,.84,.95);
+}
+.c-text {
+  font-size:10vh;
+}
+/* .c-text.a.on {
   bottom:50%;
   transition: 0.3s;
   transition-timing-function: cubic-bezier(0,1.95,.84,.95);
 }
 .c-text.b.on {
-  position:fixed;
-  display: inline-block;
   bottom:50%;
   transition: 0.3s;
   transition-timing-function: cubic-bezier(0,2.3,.84,.95);
 }
 .c-text.c.on {
-  position:fixed;
-  display: inline-block;
   bottom:50%;
   transition: 0.3s;
   transition-timing-function: cubic-bezier(0,1.3,.84,.95);
 }
 .c-text.d.on {
-  position:fixed;
-  display: inline-block;
   bottom:50%;
   transition: 0.3s;
   transition-timing-function: cubic-bezier(0,1.78,.84,.95);
 }
 .c-text.e.on {
-  position:fixed;
-  display: inline-block;
   bottom:50%;
   transition: 0.3s;
   transition-timing-function: cubic-bezier(0,1.5,.84,.95);
-}
+} */
 
 </style>
 <script>
 export default {
   data() {
     return {
-      isClick: false
+      isClick: false,
+      modalVisible: false,
     }
   },
   methods: {
     aa() {
-      this.isClick = !this.isClick
+      this.modalVisible = !this.modalVisible
+      setTimeout(() => {
+        this.isClick = !this.isClick
+      }, 100)
     }
   }
 }

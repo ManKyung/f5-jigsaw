@@ -4046,3 +4046,28 @@ html {
 .board-real-wrap{
   position:absolute; z-index:102;
 }
+
+.clear-wrap {
+  position:fixed;
+  bottom: 0px;
+}
+.clear-wrap.on {
+  position:fixed;
+  bottom: 50%;
+  transition: 0.3s;
+  transition-timing-function: cubic-bezier(0,1.95,.84,.95);
+}
+.c-text {
+  font-size:10vh;
+  animation: c-clear 0.7s ease-in-out infinite alternate;
+}
+@keyframes c-clear {
+  0% {
+      transform: scale(1.0);
+      -webkit-transform: scale(1.0);
+  }
+  100% {
+      transform: scale(1.2);
+      -webkit-transform: scale(1.15);
+  }
+}

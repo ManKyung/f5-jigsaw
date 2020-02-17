@@ -46,7 +46,6 @@ export default {
       ]
     };
   },
-  mounted() {},
   methods: {
     pushPage(obj) {
       this.$emit("push-page", obj);
