@@ -1,7 +1,7 @@
 <template>
   <v-ons-page>
     <div class="left pt-2">
-      <v-ons-back-button></v-ons-back-button>
+      <v-ons-back-button class="pl-4"></v-ons-back-button>
     </div>
 
     <div class="pt-4">
@@ -28,9 +28,6 @@
 .background-check {
   position: absolute;
   padding-left: 10px;
-}
-.back-button__icon {
-  fill: black !important;
 }
 </style>
 
@@ -87,7 +84,7 @@ export default {
         },
         {
           key: "wood",
-          borderColor: '#ddd',
+          borderColor: '#000',
           src: "wood.jpg"
         }
       ],

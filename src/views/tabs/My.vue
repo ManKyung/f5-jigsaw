@@ -9,8 +9,8 @@
         <v-ons-col>
           <v-ons-card class="pa-0 ma-0">
             <div>
-              <div style="position: absolute; background: rgba(0,0,0, 0.6)">
-                <div style="font-size:2vh; color:white">{{item.gameType}} / {{item.pCount}}</div>
+              <div style="position: absolute; background: rgba(0,0,0, 0.6); margin: 5px;">
+                <div style="font-size:2vh; color:white; padding:0 4px 4px 4px;">{{item.gameType}} / {{item.pCount}}</div>
               </div>
             <img
               @click="goPage(item)"
@@ -33,10 +33,7 @@
 </style>
 
 <script>
-import jigsawPage from '@/views/Play/Jigsaw.vue'
-import sliderPage from '@/views/Play/Slider.vue'
-import switchPage from '@/views/Play/Switch.vue'
-import rotationPage from '@/views/Play/Rotation.vue'
+import gamePage from '@/views/play/Game';
 export default {
   name: "setting",
   data() {
@@ -68,22 +65,13 @@ export default {
     },
     goPage(item) {
       let params = {
-        type: item.gameType,
+        gameType: item.gameType,
         category: item.category,
         id: item.id,
         src: item.src,
         pCount: item.pieceCount,
       }
-      
-      if(item.gameType === 'jigsaw'){
-        this.$emit("push-page", { ...jigsawPage, onsNavigatorProps: params });
-      } else if(item.gameType === 'slider'){
-        this.$emit("push-page", { ...sliderPage, onsNavigatorProps: params });
-      } else if(item.gameType === 'switch'){
-        this.$emit("push-page", { ...switchPage, onsNavigatorProps: params });
-      } else if(item.gameType === 'rotation'){
-        this.$emit("push-page", { ...rotationPage, onsNavigatorProps: params });
-      }
+      this.$emit("push-page", { ...gamePage, onsNavigatorProps: params });
     },
   }
 };

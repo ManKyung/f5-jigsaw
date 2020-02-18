@@ -1,7 +1,7 @@
 <template>
   <v-ons-page>
     <div class="left pt-2">
-      <v-ons-back-button></v-ons-back-button>
+      <v-ons-back-button class="pl-4"></v-ons-back-button>
     </div>
 
     <div class="pt-4">
@@ -66,9 +66,6 @@
   position: absolute;
   padding-left:10px;
   color:white;
-}
-.back-button__icon {
-  fill: black !important;
 }
 </style>
 

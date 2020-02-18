@@ -5,6 +5,7 @@
       swipe-target-width="200px"
       :page-stack="pageStack"
       @push-page="pageStack.push($event)"
+      @pop-page="popStatck"
     ></v-ons-navigator>
   </div>
 </template>
@@ -14,23 +15,24 @@
 // import backgroundPage from "@/views/settings/Background";
 // import settingPage from "@/views/Setting";
 // import jigsawPage from "@/views/play/Jigsaw";
+import gamePage from "@/views/play/Game";
 // import rotationPage from "@/views/play/Rotation";
 // import switchPage from "@/views/play/Switch";
 // import clearPage from "@/views/play/Clear";
 // import sliderPage from "@/views/play/Slider";
 // import clickSound from "@/assets/mp3/click.mp3";
-import MainPage from "@/views/Main";
+// import MainPage from "@/views/Main";
 // import { initAd, showBanner } from "@/api/admob.js";
 export default {
   name: "app",
   data() {
     return {
-      pageStack: [MainPage]
+      // pageStack: [MainPage]
       // pageStack: [clearTestPage]
       // pageStack: [backgroundPage]
       // pageStack: [settingPage]
       // pageStack: [clearPage]
-      // pageStack: [jigsawPage]
+      pageStack: [gamePage]
       // pageStack: [rotationPage]
       // pageStack: [sliderPage]
     };
@@ -46,9 +48,6 @@ export default {
     this.$store.commit('gameSet/setGameInit');
   },
   mounted() {
-    // console.log(this.$store.state.gameSet.background)
-    // console.log(this.$store.state.gameSet.backgroundBorder)
-    // console.log(this.$store.state.gameSet.type)
     // window.document.addEventListener("click", () => {
     //   this.play();
     // });
@@ -66,6 +65,9 @@ export default {
     });
   },
   methods: {
+    popStatck(){
+      this.pageStack = [MainPage];
+    },
     play() {
       console.log('click')
       let audio = new Audio(clickSound);

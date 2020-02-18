@@ -56,10 +56,7 @@
 }
 </style>
 <script>
-import jigsawPage from './Play/Jigsaw.vue'
-import sliderPage from './Play/Slider.vue'
-import switchPage from './Play/Switch.vue'
-import rotationPage from './Play/Rotation.vue'
+import gamePage from './play/Game.vue'
 export default {
   props: ["category", "id", "src"],
   name: "playOption",
@@ -103,16 +100,8 @@ export default {
       }
 
       this.$store.commit('gameSet/setMy', params)
+      this.$emit("push-page", { ...gamePage, onsNavigatorProps: params });
 
-      if(this.gameType === 'jigsaw'){
-        this.$emit("push-page", { ...jigsawPage, onsNavigatorProps: params });
-      } else if(this.gameType === 'slider'){
-        this.$emit("push-page", { ...sliderPage, onsNavigatorProps: params });
-      } else if(this.gameType === 'switch'){
-        this.$emit("push-page", { ...switchPage, onsNavigatorProps: params });
-      } else if(this.gameType === 'rotation'){
-        this.$emit("push-page", { ...rotationPage, onsNavigatorProps: params });
-      }
     },
     setBoard(pieceCount) {
       pieceCount = pieceCount === undefined ? this.pieceCount : pieceCount;

@@ -1,31 +1,19 @@
 <template>
-  <v-ons-page class="game-page">
-    <v-ons-toolbar class="game-top white" style="min-height:64px; background-image: none;">
-      <div class="left pt-2 w-100">
-        <v-ons-back-button class="pl-4"></v-ons-back-button>
-      </div>
-      <div class="right pt-2">
-        <v-ons-toolbar-button
-          :style="actionSheetVisible ? 'color:#6c5ce7' : 'color:#111'"
-          @click="actionSheetVisible = !actionSheetVisible"
-        >
-          <v-ons-icon icon="ion-ios-image"></v-ons-icon>
-        </v-ons-toolbar-button>
-      </div>
-    </v-ons-toolbar>
+
     <div
       class="game-background game-container"
       ref="gameContainer"
-      :style="`background:url('${background}'); padding-top:${paddingTop}px`"
+      :style="`background:url('${backgroundImage}'); padding-top:${paddingTop}px`"
     >
-      <div class="pa-5 preview-wrap" :class="actionSheetVisible ? 'on' : ''">
-        <img
-          ref="preview"
-          class="w-100 previewImage"
-          :class="actionSheetVisible ? 'on' : ''"
-          :src="imageSrc"
-        />
-      </div>
+    <div class="pa-5 preview-wrap" :class="[isVisiblePreview ? 'on' : '', isClearImage ? 'on clear' : '']">
+      <img
+        ref="preview"
+        class="w-100 previewImage"
+        :class="[isVisiblePreview ? 'on' : '',
+        isClearImage ? 'on clear' : '']"
+        :src="imageSrc"
+      />
+    </div>
       <div class="pa-5 board-real-wrap">
         <div id="board-real" :style="`max-height:${boardHeight}px; overflow:hidden`">
           <div
@@ -38,8 +26,24 @@
           </div>
         </div>
       </div>
+
+      <v-ons-modal :visible="modalClear">
+        <div class="clear-wrap w-100" :class="isClearOn ? 'on' : ''">
+        <v-ons-row>
+          <v-ons-col class="c-text"></v-ons-col>
+          <v-ons-col class="c-text">C</v-ons-col>
+          <v-ons-col class="c-text">L</v-ons-col>
+          <v-ons-col class="c-text">E</v-ons-col>
+          <v-ons-col class="c-text">A</v-ons-col>
+          <v-ons-col class="c-text">R</v-ons-col>
+          <v-ons-col class="c-text"></v-ons-col>
+        </v-ons-row>
+        <div class="pt-12 px-4">
+          <v-ons-button modifier="large" @click="next">NEXT</v-ons-button>
+        </div>
+        </div>
+      </v-ons-modal>
     </div>
-  </v-ons-page>
 </template>
 
 <style scoped>
@@ -52,7 +56,6 @@
 </style>
 
 <script>
-import clearPage from '@/views/play/Clear';
 export default {
   props: {
     category: {
@@ -70,6 +73,16 @@ export default {
     id: {
       type: Number,
       default: 1
+    },
+    isVisiblePreview: {
+      type: Boolean,
+      default: () => {
+        return true;
+      }
+    },
+    background: {
+      type: String,
+      default: 'default',
     }
   },
   name: "rotation-play",
@@ -82,28 +95,42 @@ export default {
       pWidth: 0,
       pHeight: 0,
       boardHeight: 0,
-      actionSheetVisible: true,
       paddingTop: 0,
-      background: this.$store.state.gameSet.background,
-      borderColor: this.$store.state.gameSet.backgroundBorder
+
+      backgroundImage: '',
+      modalClear: false,
+      isClearOn: false,
+      isClearImage: false,
     };
   },
   created() {
-    this.imageSrc = require(`../../assets/img/${this.category}/${this.src}`);
     this.pieceCount = this.pCount;
-    this.background = require(`../../assets/img/background/${this.background}.jpg`);
+    this.imageSrc = require(`../../assets/img/${this.category}/${this.src}`);
+    this.setBackground(this.background);
   },
   mounted() {
     setTimeout(() => {
       this.setBoard();
-      document.body._gestureDetector.dispose();
     }, 200);
-
-    setTimeout(() => {
-      this.actionSheetVisible = false;
-    }, 1000);
+  },
+  watch: {
+    background(value){
+      this.setBackground(value)
+    }
   },
   methods: {
+    setBackground(value){
+      this.backgroundImage = require(`../../assets/img/background/${value}.jpg`);
+    },
+    next(){
+      setTimeout(() => {
+        this.isClearOn = false;
+      }, 100)
+      setTimeout(() => {
+        this.modalClear = false;
+        this.$emit('goMainPage');
+      }, 400)
+    },
     isClear(){
       let len = this.realBoardItems.length;
 
@@ -120,15 +147,15 @@ export default {
       angle = angle / 360 === 1 ? 0 : angle;
       this.realBoardItems[i].angle = angle;
       this.realBoardItems[i].style = `${this.realBoardItems[i].style}; transform:rotate(${angle}deg);`;
-
-      if(this.isClear()){
-        this.$emit("push-page", {
-          ...clearPage,
-          onsNavigatorProps: {
-            category: this.category,
-            id: this.id,
-          }
-        });
+      
+      if(this.isClear()) {
+        this.isClearImage = true;
+        setTimeout(() => {
+          this.modalClear = true;
+        }, 1000)
+        setTimeout(() => {
+          this.isClearOn = true;
+        }, 1300)
       }
     },
     setBoard() {

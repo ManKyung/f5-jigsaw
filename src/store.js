@@ -37,7 +37,7 @@ export default new Vuex.Store({
           localStorage['background'] = value;
         },
         setBackgroundBorder(state, value) {
-          state.backgroundBoarder = value;
+          state.backgroundBorder = value;
           localStorage['background-border'] = value;
         },
         setGameInit(state){

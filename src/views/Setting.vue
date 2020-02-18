@@ -67,6 +67,9 @@
   border: 2px solid #fb8c00 !important;
   transition: 0 !important;
 }
+.back-button__icon {
+  fill: black !important;
+}
 </style>
 
 
