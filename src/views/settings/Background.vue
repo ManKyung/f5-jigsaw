@@ -54,7 +54,7 @@ export default {
         },
         {
           key: "grass",
-          borderColor: '#fff',
+          borderColor: '#000',
           src: "grass.jpg"
         },
         {

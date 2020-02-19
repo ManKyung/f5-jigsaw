@@ -3920,12 +3920,12 @@ html {
   background:transparent;
 }
 #board div {
-  box-shadow: inset 0 0 1px 0 #000;
-  opacity:0; 
+  /* box-shadow: inset 0 0 1px 0 #000; */
+  opacity:0;
 }
-#board > div:hover{
+/* #board > div:hover{ */
   /* background:#111; */
-}
+/* } */
 #board-real {
   display: flex;
   flex-wrap: wrap;

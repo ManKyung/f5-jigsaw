@@ -40,11 +40,11 @@
         </draggable>
       </div>
       <div class="pa-5 board-real-wrap">
-        <div id="board-real" :style="`max-height:${boardHeight}px; overflow:hidden`">
+        <div id="board-real" :style="`max-height:${boardHeight}px; overflow:hidden; box-shadow: 0 0 1px 0.4px ${backgroundBorder} inset`">
           <div
             v-for="(item, index) in realBoardItems"
             :key="index"
-            :style="`width: ${pWidth}px; height:${pHeight}px; box-shadow: 0 0 1px 0 ${backgroundBorder} inset`"
+            :style="`width: ${pWidth}px; height:${pHeight}px; box-shadow: 0 0 1px 0.3px ${backgroundBorder} inset`"
           >
             <div v-if="item.style" :style="item.style"></div>
           </div>
@@ -62,15 +62,12 @@
         @update="pieceUpdate"
         @remove="pieceRemove"
         :move="checkMove"
-        v-dragscroll.x="{ active: isMove }"
+        :style="`::-webkit-scrollbar-thumb:width:50px;`"
       >
         <div
           class="piece-item"
           v-for="(item, index) in pieceItems"
           :key="index"
-          v-long-press="200"
-          @long-press-start="onLongPressStart"
-          @long-press-stop="onLongPressStop"
         >
           <div class="piece" :id="`piece-${index}`" :style="item.style"></div>
         </div>
@@ -101,11 +98,6 @@
   position: absolute;
   z-index: 100;
 }
-.piece{
-  /* clip-path: circle(40%); */
-/* clip-path: circle(50px at 0 100px); */
-  clip-path: polygon(0.7763157894736841 0.35526315789473684 0.7236842105263157 0.2894736842105263 0.6578947368421053 0.22368421052631576 0.5921052631578947 0.3157894736842105 0.5526315789473684 0.39473684210526316 0.5526315789473684 0.47368421052631576 0.5526315789473684 0.5657894736842105 0.5921052631578947 0.5 0.6578947368421053 0.43421052631578944 0.7236842105263157 0.4605263157894737 0.7763157894736841 0.5526315789473684 0.7763157894736841H0.7763157894736842V0.5526315789473684C0.7763157894736842 0.4605263157894737 0.8289473684210525 0.4342105263157894 0.894736842105263 0.5 0.9605263157894737 0.5657894736842106 1 0.4736842105263157 1 0.39473684210526305 1 0.3157894736842106 0.9605263157894737 0.2236842105263157 0.894736842105263 0.2894736842105263 0.8289473684210525 0.3552631578947367 0.7763157894736842 0.32894736842105265 0.7763157894736842);
-}
 .board-wrap {
   position: absolute;
   z-index: 103;
@@ -114,16 +106,32 @@
   position: absolute;
   z-index: 102;
 }
+
+/* width */
+#board-piece::-webkit-scrollbar {
+  height:30px;
+	background-color: #ddd;
+}
+/* Track */
+#board-piece::-webkit-scrollbar-track {
+  background: #ddd;
+}
+/* Handle */
+#board-piece {
+  --scrollbar-bgImage: url('');
+}
+#board-piece::-webkit-scrollbar-thumb {
+  background: #333;
+  background-image: var(--scrollbar-bgImage);
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); */ 
+}
+
 </style>
 <script>
 import draggable from "@/assets/js/vuedraggable";
-import { dragscroll } from "vue-dragscroll";
-import LongPress from "vue-directive-long-press";
 export default {
-  directives: {
-    dragscroll,
-    "long-press": LongPress
-  },
   props: {
     category: {
       type: String,
@@ -159,7 +167,7 @@ export default {
   // props: ["category", "id", "src", "pCount"],
   name: "jigsaw-play",
   components: {
-    draggable
+    draggable,
   },
   data() {
     return {
@@ -175,10 +183,6 @@ export default {
       boardHeight: 0,
       moveIndex: 0,
       moveItem: {},
-      isMove: true,
-      longpress: false,
-      presstimer: null,
-      longtarget: null,
       isBoardAdd: false,
       paddingTop: 0,
 
@@ -190,11 +194,11 @@ export default {
     };
   },
   created() {
-    this.pieceCount = this.pCount;
+    // this.pieceCount = this.pCount;
+    this.pieceCount = 3;
     this.imageSrc = require(`../../assets/img/${this.category}/${this.src}`);
     this.setBackground(this.background);
     this.setBackgroundBorder(this.backgroundBorder);
-    // this.background = require(`../../assets/img/background/default.jpg`);
   },
   mounted() {
     setTimeout(() => {
@@ -213,6 +217,10 @@ export default {
   methods: {
     setBackground(value){
       this.backgroundImage = require(`../../assets/img/background/${value}.jpg`);
+
+      setTimeout(() => {
+        document.getElementById("board-piece").style.setProperty('--scrollbar-bgImage', `url(${this.backgroundImage})`);
+      }, 100)
     },
     setBackgroundBorder(value){
       this.backgroundBorderColor = value;
@@ -240,14 +248,6 @@ export default {
       setTimeout(() => {
         this.isClearOn = true;
       }, 1300)
-    },
-    onLongPressStart() {
-      this.isMove = false;
-      // triggers after 300ms of mousedown
-    },
-    onLongPressStop() {
-      this.isMove = true;
-      // triggers on mouseup of document
     },
     boardChoose(e) {
       if (this.realBoardItems[e.oldIndex] === 0) {
@@ -304,17 +304,14 @@ export default {
       this.$set(this.realBoardItems, e.oldIndex, 0);
 
       this.boardItems = this.objClone(this.realBoardItems);
-      this.isMove = true;
     },
     pieceUpdate(e) {
-      this.isMove = true;
     },
     pieceRemove(e) {
       if (!this.isBoardAdd) {
         // 중복으로 추가되지 않은 경우 롤백처리
         this.pieceItems.splice(e.oldIndex, 0, this.selectedPiece);
       }
-      this.isMove = true;
     },
     checkMove(e) {},
     setBoard() {
@@ -347,7 +344,15 @@ export default {
           temp.push(item);
         }
       }
-      this.pieceItems = temp;
+      this.pieceItems = this.shuffle(temp);
+      // this.pieceItems = temp;
+    },
+    shuffle(a){
+      for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
     },
     objClone(obj) {
       if (obj === null || typeof obj !== "object") return obj;
