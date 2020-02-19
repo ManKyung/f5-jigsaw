@@ -54,7 +54,9 @@ export default {
     //   this.play();
     // });
     window.document.addEventListener("touchstart", () => {
-      this.play();
+      if(this.$store.state.gameSet.isSound){
+        this.play();
+      }
     }); 
     setTimeout(() => {
       this.$ons.GestureDetector(document.getElementById("navigator")).dispose();
