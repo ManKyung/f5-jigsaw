@@ -15,24 +15,26 @@
 // import backgroundPage from "@/views/settings/Background";
 // import settingPage from "@/views/Setting";
 // import jigsawPage from "@/views/play/Jigsaw";
-import gamePage from "@/views/play/Game";
+// import gamePage from "@/views/play/Game";
+// import playOption from "@/views/PlayOption";
 // import rotationPage from "@/views/play/Rotation";
 // import switchPage from "@/views/play/Switch";
 // import clearPage from "@/views/play/Clear";
 // import sliderPage from "@/views/play/Slider";
-// import clickSound from "@/assets/mp3/click.mp3";
-// import MainPage from "@/views/Main";
-// import { initAd, showBanner } from "@/api/admob.js";
+import clickSound from "@/assets/mp3/click.mp3";
+import MainPage from "@/views/Main";
+// import { initAd, showBanner } from "@/assets/js/admob.js";
 export default {
   name: "app",
   data() {
     return {
-      // pageStack: [MainPage]
+      pageStack: [MainPage]
+      // pageStack: [playOption]
       // pageStack: [clearTestPage]
       // pageStack: [backgroundPage]
       // pageStack: [settingPage]
       // pageStack: [clearPage]
-      pageStack: [gamePage]
+      // pageStack: [gamePage]
       // pageStack: [rotationPage]
       // pageStack: [sliderPage]
     };
@@ -51,17 +53,18 @@ export default {
     // window.document.addEventListener("click", () => {
     //   this.play();
     // });
-    // window.document.addEventListener("touchstart", () => {
-    //   this.play();
-    // }); 
+    window.document.addEventListener("touchstart", () => {
+      this.play();
+    }); 
     setTimeout(() => {
       this.$ons.GestureDetector(document.getElementById("navigator")).dispose();
     }, 10);
     document.addEventListener("deviceready", function() {
       initAd();
-      // setTimeout(() => {
-      //   showBanner();
-      // }, 500);
+      // alert(1)
+      setTimeout(() => {
+        showBanner();
+      }, 500);
     });
   },
   methods: {
@@ -69,7 +72,6 @@ export default {
       this.pageStack = [MainPage];
     },
     play() {
-      console.log('click')
       let audio = new Audio(clickSound);
       audio.play();
     }

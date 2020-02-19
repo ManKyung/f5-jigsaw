@@ -75,20 +75,6 @@ export default {
   data() {
     return {
       type: '',
-      items: [
-        {
-          type: 'jigsaw'
-        },
-        {
-          type: 'switch'
-        },
-        {
-          type: 'slider'
-        },
-        {
-          type: 'rotation'
-        }
-      ]
     }
   },
   mounted(){

@@ -14,7 +14,7 @@
         :src="imageSrc"
       />
     </div>
-      <div class="pa-5 board-real-wrap">
+      <div class="pa-5 board-real-wrap" ref="boardWrap">
         <div id="board-real" :style="`max-height:${boardHeight}px; overflow:hidden`">
           <div
             v-for="(item, index) in realBoardItems"
@@ -80,6 +80,12 @@ export default {
         return true;
       }
     },
+    isHint: {
+      type: Boolean,
+      default: () => {
+        return true;
+      }
+    },
     background: {
       type: String,
       default: 'default',
@@ -112,13 +118,27 @@ export default {
     setTimeout(() => {
       this.setBoard();
     }, 200);
+    setTimeout(() => {
+      this.setUI();
+    }, 1000);
   },
   watch: {
+    isHint(){
+      let len = this.realBoardItems.length / 2;
+      for(let i = 0 ; i < len ; i++){
+        this.realBoardItems[i].style = `${this.realBoardItems[i].style}; transform:rotate(0deg);`;
+      }
+    },
     background(value){
       this.setBackground(value)
     }
   },
   methods: {
+    setUI(){
+      let gameContainer = this.$refs.gameContainer;
+      let boardWrap = this.$refs.boardWrap;
+      this.paddingTop = (gameContainer.clientHeight - boardWrap.clientHeight) / 2;
+    },
     setBackground(value){
       this.backgroundImage = require(`../../assets/img/background/${value}.jpg`);
     },
@@ -160,15 +180,10 @@ export default {
     },
     setBoard() {
       this.previewImage = this.$refs.preview;
-      let gameContainer = this.$refs.gameContainer;
 
-      // let rest = this.previewImage.clientWidth % this.pieceCount;
       let clientWidth = this.previewImage.clientWidth;
-
       this.pWidth = this.pHeight = clientWidth / this.pieceCount;
       this.boardHeight = clientWidth;
-      this.paddingTop =
-        gameContainer.clientHeight / 2 - (this.boardHeight + 40) / 2;
 
       let temp = [];
       for (let i = 0; i < this.pieceCount; i++) {

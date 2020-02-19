@@ -13,9 +13,14 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "cordova-admob-sdk": "0.24.1",
     "cordova-android": "^8.1.0",
+    "cordova-plugin-admob-free": "0.27.0",
+    "cordova-plugin-splashscreen": "^5.0.3",
+    "cordova-promise-polyfill": "0.0.2",
     "onsenui": "^2.9.1",
     "vue": "^2.5.0",
+    "vue-carousel-3d": "^0.2.0",
     "vue-onsenui": "^2.5.0",
     "vuedraggable": "^2.23.2",
     "vuex": "^3.0.0"
@@ -82,7 +87,11 @@
   ],
   "cordova": {
     "plugins": {
-      "cordova-plugin-whitelist": {}
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-admob-free": {
+        "ADMOB_APP_ID": "ca-app-pub-1963334904140891~7960249211"
+      },
+      "cordova-plugin-splashscreen": {}
     },
     "platforms": [
       "android"

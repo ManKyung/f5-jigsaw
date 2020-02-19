@@ -3,11 +3,10 @@
     <div
       class="game-background game-container"
       ref="gameContainer"
-      :style="`background:url('${backgroundImage}'); padding-top:${paddingTop}px`"
-    >
+      :style="`background:url('${backgroundImage}'); padding-top:${paddingTop}px`">
       <div
         class="pa-5 preview-wrap"
-        :class="[isVisiblePreview ? 'on' : '', isClearImage ? 'on clear' : '']"c>
+        :class="[isVisiblePreview ? 'on' : '', isClearImage ? 'on clear' : '']">
         <img
           ref="preview"
           class="w-100 previewImage"
@@ -16,7 +15,7 @@
           :src="imageSrc"
         />
       </div>
-      <div class="pa-5 board-wrap">
+      <div ref="boardWrap" class="pa-5 board-wrap">
         <draggable
           id="board"
           ref="board"
@@ -127,7 +126,6 @@
   border-radius: 10px;
   /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); */ 
 }
-
 </style>
 <script>
 import draggable from "@/assets/js/vuedraggable";
@@ -150,6 +148,12 @@ export default {
       default: 1
     },
     isVisiblePreview: {
+      type: Boolean,
+      default: () => {
+        return true;
+      }
+    },
+    isHint: {
       type: Boolean,
       default: () => {
         return true;
@@ -181,8 +185,6 @@ export default {
       pWidth: 0,
       pHeight: 0,
       boardHeight: 0,
-      moveIndex: 0,
-      moveItem: {},
       isBoardAdd: false,
       paddingTop: 0,
 
@@ -194,8 +196,7 @@ export default {
     };
   },
   created() {
-    // this.pieceCount = this.pCount;
-    this.pieceCount = 3;
+    this.pieceCount = this.pCount;
     this.imageSrc = require(`../../assets/img/${this.category}/${this.src}`);
     this.setBackground(this.background);
     this.setBackgroundBorder(this.backgroundBorder);
@@ -205,8 +206,21 @@ export default {
       this.setBoard();
       this.setPieceItem();
     }, 200);
+    setTimeout(() => {
+      this.setUI();
+    }, 300);
   },
   watch: {
+    isHint(){
+      let len = this.realBoardItems.length;
+      for(let i = 0 ; i < len ; i++){
+        if(this.realBoardItems[i] !== 0 && i !== this.realBoardItems[i].id) {
+          this.pieceItems.unshift(this.realBoardItems[i]);
+
+          this.$set(this.realBoardItems, i, 0)
+        }
+      }
+    },
     background(value){
       this.setBackground(value)
     },
@@ -215,6 +229,11 @@ export default {
     }
   },
   methods: {
+    setUI(){
+      let gameContainer = this.$refs.gameContainer;
+      let boardWrap = this.$refs.boardWrap;
+      this.paddingTop = (gameContainer.clientHeight - boardWrap.clientHeight) / 2;
+    },
     setBackground(value){
       this.backgroundImage = require(`../../assets/img/background/${value}.jpg`);
 
@@ -294,7 +313,6 @@ export default {
       }
     },
     pieceChoose(e) {
-      console.log("choose");
 
       e.item.children[0].classList.add("on");
       this.selectedPiece = this.pieceItems[e.oldIndex];
@@ -316,12 +334,10 @@ export default {
     checkMove(e) {},
     setBoard() {
       this.previewImage = this.$refs.preview;
-      let gameContainer = this.$refs.gameContainer;
       this.pWidth = this.previewImage.clientWidth / this.pieceCount;
       this.pHeight = this.previewImage.clientHeight / this.pieceCount;
       this.boardHeight = this.previewImage.clientHeight;
-      this.paddingTop =
-        gameContainer.clientHeight / 2 - (this.boardHeight + 40) / 2;
+
       for (let i = 0; i < this.pieceCount * this.pieceCount; i++) {
         this.realBoardItems.push(0);
         this.boardItems.push(0);

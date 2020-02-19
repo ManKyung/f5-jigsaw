@@ -4,13 +4,21 @@
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
-    <name>f5-jigsaw</name>
+    <feature name="AdMob">
+        <param name="android-package" value="name.ratson.cordova.admob.AdMob" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
+    <name>F5-jigsaw</name>
     <description>
-      Vue.js + Onsen UI + Cordova sample app
-    </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-      Vue.js + Onsen UI + Cordova teams
-    </author>
+    F5-Jigsaw Puzzle Game(Free)
+  </description>
+    <author email="realmojo88@gmail.com" href="https://realmojo880601.web.app/">
+    realmojo88
+  </author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -21,4 +29,6 @@
     <allow-intent href="geo:*" />
     <allow-intent href="market:*" />
     <preference name="loglevel" value="DEBUG" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="orientation" value="portrait" />
 </widget>

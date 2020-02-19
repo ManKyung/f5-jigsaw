@@ -13,7 +13,7 @@
         :src="imageSrc"
       />
     </div>
-    <div class="pa-5 board-real-wrap">
+    <div class="pa-5 board-real-wrap" ref="boardWrap">
       <div id="board-real" :style="`max-height:${boardHeight}px; overflow:hidden`">
         <div
           v-for="(item, index) in realBoardItems"
@@ -79,6 +79,12 @@ export default {
         return true;
       }
     },
+    isHint: {
+      type: Boolean,
+      default: () => {
+        return true;
+      }
+    },
     background: {
       type: String,
       default: 'default',
@@ -114,13 +120,44 @@ export default {
     setTimeout(() => {
       this.setBoard();
     }, 200);
+    setTimeout(() => {
+      this.setUI();
+    }, 500);
   },
   watch: {
+    isHint(){
+      let len = this.realBoardItems.length;
+
+      let correctTemp = [];
+      let shuffleTemp = [];
+      for(let i = 0 ; i < len ; i++){
+        if(this.realBoardItems[i].id < len / 2){
+          correctTemp[this.realBoardItems[i].id] = this.realBoardItems[i];
+        } else {
+          shuffleTemp.push(this.realBoardItems[i])
+        }
+      }
+      this.realBoardItems = [];
+      for(let i = 0 ; i < correctTemp.length ; i++){
+        this.realBoardItems.push(correctTemp[i])
+      }
+      for(let i = 0 ; i < shuffleTemp.length ; i++){
+        if(shuffleTemp[i] && shuffleTemp[i].id === undefined){
+          this.emptyIndex = correctTemp.length + i
+        }
+        this.realBoardItems.push(shuffleTemp[i])
+      }
+    },
     background(value){
       this.setBackground(value)
     }
   },
   methods: {
+    setUI(){
+      let gameContainer = this.$refs.gameContainer;
+      let boardWrap = this.$refs.boardWrap;
+      this.paddingTop = (gameContainer.clientHeight - boardWrap.clientHeight) / 2;
+    },
     setBackground(value){
       this.backgroundImage = require(`../../assets/img/background/${value}.jpg`);
     },
@@ -192,14 +229,9 @@ export default {
     },
     setBoard() {
       this.previewImage = this.$refs.preview;
-      let gameContainer = this.$refs.gameContainer;
-
       let clientWidth = this.previewImage.clientWidth;
-
       this.pWidth = this.pHeight = clientWidth / this.pieceCount;
       this.boardHeight = clientWidth;
-      this.paddingTop =
-        gameContainer.clientHeight / 2 - (this.boardHeight + 40) / 2;
 
       let temp = [];
       for (let i = 0; i < this.pieceCount; i++) {
@@ -223,8 +255,8 @@ export default {
           }
         }
       }
-      // this.realBoardItems = this.shuffle(temp);
-      this.realBoardItems = temp;
+      this.realBoardItems = this.shuffle(temp);
+      // this.realBoardItems = temp;
 
       for(const i in this.realBoardItems){
         if(this.realBoardItems[i].class === undefined){

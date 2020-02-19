@@ -16,10 +16,10 @@
     </div>
 
     <div class="pt-4 text-center">
-      <v-ons-button modifier="outline" class="btn-music" color="red" style="margin: 6px 0">
+      <v-ons-button @click="setMusic" modifier="outline" class="btn-music" color="red" style="margin: 6px 0">
         <v-ons-icon icon="ion-ios-musical-notes" style="color:black; font-size:32px"></v-ons-icon>
       </v-ons-button>
-      <v-ons-button modifier="outline" class="btn-sound" style="margin: 6px 0">
+      <v-ons-button @click="setSound" modifier="outline" class="btn-sound" :class="isSound ? 'on': ''" style="margin: 6px 0">
         <v-ons-icon icon="ion-ios-volume-high" style="color:black; font-size:32px"></v-ons-icon>
       </v-ons-button>
     </div>
@@ -67,6 +67,12 @@
   border: 2px solid #fb8c00 !important;
   transition: 0 !important;
 }
+.btn-sound.on {
+  background-color: #fb8c00 !important;
+}
+.btn-sound.on > ons-icon {
+  color: white !important;
+}
 .back-button__icon {
   fill: black !important;
 }
@@ -78,7 +84,19 @@ import gameSettingPage from "@/views/settings/GameSetting";
 import backgroundPage from "@/views/settings/Background";
 export default {
   name: "setting",
+  data(){
+    return {
+      isSound: this.$store.state.gameSet.isSound,
+    }
+  },
   methods: {
+    setMusic(){
+
+    },
+    setSound(){
+      this.isSound = !this.isSound
+      this.$store.commit("gameSet/setSound", this.isSound);
+    },
     goPage(page) {
       if (page === "review") {
         location.href =

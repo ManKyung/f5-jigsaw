@@ -1,10 +1,17 @@
 <template>
   <v-ons-page class="game-page">
     <v-ons-toolbar class="game-top white" style="min-height:64px; background-image: none;">
-      <div class="left pt-2 w-100">
+      <div class="left pt-2">
         <v-ons-back-button class="pl-4"></v-ons-back-button>
       </div>
       <div class="game-button right pt-1">
+        <v-ons-button
+          modifier="quiet"
+          style="color:#111"
+          @click="isHint = !isHint"
+        >
+          <v-ons-icon icon="ion-ios-color-wand"></v-ons-icon>
+        </v-ons-button>
         <v-ons-button
           modifier="quiet"
           style="color:#111"
@@ -29,6 +36,7 @@
     :pCount="pCount"
     :id="id"
     :isVisiblePreview="isVisiblePreview"
+    :isHint="isHint"
     :background="this.$store.state.gameSet.background"
     :backgroundBorder="this.$store.state.gameSet.backgroundBorder"
     @goMainPage="goMainPage"    
@@ -37,8 +45,20 @@
   </v-ons-page>
 </template>
 <style>
+.game-top {
+  display:flex;
+}
+.game-top > .left {
+  flex: 1;
+}
+.game-top > .center {
+  flex: 0;
+}
+.game-top > .right {
+  flex: 2;
+}
 .game-button ons-button {
-  font-size:2.4vh
+  font-size:3vh !important;
 }
 .preview-wrap{
   position:absolute; z-index:100
@@ -61,7 +81,7 @@ export default {
   props: {
     gameType: {
       type: String,
-      default: "animal"
+      default: "jigsaw"
     },
     category: {
       type: String,
@@ -83,10 +103,11 @@ export default {
   data() {
     return {
       isVisiblePreview: true,
+      isHint: true,
     };
   },
   created() {
-    this.gameType = 'jigsaw'
+    // this.gameType = 'rotation'
     if(this.gameType === 'jigsaw'){
       this.component = jigsawPage
     } else if(this.gameType === 'slider'){

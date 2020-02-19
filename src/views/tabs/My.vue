@@ -10,7 +10,7 @@
           <v-ons-card class="pa-0 ma-0">
             <div>
               <div style="position: absolute; background: rgba(0,0,0, 0.6); margin: 5px;">
-                <div style="font-size:2vh; color:white; padding:0 4px 4px 4px;">{{item.gameType}} / {{item.pCount}}</div>
+                <div style="font-size:2vh; color:white; padding:0 4px 4px 4px; text-transform:capitalize;">{{item.gameType}} / {{item.pCount}}</div>
               </div>
             <img
               @click="goPage(item)"

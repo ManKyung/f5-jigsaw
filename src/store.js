@@ -11,6 +11,7 @@ export default new Vuex.Store({
         type: 'jigsaw',
         background: 'default',
         backgroundBorder: '#fff',
+        isSound: true,
         my: []
       },
       mutations: {
@@ -25,6 +26,10 @@ export default new Vuex.Store({
           
           state.my = my
           localStorage['game-my'] = JSON.stringify(state.my);
+        },
+        // setting sound
+        setSound(state, value) {
+          state.isSound = value;
         },
         // jigsaw, switch, slider, rotation
         setGameType(state, value) {
