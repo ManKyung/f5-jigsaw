@@ -107,7 +107,7 @@ export default {
     };
   },
   created() {
-    // this.gameType = 'rotation'
+    // this.gameType = 'slider'
     if(this.gameType === 'jigsaw'){
       this.component = jigsawPage
     } else if(this.gameType === 'slider'){
@@ -120,7 +120,9 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      document.body._gestureDetector.dispose();
+      if(this.component === 'jigsaw'){
+        document.body._gestureDetector.dispose();
+      }
     }, 200);
 
     setTimeout(() => {

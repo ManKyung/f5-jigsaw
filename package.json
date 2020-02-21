@@ -9,6 +9,7 @@
     "serve": "npm run dev",
     "build": "node build/build.js",
     "build-app": "node build/build.js && cordova run android --device",
+    "build-apk": "node build/build.js && cordova build android",
     "build:watch": "cross-env WEBPACK_WATCH=true node build/build.js",
     "lint": "eslint --ext .js,.vue src"
   },
@@ -22,6 +23,7 @@
     "vue": "^2.5.0",
     "vue-carousel-3d": "^0.2.0",
     "vue-onsenui": "^2.5.0",
+    "vue2-hammer": "^2.1.2",
     "vuedraggable": "^2.23.2",
     "vuex": "^3.0.0"
   },

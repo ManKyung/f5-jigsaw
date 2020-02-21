@@ -297,6 +297,11 @@ export default {
       if (this.realBoardItems[e.newIndex] === 0) {
         this.$set(this.realBoardItems, e.newIndex, this.selectedPiece);
         this.$set(this.realBoardItems, e.oldIndex, 0);
+      } else {
+        let temp = this.realBoardItems[e.oldIndex]; 
+        console.log(temp)
+        this.$set(this.realBoardItems, e.oldIndex, this.realBoardItems[e.newIndex]);
+        this.$set(this.realBoardItems, e.newIndex, temp);
       }
       let dom = document.getElementById(`board-${e.oldIndex}`);
  

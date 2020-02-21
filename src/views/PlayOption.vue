@@ -34,12 +34,12 @@
       </carousel-3d>
 
       <v-ons-row class="text-center">
-        <v-ons-col class="pa-2" v-for="(item, index) in gameTypeItems" :key="index">
+        <v-ons-col class="pa-1" v-for="(item, index) in gameTypeItems" :key="index">
           <v-ons-button @click="setGameType(item.type)" class="w-100 btn-type type-text" :class="gameType === item.type ? 'on' : ''">{{item.type}}</v-ons-button>
         </v-ons-col>
       </v-ons-row>
 
-      <v-ons-col class="pa-2">
+      <v-ons-col class="pa-1">
         <v-ons-button modifier="large" class="w-100 play-text" @click="goPage">Play</v-ons-button>
       </v-ons-col>
     </div>
@@ -65,19 +65,19 @@
   background-color: transparent !important;
   border: 1px solid #fb8c00 !important;
   color: #fb8c00 !important;
-  letter-spacing: 3px !important;
+  letter-spacing: 2px !important;
 }
 .btn-type.on {
   background-color: #fb8c00 !important;
   color: white !important;
-  letter-spacing: 3px !important;
+  letter-spacing: 2px !important;
 }
 .type-text, .play-text {
   text-transform:capitalize !important;
   font-family: NanumOenSonJabIDoYeBbeo !important;
-  font-size: 2.4vh !important;
-  font-weight: bold !important;
+  font-size: 2vh !important;
   letter-spacing: 2px !important;
+  font-weight: bold !important;
 }
 </style>
 <script>
@@ -93,7 +93,7 @@ export default {
   data() {
     return {
       pieceCount: 4,
-      items: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+      items: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
       perviewImage: null,
       boardItems: [],
       selectedPiece: {},

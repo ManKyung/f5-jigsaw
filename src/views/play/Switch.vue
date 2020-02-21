@@ -19,7 +19,8 @@
             v-for="(item, index) in realBoardItems"
             :key="index"
             :style="`width: ${pWidth}px; height:${pHeight}px`"
-            @click="changePiece(index)"
+            v-hammer:tap="(event)=> changePiece(event, index)"
+            v-hammer:pan="(event)=> changePiece(event, index)"
           >
             <div class="switch-piece" :id="`piece-${index}`" :style="item.style"></div>
           </div>
@@ -175,7 +176,7 @@ export default {
 
       return true;
     },
-    changePiece(i) {
+    changePiece(e, i) {
       let curDom = document.getElementById(`piece-${i}`);
       if (this.selectedIndex === i) {
         curDom.classList.remove("on");

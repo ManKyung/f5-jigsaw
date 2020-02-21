@@ -19,7 +19,7 @@
           v-for="(item, index) in realBoardItems"
           :key="index"
           :style="`width: ${pWidth}px; height:${pHeight}px`"
-          @click="sliderPiece(index)"
+          v-hammer:pan="(event)=> sliderPiece(event, index)"
         >
           <div v-if="item.style" :style="item.style"></div>
         </div>
@@ -199,32 +199,37 @@ export default {
       bottom = i + pieceCount < Math.pow(pieceCount, 2) ? i + pieceCount : -1;
 
       return {
-        top: top,
-        right: right,
-        bottom: bottom,
-        left: left,
+        TOP: top,
+        RIGHT: right,
+        BOTTOM: bottom,
+        LEFT: left,
       }
     },
-    sliderPiece(i) {
-      if(this.emptyIndex === i){ return ; }
-      let nearIndex = this.getNearIndex(i)
-
-      for(const key in nearIndex){
-        if(nearIndex[key] === this.emptyIndex){
-          this.$set(this.realBoardItems, this.emptyIndex, this.realBoardItems[i])
-          this.$set(this.realBoardItems, i, {})
-          this.emptyIndex = i;
-        }
+    sliderPiece(e, i) {
+      if(e.additionalEvent === undefined || this.emptyIndex === i){
+        return ;
       }
+      let nearIndex = this.getNearIndex(i);
+      if(
+        (e.additionalEvent === 'panup' && nearIndex.TOP === this.emptyIndex) ||
+        (e.additionalEvent === 'pandown' && nearIndex.BOTTOM === this.emptyIndex) ||
+        (e.additionalEvent === 'panleft' && nearIndex.LEFT === this.emptyIndex) ||
+        (e.additionalEvent === 'panright' && nearIndex.RIGHT === this.emptyIndex)
+      ){
 
-      if(this.isClear()) {
-        this.isClearImage = true;
-        setTimeout(() => {
-          this.modalClear = true;
-        }, 1000)
-        setTimeout(() => {
-          this.isClearOn = true;
-        }, 1300)
+        this.$set(this.realBoardItems, this.emptyIndex, this.realBoardItems[i])
+        this.$set(this.realBoardItems, i, {})
+        this.emptyIndex = i;
+
+        if(this.isClear()) {
+          this.isClearImage = true;
+          setTimeout(() => {
+            this.modalClear = true;
+          }, 1000)
+          setTimeout(() => {
+            this.isClearOn = true;
+          }, 1300)
+        }
       }
     },
     setBoard() {

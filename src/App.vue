@@ -23,7 +23,7 @@
 // import sliderPage from "@/views/play/Slider";
 import clickSound from "@/assets/mp3/click.mp3";
 import MainPage from "@/views/Main";
-// import { initAd, showBanner } from "@/assets/js/admob.js";
+import { initAd, showBanner } from "@/assets/js/admob.js";
 export default {
   name: "app",
   data() {

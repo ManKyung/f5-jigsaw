@@ -3919,9 +3919,13 @@ html {
   overflow:hidden;
   background:transparent;
 }
-#board div {
+#board .board-item {
   /* box-shadow: inset 0 0 1px 0 #000; */
   opacity:0;
+}
+#board .piece-item {
+  /* box-shadow: inset 0 0 1px 0 #000; */
+  opacity:0.5 !important;
 }
 /* #board > div:hover{ */
   /* background:#111; */

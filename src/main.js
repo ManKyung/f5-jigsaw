@@ -7,11 +7,13 @@ import Vue from 'vue'
 import VueOnsen from 'vue-onsenui'
 import store from './store'
 import App from './App'
+import { VueHammer } from 'vue2-hammer'
 import './assets/css/index.css'
 
 Vue.config.productionTip = false
 
 Vue.use(VueOnsen)
+Vue.use(VueHammer)
 
 /* eslint-disable no-new */
 new Vue({

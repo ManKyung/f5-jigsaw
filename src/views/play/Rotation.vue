@@ -20,7 +20,8 @@
             v-for="(item, index) in realBoardItems"
             :key="index"
             :style="`width: ${pWidth}px; height:${pHeight}px`"
-            @click="transPiece(index)"
+            v-hammer:tap="(event)=> transPiece(event, index)"
+            v-hammer:pan="(event)=> transPiece(event, index)"
           >
             <div v-if="item.style" :style="item.style"></div>
           </div>
@@ -162,7 +163,7 @@ export default {
 
       return true;
     },
-    transPiece(i){
+    transPiece(e, i){
       let angle = this.realBoardItems[i].angle + 90;
       angle = angle / 360 === 1 ? 0 : angle;
       this.realBoardItems[i].angle = angle;

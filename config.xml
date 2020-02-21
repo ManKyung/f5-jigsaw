@@ -2,7 +2,7 @@
 <widget id="com.f5game.jigsaw" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <preference name="SplashScreenDelay" value="3000" />
   <preference name="orientation" value="portrait"/>
-  <name>F5-jigsaw</name>
+  <name>F5 Jigsaw</name>
   <description>
     F5-Jigsaw Puzzle Game(Free)
   </description>
