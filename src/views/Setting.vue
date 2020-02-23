@@ -7,19 +7,19 @@
     <div class="pt-4">
       <v-ons-list-item>
         <v-ons-list-item modifier="nodivider"></v-ons-list-item>
-        <v-ons-list-item modifier="nodivider" @click="goPage('review')">Review</v-ons-list-item>
-        <v-ons-list-item modifier="nodivider" @click="goPage('background')">Background</v-ons-list-item>
-        <v-ons-list-item modifier="nodivider" @click="goPage('share')">Share</v-ons-list-item>
-        <v-ons-list-item modifier="nodivider" @click="goPage('gameSetting')">Game Setting</v-ons-list-item>
-        <v-ons-list-item modifier="nodivider" @click="goPage('removeAd')">Remove AD</v-ons-list-item>
+        <v-ons-list-item modifier="nodivider" v-hammer:tap="(e)=> goPage(e, 'review')">Review</v-ons-list-item>
+        <v-ons-list-item modifier="nodivider" v-hammer:tap="(e)=> goPage(e, 'background')">Background</v-ons-list-item>
+        <v-ons-list-item modifier="nodivider" v-hammer:tap="(e)=> goPage(e, 'share')">Share</v-ons-list-item>
+        <v-ons-list-item modifier="nodivider" v-hammer:tap="(e)=> goPage(e, 'gameSetting')">Game Setting</v-ons-list-item>
+        <v-ons-list-item modifier="nodivider" v-hammer:tap="(e)=> goPage(e, 'removeAd')">Remove AD</v-ons-list-item>
       </v-ons-list-item>
     </div>
 
     <div class="pt-4 text-center">
-      <v-ons-button @click="setMusic" modifier="outline" class="btn-music" color="red" style="margin: 6px 0">
+      <v-ons-button  v-hammer:tap="setBackgroundMusic" modifier="outline" class="btn-music" :class="isBackgroundMusic ? 'on': ''" style="margin: 6px 0">
         <v-ons-icon icon="ion-ios-musical-notes" style="color:black; font-size:32px"></v-ons-icon>
       </v-ons-button>
-      <v-ons-button @click="setSound" modifier="outline" class="btn-sound" :class="isSound ? 'on': ''" style="margin: 6px 0">
+      <v-ons-button  v-hammer:tap="setSound" modifier="outline" class="btn-sound" :class="isSound ? 'on': ''" style="margin: 6px 0">
         <v-ons-icon icon="ion-ios-volume-high" style="color:black; font-size:32px"></v-ons-icon>
       </v-ons-button>
     </div>
@@ -73,6 +73,12 @@
 .btn-sound.on > ons-icon {
   color: white !important;
 }
+.btn-music.on {
+  background-color: #6c5ce7 !important;
+}
+.btn-music.on > ons-icon {
+  color: white !important;
+}
 .back-button__icon {
   fill: black !important;
 }
@@ -87,6 +93,7 @@ export default {
   data(){
     return {
       isSound: this.$store.state.gameSet.isSound,
+      isBackgroundMusic: this.$store.state.gameSet.isBackgroundMusic,
     }
   },
   methods: {
@@ -97,7 +104,11 @@ export default {
       this.isSound = !this.isSound
       this.$store.commit("gameSet/setSound", this.isSound);
     },
-    goPage(page) {
+    setBackgroundMusic(){
+      this.isBackgroundMusic = !this.isBackgroundMusic;
+      this.$store.commit("gameSet/setBackgroundMusic", this.isBackgroundMusic);
+    },
+    goPage(e, page) {
       if (page === "review") {
         location.href =
           "https://play.google.com/store/apps/details?id=com.f5game.jigsaw";

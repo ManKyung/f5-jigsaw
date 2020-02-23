@@ -12,6 +12,7 @@ export default new Vuex.Store({
         background: 'default',
         backgroundBorder: '#fff',
         isSound: true,
+        isBackgroundMusic: true,
         my: []
       },
       mutations: {
@@ -30,6 +31,11 @@ export default new Vuex.Store({
         // setting sound
         setSound(state, value) {
           state.isSound = value;
+        },
+        // setting background music
+        setBackgroundMusic(state, value) {
+          console.log(value)
+          state.isBackgroundMusic = value;
         },
         // jigsaw, switch, slider, rotation
         setGameType(state, value) {

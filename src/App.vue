@@ -6,6 +6,7 @@
       :page-stack="pageStack"
       @push-page="pageStack.push($event)"
       @pop-page="popStatck"
+      v-hammer:tap="init"
     ></v-ons-navigator>
   </div>
 </template>
@@ -21,22 +22,25 @@
 // import switchPage from "@/views/play/Switch";
 // import clearPage from "@/views/play/Clear";
 // import sliderPage from "@/views/play/Slider";
+import backgroundMusic from "@/assets/mp3/bensound-photoalbum.mp3";
 import clickSound from "@/assets/mp3/click.mp3";
 import MainPage from "@/views/Main";
-import { initAd, showBanner } from "@/assets/js/admob.js";
+import { initAd } from "@/assets/js/admob.js";
 export default {
   name: "app",
   data() {
     return {
-      pageStack: [MainPage]
+      pageStack: [MainPage],
       // pageStack: [playOption]
       // pageStack: [clearTestPage]
       // pageStack: [backgroundPage]
       // pageStack: [settingPage]
       // pageStack: [clearPage]
-      // pageStack: [gamePage]
+      // pageStack: [gamePage],
       // pageStack: [rotationPage]
       // pageStack: [sliderPage]
+      isPlayMusic: false,
+      backgroundMusic: null
     };
   },
   created() {
@@ -51,31 +55,56 @@ export default {
   },
   mounted() {
     // window.document.addEventListener("click", () => {
-    //   this.play();
+      //   this.play();
     // });
-    window.document.addEventListener("touchstart", () => {
-      if(this.$store.state.gameSet.isSound){
-        this.play();
-      }
-    }); 
+
+    // window.document.addEventListener("click", () => {
+    //   if(this.$store.state.gameSet.isSound){
+    //     this.play();
+    //   }
+    //   if(!this.isPlayMusic && this.$store.state.gameSet.isBackgroundMusic){
+    //     this.backgroudPlay();
+    //   }
+    //   if(this.$store.state.gameSet.isBackgroundMusic === false){
+    //     this.backgroundMusic.pause();
+    //     this.backgroundMusic.currentTime = 0;
+    //     this.isPlayMusic = false;
+    //   }
+    // });
     setTimeout(() => {
       this.$ons.GestureDetector(document.getElementById("navigator")).dispose();
     }, 10);
     document.addEventListener("deviceready", function() {
       initAd();
-      // alert(1)
-      setTimeout(() => {
-        showBanner();
-      }, 500);
     });
   },
   methods: {
+    init(){
+      if(this.$store.state.gameSet.isSound){
+        this.play();
+      }
+      // if(!this.isPlayMusic && this.$store.state.gameSet.isBackgroundMusic){
+      //   this.backgroudPlay();
+      // }
+      // if(this.$store.state.gameSet.isBackgroundMusic === false){
+      //   this.backgroundMusic.pause();
+      //   this.backgroundMusic.currentTime = 0;
+      //   this.isPlayMusic = false;
+      // }
+    },
     popStatck(){
       this.pageStack = [MainPage];
     },
     play() {
       let audio = new Audio(clickSound);
       audio.play();
+    },
+    backgroudPlay() {
+      this.backgroundMusic = new Audio(backgroundMusic);
+      this.backgroundMusic.loop = true;
+      this.backgroundMusic.volume = 0.3;
+      this.backgroundMusic.play();
+      this.isPlayMusic = true;
     }
   }
 };

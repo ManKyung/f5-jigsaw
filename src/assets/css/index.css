@@ -4023,7 +4023,7 @@ html {
   overflow-x: scroll;
 }
 #board-piece .piece-item {
-  padding: 10px;
+  margin: 30px;
 }
 
 #board-piece .piece-item div.on {

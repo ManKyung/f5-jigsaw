@@ -4,7 +4,7 @@
     ref="gameContainer"
     :style="`background:url('${backgroundImage}'); padding-top:${paddingTop}px`"
   >
-    <div class="pa-5 preview-wrap" :class="[isVisiblePreview ? 'on' : '', isClearImage ? 'on clear' : '']">
+    <div ref="previewWrap" class="pa-5 preview-wrap" :class="[isVisiblePreview ? 'on' : '', isClearImage ? 'on clear' : '']">
       <img
         ref="preview"
         class="w-100 previewImage"
@@ -14,14 +14,15 @@
       />
     </div>
     <div class="pa-5 board-real-wrap" ref="boardWrap">
-      <div id="board-real" :style="`max-height:${boardHeight}px; overflow:hidden`">
+      <div id="board-real" :style="`max-height:${boardHeight}px; overflow:hidden;`">
         <div
           v-for="(item, index) in realBoardItems"
+          class="board-item"
           :key="index"
-          :style="`width: ${pWidth}px; height:${pHeight}px`"
-          v-hammer:pan="(event)=> sliderPiece(event, index)"
+          :style="`${item.style}; transition: all 0.08s; position:absolute;`"
+          :data-id="`${index}`"
+          v-hammer:pan.start="(event)=> sliderPiece(event, item)"
         >
-          <div v-if="item.style" :style="item.style"></div>
         </div>
       </div>
     </div>
@@ -96,7 +97,6 @@ export default {
       previewImage: null,
       imageSrc: "",
       realBoardItems: [],
-      emptyItem: {},
       pieceCount: 0,
       pWidth: 0,
       pHeight: 0,
@@ -118,35 +118,16 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.setBoard();
-    }, 200);
-    setTimeout(() => {
+      this.setBoard(true);
       this.setUI();
     }, 500);
   },
   watch: {
     isHint(){
-      let len = this.realBoardItems.length;
-
-      let correctTemp = [];
-      let shuffleTemp = [];
-      for(let i = 0 ; i < len ; i++){
-        if(this.realBoardItems[i].id < len / 2){
-          correctTemp[this.realBoardItems[i].id] = this.realBoardItems[i];
-        } else {
-          shuffleTemp.push(this.realBoardItems[i])
-        }
-      }
       this.realBoardItems = [];
-      for(let i = 0 ; i < correctTemp.length ; i++){
-        this.realBoardItems.push(correctTemp[i])
-      }
-      for(let i = 0 ; i < shuffleTemp.length ; i++){
-        if(shuffleTemp[i] && shuffleTemp[i].id === undefined){
-          this.emptyIndex = correctTemp.length + i
-        }
-        this.realBoardItems.push(shuffleTemp[i])
-      }
+      setTimeout(() => {
+        this.setBoard(false);
+      }, 10)
     },
     background(value){
       this.setBackground(value)
@@ -155,8 +136,8 @@ export default {
   methods: {
     setUI(){
       let gameContainer = this.$refs.gameContainer;
-      let boardWrap = this.$refs.boardWrap;
-      this.paddingTop = (gameContainer.clientHeight - boardWrap.clientHeight) / 2;
+      let previewWrap = this.$refs.previewWrap;
+      this.paddingTop = (gameContainer.clientHeight - previewWrap.clientHeight) / 2;
     },
     setBackground(value){
       this.backgroundImage = require(`../../assets/img/background/${value}.jpg`);
@@ -182,7 +163,6 @@ export default {
         }
       }
 
-      this.realBoardItems[len - 1] = this.emptyItem;
       return true;
     },
     getNearIndex(i){
@@ -205,63 +185,101 @@ export default {
         LEFT: left,
       }
     },
-    sliderPiece(e, i) {
+    sliderPiece(e, item) {
+      let i = Number(e.target.getAttribute('data-id'));
+      let nearIndex = this.getNearIndex(i);
       if(e.additionalEvent === undefined || this.emptyIndex === i){
         return ;
       }
-      let nearIndex = this.getNearIndex(i);
-      if(
-        (e.additionalEvent === 'panup' && nearIndex.TOP === this.emptyIndex) ||
-        (e.additionalEvent === 'pandown' && nearIndex.BOTTOM === this.emptyIndex) ||
-        (e.additionalEvent === 'panleft' && nearIndex.LEFT === this.emptyIndex) ||
-        (e.additionalEvent === 'panright' && nearIndex.RIGHT === this.emptyIndex)
-      ){
 
-        this.$set(this.realBoardItems, this.emptyIndex, this.realBoardItems[i])
-        this.$set(this.realBoardItems, i, {})
-        this.emptyIndex = i;
-
-        if(this.isClear()) {
-          this.isClearImage = true;
-          setTimeout(() => {
-            this.modalClear = true;
-          }, 1000)
-          setTimeout(() => {
-            this.isClearOn = true;
-          }, 1300)
+      if(nearIndex.TOP !== this.emptyIndex && nearIndex.BOTTOM !== this.emptyIndex && nearIndex.LEFT !== this.emptyIndex && nearIndex.RIGHT !== this.emptyIndex){
+        return ;
+      }
+      let target = e.target;
+      this.realBoardItems[this.emptyIndex].id = -1;
+      if(e.additionalEvent === 'panup' && nearIndex.TOP === this.emptyIndex){
+        target.style.marginTop = `${item.mt - this.pHeight}px`;
+        item.mt = item.mt - this.pHeight;
+        e.target.setAttribute('data-id', this.emptyIndex);
+        if(this.emptyIndex === item.originalId){
+          this.realBoardItems[this.emptyIndex].id = item.originalId;
         }
+        this.emptyIndex = i;
+      } else if(e.additionalEvent === 'pandown' && nearIndex.BOTTOM === this.emptyIndex){
+        target.style.marginTop = `${item.mt + this.pHeight}px`;
+        item.mt = item.mt + this.pHeight;
+        e.target.setAttribute('data-id', this.emptyIndex);
+        if(this.emptyIndex === item.originalId){
+          this.realBoardItems[this.emptyIndex].id = item.originalId;
+        }
+        this.emptyIndex = i;
+      } else if(e.additionalEvent === 'panleft' && nearIndex.LEFT === this.emptyIndex){
+        target.style.marginLeft = `${item.ml - this.pWidth}px`;
+        item.ml = item.ml - this.pWidth;
+        e.target.setAttribute('data-id', this.emptyIndex);
+        if(this.emptyIndex === item.originalId){
+          this.realBoardItems[this.emptyIndex].id = item.originalId;
+        }
+        this.emptyIndex = i;
+      } else if(e.additionalEvent === 'panright' && nearIndex.RIGHT === this.emptyIndex){
+        target.style.marginLeft = `${item.ml + this.pWidth}px`;
+        item.ml = item.ml + this.pWidth;
+        e.target.setAttribute('data-id', this.emptyIndex);
+        if(this.emptyIndex === item.originalId){
+          this.realBoardItems[this.emptyIndex].id = item.originalId;
+        }
+        this.emptyIndex = i;
+      }
+
+      if(this.isClear()) {
+        this.isClearImage = true;
+        setTimeout(() => {
+          this.modalClear = true;
+        }, 1000)
+        setTimeout(() => {
+          this.isClearOn = true;
+        }, 1300)
       }
     },
-    setBoard() {
+    setBoard(isShuffle = true) {
       this.previewImage = this.$refs.preview;
       let clientWidth = this.previewImage.clientWidth;
       this.pWidth = this.pHeight = clientWidth / this.pieceCount;
       this.boardHeight = clientWidth;
 
+      this.realBoardItems = [];
       let temp = [];
       for (let i = 0; i < this.pieceCount; i++) {
         for (let j = 0; j < this.pieceCount; j++) {
           let item = {};
 
           item.id = i * this.pieceCount + j;
+          item.originalId = i * this.pieceCount + j;
           item.class = "piece-item";
-          item.style = `width: ${this.pWidth}px; height: ${
-            this.pHeight
-          }px; background: url(${this.imageSrc}); background-size:${
-            this.previewImage.clientWidth
-          }px ${this.previewImage.clientHeight}px; background-position: -${j *
-            this.pWidth}px -${i * this.pHeight}px;`;
-
+          item.style = this.setStyle(i, j);
+          
           if (i === this.pieceCount - 1 && j === this.pieceCount - 1) {
             temp.push({});
-            this.emptyItem = item;
           } else {
             temp.push(item);
           }
         }
       }
-      this.realBoardItems = this.shuffle(temp);
-      // this.realBoardItems = temp;
+
+      if(isShuffle){
+        temp = this.shuffle(temp);
+      }
+      
+      for (let i = 0; i < this.pieceCount; i++) {
+        for (let j = 0; j < this.pieceCount; j++) {
+          let id = i * this.pieceCount + j;
+          
+          temp[id].style = `${temp[id].style} margin-left: ${j * this.pWidth}px; margin-top: ${i * this.pHeight}px `;
+          temp[id].ml = j * this.pWidth;
+          temp[id].mt = i * this.pHeight;
+        }
+      }
+      this.realBoardItems = temp;
 
       for(const i in this.realBoardItems){
         if(this.realBoardItems[i].class === undefined){
@@ -269,6 +287,14 @@ export default {
           break;
         }
       }
+    },
+    setStyle(i, j){
+      let style = `width: ${this.pWidth}px; 
+                  height: ${this.pHeight}px; 
+                  background: url(${this.imageSrc}); 
+                  background-size:${this.previewImage.clientWidth}px ${this.previewImage.clientHeight}px; 
+                  background-position: -${j * this.pWidth}px -${i * this.pHeight}px;`;
+      return style;
     },
     shuffle(a){
       for (let i = a.length - 1; i > 0; i--) {

@@ -60,15 +60,6 @@
 .game-button ons-button {
   font-size:3vh !important;
 }
-.preview-wrap{
-  position:absolute; z-index:100
-}
-.board-wrap{
-  position:absolute; z-index:103
-}
-.board-real-wrap{
-  position:absolute; z-index:102
-}
 </style>
 <script>
 import jigsawPage from '@/views/play/Jigsaw.vue'
@@ -76,6 +67,7 @@ import sliderPage from '@/views/play/Slider.vue'
 import switchPage from '@/views/play/Switch.vue'
 import rotationPage from '@/views/play/Rotation.vue'
 import backgroundPage from '@/views/settings/Background'
+import { showBanner } from "@/assets/js/admob.js";
 export default {
   name: "play",
   props: {
@@ -89,7 +81,7 @@ export default {
     },
     src: {
       type: String,
-      default: "1.jpg"
+      default: "5.jpg"
     },
     pCount: {
       type: Number,
@@ -107,7 +99,7 @@ export default {
     };
   },
   created() {
-    // this.gameType = 'slider'
+    // this.gameType = 'jigsaw'
     if(this.gameType === 'jigsaw'){
       this.component = jigsawPage
     } else if(this.gameType === 'slider'){
@@ -120,9 +112,10 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      if(this.component === 'jigsaw'){
+      if(this.component.name === 'jigsaw-play'){
         document.body._gestureDetector.dispose();
       }
+      showBanner();
     }, 200);
 
     setTimeout(() => {

@@ -22,6 +22,7 @@
     "onsenui": "^2.9.1",
     "vue": "^2.5.0",
     "vue-carousel-3d": "^0.2.0",
+    "vue-dragscroll": "^2.0.1",
     "vue-onsenui": "^2.5.0",
     "vue2-hammer": "^2.1.2",
     "vuedraggable": "^2.23.2",

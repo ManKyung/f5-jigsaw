@@ -35,7 +35,12 @@
 
       <v-ons-row class="text-center">
         <v-ons-col class="pa-1" v-for="(item, index) in gameTypeItems" :key="index">
-          <v-ons-button @click="setGameType(item.type)" class="w-100 btn-type type-text" :class="gameType === item.type ? 'on' : ''">{{item.type}}</v-ons-button>
+          <v-ons-button
+            v-hammer:tap="(e)=> setGameType(e, item.type)"
+            v-hammer:pan="(e)=> setGameType(e, item.type)"
+            class="w-100 btn-type type-text"
+            :class="gameType === item.type ? 'on' : ''"
+          >{{item.type}}</v-ons-button>
         </v-ons-col>
       </v-ons-row>
 
@@ -57,7 +62,7 @@
 .carousel-3d-slide.left-1,
 .carousel-3d-slide.left-2,
 .carousel-3d-slide.right-1,
-.carousel-3d-slide.right-2{
+.carousel-3d-slide.right-2 {
   background-color: white !important;
   color: #fb8c00 !important;
 }
@@ -72,8 +77,9 @@
   color: white !important;
   letter-spacing: 2px !important;
 }
-.type-text, .play-text {
-  text-transform:capitalize !important;
+.type-text,
+.play-text {
+  text-transform: capitalize !important;
   font-family: NanumOenSonJabIDoYeBbeo !important;
   font-size: 2vh !important;
   letter-spacing: 2px !important;
@@ -106,16 +112,16 @@ export default {
       my: this.$store.state.gameSet.my,
       gameTypeItems: [
         {
-          type: 'jigsaw'
+          type: "jigsaw"
         },
         {
-          type: 'switch'
+          type: "switch"
         },
         {
-          type: 'slider'
+          type: "slider"
         },
         {
-          type: 'rotation'
+          type: "rotation"
         }
       ]
     };
@@ -134,11 +140,11 @@ export default {
     }
   },
   methods: {
-    setGameType(value){
+    setGameType(e, value) {
       this.gameType = value;
     },
     setPieceCount(index) {
-      this.pieceCount = index + 2;
+      this.pieceCount = index + 4;
     },
     goPage() {
       let params = {

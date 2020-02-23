@@ -11,7 +11,7 @@
           ref="preview"
           class="w-100 previewImage"
           :class="[isVisiblePreview ? 'on' : '',
-        isClearImage ? 'on clear' : '']"
+                   isClearImage ? 'on clear' : '']"
           :src="imageSrc"
         />
       </div>
@@ -43,6 +43,7 @@
           <div
             v-for="(item, index) in realBoardItems"
             :key="index"
+            class="border"
             :style="`width: ${pWidth}px; height:${pHeight}px; box-shadow: 0 0 1px 0.3px ${backgroundBorder} inset`"
           >
             <div v-if="item.style" :style="item.style"></div>
@@ -62,6 +63,8 @@
         @remove="pieceRemove"
         :move="checkMove"
         :style="`::-webkit-scrollbar-thumb:width:50px;`"
+        v-hammer:pan="(event)=> panStart(event)"
+        v-dragscroll.x="{ active: isDragScroll }"
       >
         <div
           class="piece-item"
@@ -93,7 +96,7 @@
   </div>
 </template>
 <style>
-.preview-wrap {
+/* .preview-wrap {
   position: absolute;
   z-index: 100;
 }
@@ -104,6 +107,9 @@
 .board-real-wrap {
   position: absolute;
   z-index: 102;
+} */
+#board-real .border{
+  box-shadow: none !important;
 }
 
 /* width */
@@ -129,7 +135,11 @@
 </style>
 <script>
 import draggable from "@/assets/js/vuedraggable";
+import { dragscroll } from 'vue-dragscroll'
 export default {
+  directives: {
+    dragscroll
+  },
   props: {
     category: {
       type: String,
@@ -175,6 +185,7 @@ export default {
   },
   data() {
     return {
+      isDragScroll: true,
       previewImage: null,
       imageSrc: "",
       pieceItems: [],
@@ -193,6 +204,7 @@ export default {
       modalClear: false,
       isClearOn: false,
       isClearImage: false,
+      prevNumber: [],
     };
   },
   created() {
@@ -229,6 +241,18 @@ export default {
     }
   },
   methods: {
+    panStart(e){
+        console.log(e)
+      if(e.additionalEvent === 'panup') {
+        this.isDragScroll = false;
+      } else {
+      this.isDragScroll = true;
+      }
+    },
+    panStop(e){
+        console.log('stop')
+      this.isDragScroll = true;
+    },
     setUI(){
       let gameContainer = this.$refs.gameContainer;
       let boardWrap = this.$refs.boardWrap;
@@ -299,7 +323,6 @@ export default {
         this.$set(this.realBoardItems, e.oldIndex, 0);
       } else {
         let temp = this.realBoardItems[e.oldIndex]; 
-        console.log(temp)
         this.$set(this.realBoardItems, e.oldIndex, this.realBoardItems[e.newIndex]);
         this.$set(this.realBoardItems, e.newIndex, temp);
       }
@@ -318,7 +341,6 @@ export default {
       }
     },
     pieceChoose(e) {
-
       e.item.children[0].classList.add("on");
       this.selectedPiece = this.pieceItems[e.oldIndex];
     },
@@ -355,18 +377,126 @@ export default {
           let item = {};
           item.id = i * this.pieceCount + j;
           item.class = "piece-item";
-          item.style = `width: ${this.pWidth}px; height: ${
-            this.pHeight
-          }px; background: url(${this.imageSrc}); background-size:${
-            this.previewImage.clientWidth
-          }px ${this.previewImage.clientHeight}px; background-position: -${j *
-            this.pWidth}px -${i * this.pHeight}px;`;
+          item.style = this.setStyle(i, j, item.id);
 
           temp.push(item);
         }
       }
       this.pieceItems = this.shuffle(temp);
       // this.pieceItems = temp;
+    },
+    getNumber(i, j, id){
+      let number = '';
+      let top = 0;
+      let right = 0;
+      let bottom = 0;
+      let left = 0;
+      // top 0
+      // right 1
+      // bottom 2
+      // left 3
+
+      let prevIdx = id - 1;
+      let rowPrevIdx = id - this.pCount;
+
+      if(i === 0 && j === 0){ //
+        top = 0;
+        right = this.getRandom(1, 3);
+        bottom = this.getRandom(1, 3);
+        left = 0;
+      } else if (i === 0 && j === this.pCount - 1){ //
+        top = 0;
+        right = 0;
+        bottom = this.getRandom(1, 3);
+        left = this.prevNumber[prevIdx][1] === '2' ? 1 : 2;
+      } else if (i === this.pCount - 1 && j === 0){
+        top = this.prevNumber[rowPrevIdx][2] === '2' ? 1 : 2;
+        right = this.getRandom(1, 3);
+        bottom = 0;
+        left = 0;
+      } else if (i === this.pCount - 1 && j === this.pCount - 1){
+        top = this.prevNumber[rowPrevIdx][2] === '2' ? 1 : 2;;
+        right = 0;
+        bottom = 0;
+        left = this.prevNumber[prevIdx][1] === '2' ? 1 : 2;;
+      } else if (i === 0){
+        top = 0;
+        right = this.getRandom(1, 3);
+        bottom = this.getRandom(1, 3);
+        left = this.prevNumber[prevIdx][1] === '2' ? 1 : 2;
+      } else if (j === 0){
+        top = this.prevNumber[rowPrevIdx][2] === '2' ? 1 : 2;
+        right = this.getRandom(1, 3);
+        bottom = this.getRandom(1, 3);
+        left = 0;
+      } else if (i === this.pCount - 1){
+        top = this.prevNumber[rowPrevIdx][2] === '2' ? 1 : 2;
+        right = this.getRandom(1, 3);
+        bottom = 0
+        left = this.prevNumber[prevIdx][1] === '2' ? 1 : 2;
+      } else if (j === this.pCount - 1){
+        top = this.prevNumber[rowPrevIdx][2] === '2' ? 1 : 2;
+        right = 0;
+        bottom = this.getRandom(1, 3);
+        left = this.prevNumber[prevIdx][1] === '2' ? 1 : 2;
+      } else {
+        top = this.prevNumber[rowPrevIdx][2] === '2' ? 1 : 2;
+        right = this.getRandom(1, 3);
+        bottom = this.getRandom(1, 3);
+        left = this.prevNumber[prevIdx][1] === '2' ? 1 : 2;
+      }
+      number = `${top}${right}${bottom}${left}`;
+      this.prevNumber.push(number); // string 으로 넣어줘야 함
+
+      return number;
+    },
+    setStyle(i, j, id){
+      let number = this.getNumber(i, j, id);
+
+      let maskImage = require(`../../assets/img/puzzle/${number}.png`);
+
+      let ratio = 0.35;
+      // let topRatio = 0;
+      // let rightRatio = 0;
+      // let bottomRatio = 0;
+      // let leftRatio = 0;
+      let widthRatio = 0;
+      let heightRatio = 0;
+      let marginLeftRatio = 0;
+      let marginTopRatio = 0;
+      if(number[0] === '2') { // top
+        heightRatio += this.pHeight * ratio;
+        marginTopRatio = this.pHeight * ratio;
+      }
+      if(number[1] === '2'){ // right
+        widthRatio += this.pWidth * ratio;
+      }
+      if(number[2] === '2'){ // bottom
+        heightRatio += this.pHeight * ratio;
+      }
+      if(number[3] === '2'){ // left
+        widthRatio += this.pWidth * ratio;
+        marginLeftRatio = this.pWidth * ratio;
+      }
+
+      let style = `width: ${this.pWidth + widthRatio}px; 
+          height: ${this.pHeight + heightRatio}px; 
+          background: url(${this.imageSrc}); 
+          background-size:${this.previewImage.clientWidth}px ${this.previewImage.clientHeight}px; 
+          background-position: -${j * this.pWidth - marginLeftRatio}px -${i * this.pHeight - marginTopRatio}px;
+          mask-image: url(${maskImage});
+          mask-position: center center;
+          mask-size: 100%;
+          mask-repeat: no-repeat;
+          margin-left:-${marginLeftRatio}px;
+          margin-top:-${marginTopRatio}px;
+          `;
+      return style;
+    },
+    getRandom(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
     },
     shuffle(a){
       for (let i = a.length - 1; i > 0; i--) {

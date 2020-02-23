@@ -6,7 +6,12 @@
 
     <div class="pt-4">
       <v-ons-row>
-        <v-ons-col class="mx-2 my-1 background-item" v-for="(item, index) in items" :key="index" @click="setBackground(item.key, item.borderColor)">
+        <v-ons-col
+          class="mx-2 my-1 background-item"
+          v-for="(item, index) in items"
+          :key="index"
+          v-hammer:tap="(e)=> setBackground(e, item.key, item.borderColor)"
+        >
           <div v-if="item.key === background" class="background-check">
             <v-ons-icon
               icon="ion-ios-checkmark-circle-outline"
@@ -39,52 +44,52 @@ export default {
       items: [
         {
           key: "default",
-          borderColor: '#000',
+          borderColor: "#000",
           src: "default-border.jpg"
         },
         {
           key: "brand",
-          borderColor: '#fff',
+          borderColor: "#fff",
           src: "brand.jpg"
         },
         {
           key: "black",
-          borderColor: '#fff',
+          borderColor: "#fff",
           src: "black.jpg"
         },
         {
           key: "grass",
-          borderColor: '#000',
+          borderColor: "#000",
           src: "grass.jpg"
         },
         {
           key: "paper",
-          borderColor: '#000',
+          borderColor: "#000",
           src: "paper.jpg"
         },
         {
           key: "polygon",
-          borderColor: '#000',
+          borderColor: "#000",
           src: "polygon.jpg"
         },
         {
           key: "texttile",
-          borderColor: '#000',
+          borderColor: "#000",
           src: "texttile.jpg"
         },
         {
           key: "texture",
-          borderColor: '#000',
+          borderColor: "#000",
           src: "texture.jpg"
         },
         {
           key: "wall",
-          borderColor: '#000',
+          borderColor: "#000",
           src: "wall.jpg"
         },
         {
           key: "wood",
-          borderColor: '#000',
+          borderColor: "#000",
           src: "wood.jpg"
         }
       ],
@@ -95,12 +100,12 @@ export default {
     for (let i = 0; i < this.items.length; i++) {
       this.items[i].imageSrc = require(`../../assets/img/background/${this.items[i].src}`);
     }
-    this.background = localStorage['background']
-      ? localStorage['background']
-      : 'default';
+    this.background = localStorage["background"]
+      ? localStorage["background"]
+      : "default";
   },
   methods: {
-    setBackground(value, color) {
+    setBackground(e, value, color) {
       this.background = value;
       this.$store.commit("gameSet/setBackground", value);
       this.$store.commit("gameSet/setBackgroundBorder", color);
