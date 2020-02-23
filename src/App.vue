@@ -25,7 +25,7 @@
 import backgroundMusic from "@/assets/mp3/bensound-photoalbum.mp3";
 import clickSound from "@/assets/mp3/click.mp3";
 import MainPage from "@/views/Main";
-import { initAd } from "@/assets/js/admob.js";
+import { initAd, removeBanner } from "@/assets/js/admob.js";
 export default {
   name: "app",
   data() {
@@ -94,6 +94,7 @@ export default {
     },
     popStatck(){
       this.pageStack = [MainPage];
+      removeBanner();
     },
     play() {
       let audio = new Audio(clickSound);
