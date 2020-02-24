@@ -26,16 +26,16 @@ export default {
       activeIndex: 0,
       tabs: [
         {
-          icon: "ion-ios-cube",
-          title: "Category",
-          page: categoryPage,
-          key: "categoryPage"
-        },
-        {
           icon: "ion-ios-home",
           page: homePage,
           title: "Daily Puzzle",
           key: "homePage"
+        },
+        {
+          icon: "ion-ios-cube",
+          title: "Category",
+          page: categoryPage,
+          key: "categoryPage"
         },
         {
           icon: "ion-ios-person",

@@ -4022,9 +4022,6 @@ html {
   flex-wrap: nowrap;
   overflow-x: scroll;
 }
-#board-piece .piece-item {
-  margin: 30px;
-}
 
 #board-piece .piece-item div.on {
   box-shadow: 0 0 1px 0 #000 inset;
@@ -4075,4 +4072,15 @@ html {
 }
 .back-button__icon {
   fill: black !important;
+}
+.game-img {
+  border-radius: 8px;
+  width: 100%;
+}
+.game-img:active {
+  transform: scale(0.98);
+}
+
+.next-text:active {
+  transform: translateY(2px);
 }

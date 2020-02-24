@@ -2,7 +2,7 @@
   <v-ons-page class="game-page">
     <v-ons-toolbar class="game-top white" style="min-height:64px; background-image: none;">
       <div class="left pt-2">
-        <v-ons-back-button class="pl-4"></v-ons-back-button>
+        <v-ons-back-button class="pl-4" @click="clickRemoveBanner"></v-ons-back-button>
       </div>
       <div class="game-button right pt-1">
         <v-ons-button
@@ -67,7 +67,7 @@ import sliderPage from '@/views/play/Slider.vue'
 import switchPage from '@/views/play/Switch.vue'
 import rotationPage from '@/views/play/Rotation.vue'
 import backgroundPage from '@/views/settings/Background'
-import { showBanner } from "@/assets/js/admob.js";
+import { showBanner, removeBanner } from "@/assets/js/admob.js";
 export default {
   name: "play",
   props: {
@@ -77,7 +77,7 @@ export default {
     },
     category: {
       type: String,
-      default: "animal"
+      default: "cats"
     },
     src: {
       type: String,
@@ -106,7 +106,7 @@ export default {
       this.component = sliderPage
     } else if(this.gameType === 'switch'){
       this.component = switchPage
-    } else if(this.gameType === 'rotation'){
+    } else if(this.gameType === 'rotate'){
       this.component = rotationPage
     }
   },
@@ -123,6 +123,9 @@ export default {
     }, 1000);
   },
   methods: {
+    clickRemoveBanner(){
+      removeBanner();
+    },
     goMainPage(){
       this.$emit('pop-page');
     },

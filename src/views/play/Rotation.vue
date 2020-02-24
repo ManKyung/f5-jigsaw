@@ -30,18 +30,22 @@
 
       <v-ons-modal :visible="modalClear">
         <div class="clear-wrap w-100" :class="isClearOn ? 'on' : ''">
-        <v-ons-row>
-          <v-ons-col class="c-text"></v-ons-col>
-          <v-ons-col class="c-text">C</v-ons-col>
-          <v-ons-col class="c-text">L</v-ons-col>
-          <v-ons-col class="c-text">E</v-ons-col>
-          <v-ons-col class="c-text">A</v-ons-col>
-          <v-ons-col class="c-text">R</v-ons-col>
-          <v-ons-col class="c-text"></v-ons-col>
-        </v-ons-row>
-        <div class="pt-12 px-4">
-          <v-ons-button modifier="large" @click="next">NEXT</v-ons-button>
-        </div>
+          <v-ons-row>
+            <v-ons-col class="c-text"></v-ons-col>
+            <v-ons-col class="c-text">C</v-ons-col>
+            <v-ons-col class="c-text">L</v-ons-col>
+            <v-ons-col class="c-text">E</v-ons-col>
+            <v-ons-col class="c-text">A</v-ons-col>
+            <v-ons-col class="c-text">R</v-ons-col>
+            <v-ons-col class="c-text"></v-ons-col>
+          </v-ons-row>
+          <div class="pt-12 px-4">
+            <v-ons-button class="w-100 text-center next-text" 
+            v-hammer:tap="next"
+            v-hammer:press="next"
+            v-hammer:pressup="next"
+          >NEXT</v-ons-button>
+          </div>
         </div>
       </v-ons-modal>
     </div>
@@ -61,7 +65,7 @@ export default {
   props: {
     category: {
       type: String,
-      default: "animal"
+      default: "cats"
     },
     src: {
       type: String,
@@ -143,14 +147,16 @@ export default {
     setBackground(value){
       this.backgroundImage = require(`../../assets/img/background/${value}.jpg`);
     },
-    next(){
-      setTimeout(() => {
-        this.isClearOn = false;
-      }, 100)
-      setTimeout(() => {
-        this.modalClear = false;
-        this.$emit('goMainPage');
-      }, 400)
+    next(e){
+      if(e.type === 'tap' || e.type === 'pressup'){
+        setTimeout(() => {
+          this.isClearOn = false;
+        }, 100)
+        setTimeout(() => {
+          this.modalClear = false;
+          this.$emit('goMainPage');
+        }, 400)
+      }
     },
     isClear(){
       let len = this.realBoardItems.length;

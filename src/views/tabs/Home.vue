@@ -12,7 +12,7 @@
                   v-hammer:press="(e)=> goPage(e, category, item.id, item.src)"
                   v-hammer:pressup="(e)=> goPage(e, category, item.id, item.src)"
                   :src="item.imageSrc"
-                  class="home-img"
+                  class="game-img"
                 />
               </v-ons-card>
             </v-ons-carousel-item>
@@ -22,16 +22,6 @@
     </div>
   </v-ons-page>
 </template>
-
-<style>
-.home-img {
-  border-radius: 8px;
-  width: 100%;
-}
-.home-img:active {
-  transform: scale(0.98);
-}
-</style>
 
 <script>
 import stage from "@/assets/js/stage.js";

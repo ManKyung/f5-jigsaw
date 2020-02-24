@@ -98,6 +98,9 @@ export function showBanner() {
 export function removeBanner() {
   if (admob) {
     admob.banner.remove();
+    setTimeout(() => {
+      admob.banner.prepare()
+    }, 100)
   }
 }
 export function showInterstitial() {

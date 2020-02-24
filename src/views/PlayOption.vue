@@ -40,7 +40,9 @@
         <v-ons-col class="pa-1" v-for="(item, index) in gameTypeItems" :key="index">
           <v-ons-button
             v-hammer:tap="(e)=> setGameType(e, item.type)"
-            v-hammer:pan="(e)=> setGameType(e, item.type)"
+            v-hammer:press="(e)=> setGameType(e, item.type)"
+            v-hammer:pressup="(e)=> setGameType(e, item.type)"
+            v-hammer:pan.start="(e)=> setGameType(e, item.type)"
             class="w-100 btn-type type-text"
             :class="gameType === item.type ? 'on' : ''"
           >{{item.type}}</v-ons-button>
@@ -48,7 +50,11 @@
       </v-ons-row>
 
       <v-ons-col class="pa-1">
-        <v-ons-button modifier="large" class="w-100 play-text" @click="goPage">Play</v-ons-button>
+        <v-ons-button class="w-100 text-center play-text" 
+          v-hammer:tap="goPage"
+          v-hammer:press="goPage"
+          v-hammer:pressup="goPage"
+        >Play</v-ons-button>
       </v-ons-col>
     </div>
   </v-ons-page>
@@ -61,6 +67,8 @@
   background-color: #fb8c00 !important;
   color: white !important;
   letter-spacing: 4px !important;
+  border-radius: 20px;
+  border: none;
 }
 .carousel-3d-slide.left-1,
 .carousel-3d-slide.left-2,
@@ -68,6 +76,9 @@
 .carousel-3d-slide.right-2 {
   background-color: white !important;
   color: #fb8c00 !important;
+  border: 1px solid #fcaf50 !important;
+  border-radius: 10px;
+  letter-spacing: 3px !important;
 }
 .btn-type {
   background-color: transparent !important;
@@ -84,9 +95,12 @@
 .play-text {
   text-transform: capitalize !important;
   font-family: NanumOenSonJabIDoYeBbeo !important;
-  font-size: 2vh !important;
+  font-size: 5vw !important;
   letter-spacing: 2px !important;
   font-weight: bold !important;
+}
+.play-text:active, .type-text:active {
+  transform: translateY(2px);
 }
 </style>
 <script>
@@ -124,7 +138,7 @@ export default {
           type: "slider"
         },
         {
-          type: "rotation"
+          type: "rotate"
         }
       ]
     };
@@ -144,22 +158,26 @@ export default {
   },
   methods: {
     setGameType(e, value) {
-      this.gameType = value;
+      if(e.type === 'tap' || e.type === 'pressup' || e.type === 'pan'){
+        this.gameType = value;
+      }
     },
     setPieceCount(index) {
       this.pieceCount = index + 4;
     },
-    goPage() {
-      let params = {
-        gameType: this.gameType,
-        category: this.category,
-        id: this.id,
-        src: this.src,
-        pCount: this.pieceCount
-      };
+    goPage(e) {
+      if(e.type === 'tap' || e.type === 'pressup'){
+        let params = {
+          gameType: this.gameType,
+          category: this.category,
+          id: this.id,
+          src: this.src,
+          pCount: this.pieceCount
+        };
 
-      this.$store.commit("gameSet/setMy", params);
-      this.$emit("push-page", { ...gamePage, onsNavigatorProps: params });
+        this.$store.commit("gameSet/setMy", params);
+        this.$emit("push-page", { ...gamePage, onsNavigatorProps: params });
+      }
     },
     setBoard(pieceCount) {
       pieceCount = pieceCount === undefined ? this.pieceCount : pieceCount;

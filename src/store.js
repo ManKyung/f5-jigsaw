@@ -13,20 +13,22 @@ export default new Vuex.Store({
         backgroundBorder: '#fff',
         isSound: true,
         isBackgroundMusic: true,
-        my: []
+        my: ''
       },
       mutations: {
         setMy(state, value) {
-          let my = state.my.length === 0 ? [] : state.my;
+          let my = state.my === '' ? [] : JSON.parse(state.my);
+
           let result = my.filter(item => {
             return (item.type === value.type && item.category === value.category && item.src === value.src)
           })
           if(result.length === 0){
             my.push(value)
           }
+          console.log(my)
           
-          state.my = my
-          localStorage['game-my'] = JSON.stringify(state.my);
+          state.my = JSON.stringify(my);
+          localStorage['game-my'] = JSON.stringify(my);
         },
         // setting sound
         setSound(state, value) {
@@ -34,10 +36,9 @@ export default new Vuex.Store({
         },
         // setting background music
         setBackgroundMusic(state, value) {
-          console.log(value)
           state.isBackgroundMusic = value;
         },
-        // jigsaw, switch, slider, rotation
+        // jigsaw, switch, slider, rotate
         setGameType(state, value) {
           state.type = value;
           localStorage['game-type'] = value;
@@ -55,7 +56,7 @@ export default new Vuex.Store({
           state.type = localStorage['game-type'] === undefined ? 'jigsaw' : localStorage['game-type'];
           state.background = localStorage['background'] === undefined ? 'default' : localStorage['background'];
           state.backgroundBorder = localStorage['background-border'] === undefined ? '#000' : localStorage['background-border'];
-          state.my = localStorage['game-my'] === undefined ? [] : JSON.parse(localStorage['game-my']);
+          state.my = localStorage['game-my'] === undefined ? '' : JSON.parse(localStorage['game-my']);
         }
       }
     }

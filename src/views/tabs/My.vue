@@ -13,9 +13,11 @@
                 <div style="font-size:2vh; color:white; padding:0 4px 4px 4px; text-transform:capitalize;">{{item.gameType}} / {{item.pCount}}</div>
               </div>
             <img
-              @click="goPage(item)"
+              v-hammer:tap="(e)=> goPage(e, item)"
+              v-hammer:press="(e)=> goPage(e, item)"
+              v-hammer:pressup="(e)=> goPage(e, item)"
               :src="item.imageSrc"
-              class="home-img"
+              class="game-img"
             />
             </div>
           </v-ons-card>
@@ -50,28 +52,38 @@ export default {
   },
   watch: {
     items() {
+      console.log(123123)
       this.myInit()
     }
   },
   methods: {
     myInit(){
-      this.items = this.$store.state.gameSet.my;
-      let temp = [];
-      for (let i = 0; i < this.items.length; i++) {
-        this.items[i].imageSrc = require(`../../assets/img/${this.items[i].category}/${this.items[i].src}`);
-        temp.push(this.items[i])
+      let myItems = this.$store.state.gameSet.my;
+      console.log(myItems)
+      myItems = myItems.length > 0 ? myItems : '';
+      console.log(myItems)
+      
+      if(myItems !== ''){
+        let temp = [];
+        this.myItems = [];
+        for (let i = 0; i < myItems.length; i++) {
+          myItems[i].imageSrc = require(`../../assets/img/${myItems[i].category}/${myItems[i].src}`);
+          temp.push(myItems[i])
+        }
+        this.myItems = temp;
       }
-      this.myItems = temp;
     },
-    goPage(item) {
-      let params = {
-        gameType: item.gameType,
-        category: item.category,
-        id: item.id,
-        src: item.src,
-        pCount: item.pieceCount,
+    goPage(e, item) {
+      if(e.type === 'tap' || e.type === 'pressup'){
+        let params = {
+          gameType: item.gameType,
+          category: item.category,
+          id: item.id,
+          src: item.src,
+          pCount: item.pieceCount,
+        }
+        this.$emit("push-page", { ...gamePage, onsNavigatorProps: params });
       }
-      this.$emit("push-page", { ...gamePage, onsNavigatorProps: params });
     },
   }
 };

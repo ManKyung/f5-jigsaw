@@ -62,7 +62,6 @@
         @update="pieceUpdate"
         @remove="pieceRemove"
         :move="checkMove"
-        :style="`::-webkit-scrollbar-thumb:width:50px;`"
         v-hammer:pan="(event)=> panStart(event)"
         v-dragscroll.x="{ active: isDragScroll }"
       >
@@ -70,6 +69,7 @@
           class="piece-item"
           v-for="(item, index) in pieceItems"
           :key="index"
+          :style="pieceItemStyle"
         >
           <div class="piece" :id="`piece-${index}`" :style="item.style"></div>
         </div>
@@ -78,43 +78,35 @@
 
     <v-ons-modal :visible="modalClear">
       <div class="clear-wrap w-100" :class="isClearOn ? 'on' : ''">
-      <v-ons-row>
-        <v-ons-col class="c-text"></v-ons-col>
-        <v-ons-col class="c-text">C</v-ons-col>
-        <v-ons-col class="c-text">L</v-ons-col>
-        <v-ons-col class="c-text">E</v-ons-col>
-        <v-ons-col class="c-text">A</v-ons-col>
-        <v-ons-col class="c-text">R</v-ons-col>
-        <v-ons-col class="c-text"></v-ons-col>
-      </v-ons-row>
-      <div class="pt-12 px-4">
-        <v-ons-button modifier="large" @click="next">NEXT</v-ons-button>
-      </div>
+        <v-ons-row>
+          <v-ons-col class="c-text"></v-ons-col>
+          <v-ons-col class="c-text">C</v-ons-col>
+          <v-ons-col class="c-text">L</v-ons-col>
+          <v-ons-col class="c-text">E</v-ons-col>
+          <v-ons-col class="c-text">A</v-ons-col>
+          <v-ons-col class="c-text">R</v-ons-col>
+          <v-ons-col class="c-text"></v-ons-col>
+        </v-ons-row>
+        <div class="pt-12 px-4">
+            <v-ons-button class="w-100 text-center next-text" 
+            v-hammer:tap="next"
+            v-hammer:press="next"
+            v-hammer:pressup="next"
+          >NEXT</v-ons-button>
+        </div>
       </div>
     </v-ons-modal>
 
   </div>
 </template>
 <style>
-/* .preview-wrap {
-  position: absolute;
-  z-index: 100;
-}
-.board-wrap {
-  position: absolute;
-  z-index: 103;
-}
-.board-real-wrap {
-  position: absolute;
-  z-index: 102;
-} */
 #board-real .border{
   box-shadow: none !important;
 }
 
 /* width */
 #board-piece::-webkit-scrollbar {
-  height:30px;
+  height:8px;
 	background-color: #ddd;
 }
 /* Track */
@@ -132,6 +124,10 @@
   border-radius: 10px;
   /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); */ 
 }
+
+/* #board-piece .piece-item {
+  margin: 30px 30px 0 0;
+} */
 </style>
 <script>
 import draggable from "@/assets/js/vuedraggable";
@@ -143,7 +139,7 @@ export default {
   props: {
     category: {
       type: String,
-      default: "animal"
+      default: "cats"
     },
     src: {
       type: String,
@@ -205,6 +201,7 @@ export default {
       isClearOn: false,
       isClearImage: false,
       prevNumber: [],
+      pieceItemStyle: 'margin: 10vw 10vw 0 0'
     };
   },
   created() {
@@ -260,20 +257,25 @@ export default {
       this.backgroundImage = require(`../../assets/img/background/${value}.jpg`);
 
       setTimeout(() => {
-        document.getElementById("board-piece").style.setProperty('--scrollbar-bgImage', `url(${this.backgroundImage})`);
+        let dom = document.getElementById("board-piece");
+        if(dom !== null){
+          document.getElementById("board-piece").style.setProperty('--scrollbar-bgImage', `url(${this.backgroundImage})`);
+        }
       }, 100)
     },
     setBackgroundBorder(value){
       this.backgroundBorderColor = value;
     },
-    next(){
-      setTimeout(() => {
-        this.isClearOn = false;
-      }, 100)
-      setTimeout(() => {
-        this.modalClear = false;
-        this.$emit('goMainPage');
-      }, 400)
+    next(e){
+      if(e.type === 'tap' || e.type === 'pressup'){
+        setTimeout(() => {
+          this.isClearOn = false;
+        }, 100)
+        setTimeout(() => {
+          this.modalClear = false;
+          this.$emit('goMainPage');
+        }, 400)
+      }
     },
     isClear(){
       let len = this.realBoardItems.length;

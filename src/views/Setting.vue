@@ -7,19 +7,61 @@
     <div class="pt-4">
       <v-ons-list-item>
         <v-ons-list-item modifier="nodivider"></v-ons-list-item>
-        <v-ons-list-item modifier="nodivider" v-hammer:tap="(e)=> goPage(e, 'review')">Review</v-ons-list-item>
-        <v-ons-list-item modifier="nodivider" v-hammer:tap="(e)=> goPage(e, 'background')">Background</v-ons-list-item>
-        <v-ons-list-item modifier="nodivider" v-hammer:tap="(e)=> goPage(e, 'share')">Share</v-ons-list-item>
-        <v-ons-list-item modifier="nodivider" v-hammer:tap="(e)=> goPage(e, 'gameSetting')">Game Setting</v-ons-list-item>
-        <v-ons-list-item modifier="nodivider" v-hammer:tap="(e)=> goPage(e, 'removeAd')">Remove AD</v-ons-list-item>
+        <v-ons-list-item
+          class="setting-title"
+          modifier="nodivider"
+          v-hammer:tap="(e)=> goPage(e, 'review')"
+          v-hammer:press="(e)=> goPage(e, 'review')"
+          v-hammer:pressup="(e)=> goPage(e, 'review')"
+        >Review</v-ons-list-item>
+        <v-ons-list-item
+          class="setting-title"
+          modifier="nodivider"
+          v-hammer:tap="(e)=> goPage(e, 'background')"
+          v-hammer:press="(e)=> goPage(e, 'background')"
+          v-hammer:pressup="(e)=> goPage(e, 'background')"
+        >Background</v-ons-list-item>
+        <v-ons-list-item
+          class="setting-title"
+          modifier="nodivider"
+          v-hammer:tap="(e)=> goPage(e, 'share')"
+          v-hammer:press="(e)=> goPage(e, 'share')"
+          v-hammer:pressup="(e)=> goPage(e, 'share')"
+        >Share</v-ons-list-item>
+        <v-ons-list-item
+          class="setting-title"
+          modifier="nodivider"
+          v-hammer:tap="(e)=> goPage(e, 'gameSetting')"
+          v-hammer:press="(e)=> goPage(e, 'gameSetting')"
+          v-hammer:pressup="(e)=> goPage(e, 'gameSetting')"
+        >Game Setting</v-ons-list-item>
+        <v-ons-list-item
+          class="setting-title"
+          modifier="nodivider"
+          v-hammer:tap="(e)=> goPage(e, 'removeAd')"
+          v-hammer:press="(e)=> goPage(e, 'removeAd')"
+          v-hammer:pressup="(e)=> goPage(e, 'removeAd')"
+        >Remove AD</v-ons-list-item>
       </v-ons-list-item>
     </div>
 
     <div class="pt-4 text-center">
-      <v-ons-button  v-hammer:tap="setBackgroundMusic" modifier="outline" class="btn-music" :class="isBackgroundMusic ? 'on': ''" style="margin: 6px 0">
+      <v-ons-button
+        v-hammer:tap="setBackgroundMusic"
+        modifier="outline"
+        class="btn-music"
+        :class="isBackgroundMusic ? 'on': ''"
+        style="margin: 6px 0"
+      >
         <v-ons-icon icon="ion-ios-musical-notes" style="color:black; font-size:32px"></v-ons-icon>
       </v-ons-button>
-      <v-ons-button  v-hammer:tap="setSound" modifier="outline" class="btn-sound" :class="isSound ? 'on': ''" style="margin: 6px 0">
+      <v-ons-button
+        v-hammer:tap="setSound"
+        modifier="outline"
+        class="btn-sound"
+        :class="isSound ? 'on': ''"
+        style="margin: 6px 0"
+      >
         <v-ons-icon icon="ion-ios-volume-high" style="color:black; font-size:32px"></v-ons-icon>
       </v-ons-button>
     </div>
@@ -27,6 +69,9 @@
 </template>
 
 <style>
+.setting-title:active {
+  transform: translateY(2px);
+}
 .list-item__center {
   align-items: center !important;
   justify-content: center !important;
@@ -90,38 +135,44 @@ import gameSettingPage from "@/views/settings/GameSetting";
 import backgroundPage from "@/views/settings/Background";
 export default {
   name: "setting",
-  data(){
+  data() {
     return {
       isSound: this.$store.state.gameSet.isSound,
-      isBackgroundMusic: this.$store.state.gameSet.isBackgroundMusic,
-    }
+      isBackgroundMusic: this.$store.state.gameSet.isBackgroundMusic
+    };
   },
   methods: {
-    setMusic(){
-
-    },
-    setSound(){
-      this.isSound = !this.isSound
+    setSound() {
+      this.isSound = !this.isSound;
       this.$store.commit("gameSet/setSound", this.isSound);
     },
-    setBackgroundMusic(){
+    setBackgroundMusic() {
       this.isBackgroundMusic = !this.isBackgroundMusic;
       this.$store.commit("gameSet/setBackgroundMusic", this.isBackgroundMusic);
     },
     goPage(e, page) {
-      if (page === "review") {
-        location.href =
-          "https://play.google.com/store/apps/details?id=com.f5game.jigsaw";
-      } else if (page === "background") {
-        this.$emit("push-page", {
-          ...backgroundPage,
-          onsNavigatorProps: {}
-        });
-      } else if (page === "gameSetting") {
-        this.$emit("push-page", {
-          ...gameSettingPage,
-          onsNavigatorProps: {}
-        });
+      if(e.type === 'tap' || e.type === 'pressup'){
+        if (page === "review") {
+          location.href =
+            "https://play.google.com/store/apps/details?id=com.f5game.jigsaw";
+        } else if (page === "background") {
+          this.$emit("push-page", {
+            ...backgroundPage,
+            onsNavigatorProps: {}
+          });
+        } else if (page === "share") {
+          window.plugins.socialsharing.share(
+            "Message, subject, image and link",
+            "The subject",
+            "https://www.google.nl/images/srpr/logo4w.png",
+            "http://www.x-services.nl"
+          );
+        } else if (page === "gameSetting") {
+          this.$emit("push-page", {
+            ...gameSettingPage,
+            onsNavigatorProps: {}
+          });
+        }
       }
     }
   }

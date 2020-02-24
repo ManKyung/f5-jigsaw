@@ -10,7 +10,7 @@
           class="ml-2 mr-1 my-1 gamesetting-item"
           :class="type === 'jigsaw' ? 'on' : ''"
           v-hammer:tap="(e)=> setGameType(e, 'jigsaw')"
-          v-hammer:pan="(e)=> setGameType(e, 'jigsaw')"
+          v-hammer:pan.start="(e)=> setGameType(e, 'jigsaw')"
         >
           <div v-if="type === 'jigsaw'" class="game-check">
             <v-ons-icon icon="ion-ios-checkmark-circle-outline"></v-ons-icon>
@@ -21,7 +21,7 @@
           class="ml-1 mr-2 my-1 gamesetting-item"
           :class="type === 'switch' ? 'on' : ''"
           v-hammer:tap="(e)=> setGameType(e, 'switch')"
-          v-hammer:pan="(e)=> setGameType(e, 'switch')"
+          v-hammer:pan.start="(e)=> setGameType(e, 'switch')"
         >
           <div v-if="type === 'switch'" class="game-check">
             <v-ons-icon icon="ion-ios-checkmark-circle-outline"></v-ons-icon>
@@ -34,7 +34,7 @@
           class="ml-2 mr-1 my-1 gamesetting-item"
           :class="type === 'slider' ? 'on' : ''"
           v-hammer:tap="(e)=> setGameType(e, 'slider')"
-          v-hammer:pan="(e)=> setGameType(e, 'slider')"
+          v-hammer:pan.start="(e)=> setGameType(e, 'slider')"
         >
           <div v-if="type === 'slider'" class="game-check">
             <v-ons-icon icon="ion-ios-checkmark-circle-outline"></v-ons-icon>
@@ -43,14 +43,14 @@
         </v-ons-col>
         <v-ons-col
           class="ml-1 mr-2 my-1 gamesetting-item"
-          :class="type === 'rotation' ? 'on' : ''"
-          v-hammer:tap="(e)=> setGameType(e, 'rotation')"
-          v-hammer:pan="(e)=> setGameType(e, 'rotation')"
+          :class="type === 'rotate' ? 'on' : ''"
+          v-hammer:tap="(e)=> setGameType(e, 'rotate')"
+          v-hammer:pan.start="(e)=> setGameType(e, 'rotate')"
         >
-          <div v-if="type === 'rotation'" class="game-check">
+          <div v-if="type === 'rotate'" class="game-check">
             <v-ons-icon icon="ion-ios-checkmark-circle-outline"></v-ons-icon>
           </div>
-          <div class="pl-5 pt-10">Rotation</div>
+          <div class="pl-5 pt-10">Rotate</div>
         </v-ons-col>
       </v-ons-row>
     </div>

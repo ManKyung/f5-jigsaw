@@ -17,6 +17,10 @@
     },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.f5game.jigsaw"
+    },
+    "cordova-plugin-x-socialsharing": {
+      "ANDROID_SUPPORT_V4_VERSION": "24.1.1+",
+      "PACKAGE_NAME": "com.f5game.jigsaw"
     }
   },
   "dependent_plugins": {
@@ -25,6 +29,9 @@
     },
     "cordova-admob-sdk": {
       "PLAY_SERVICES_VERSION": "11.0.4",
+      "PACKAGE_NAME": "com.f5game.jigsaw"
+    },
+    "es6-promise-plugin": {
       "PACKAGE_NAME": "com.f5game.jigsaw"
     }
   }

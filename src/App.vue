@@ -4,8 +4,8 @@
       id="navigator"
       swipe-target-width="200px"
       :page-stack="pageStack"
-      @push-page="pageStack.push($event)"
-      @pop-page="popStatck"
+      @push-page="pushStack"
+      @pop-page="popStack"
       v-hammer:tap="init"
     ></v-ons-navigator>
   </div>
@@ -92,7 +92,10 @@ export default {
       //   this.isPlayMusic = false;
       // }
     },
-    popStatck(){
+    pushStack(e){
+      this.pageStack.push(e)
+    },
+    popStack(){
       this.pageStack = [MainPage];
       removeBanner();
     },
