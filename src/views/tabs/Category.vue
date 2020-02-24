@@ -1,7 +1,16 @@
 <template>
   <v-ons-page class="mt-5">
 
-    <div v-for="(items, category) in categories" :key="category">
+    <v-ons-list>
+      <v-ons-list-item v-for="item in categories" :key="item.nameKR" expandable :expanded.sync="item.expand">
+        {{item.nameKR}}
+        <div class="expandable-content">
+          {{item.data}}
+        </div>
+      </v-ons-list-item>
+    </v-ons-list>
+
+    <!-- <div v-for="(items, category) in categories" :key="category">
       <div class="pl-3 py-5">{{items.nameKR}}</div>
       <v-ons-row>
         <v-ons-col style="width:50%">
@@ -23,7 +32,7 @@
           </v-ons-carousel>
         </v-ons-col>
       </v-ons-row>
-    </div>
+    </div> -->
 
   </v-ons-page>
 </template>
@@ -36,7 +45,8 @@ export default {
   data() {
     return {
       cIndex: 0,
-      categories: stage
+      categories: stage,
+      isExpanded: false
     };
   },
   created(){
@@ -46,6 +56,7 @@ export default {
         data[i].imageSrc = require(`../../assets/img/${key}/${data[i].src}`);
       }
     }
+    console.log(this.categories)
   },
   methods: {
     goPage(category, id, src) {

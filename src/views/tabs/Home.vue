@@ -8,7 +8,9 @@
             <v-ons-carousel-item style="width:48%" v-for="(item, index) in items.data" :key="index">
               <v-ons-card class="pa-0">
                 <img
-                  @click="goPage(category, item.id, item.src)"
+                  v-hammer:tap="(e)=> goPage(e, category, item.id, item.src)"
+                  v-hammer:press="(e)=> goPage(e, category, item.id, item.src)"
+                  v-hammer:pressup="(e)=> goPage(e, category, item.id, item.src)"
                   :src="item.imageSrc"
                   class="home-img"
                 />
@@ -25,6 +27,9 @@
 .home-img {
   border-radius: 8px;
   width: 100%;
+}
+.home-img:active {
+  transform: scale(0.98);
 }
 </style>
 
@@ -48,15 +53,17 @@ export default {
     }
   },
   methods: {
-    goPage(category, id, src) {
-      this.$emit("push-page", {
-        ...playOptionPage,
-        onsNavigatorProps: {
-          category: category,
-          id: id,
-          src: src
-        }
-      });
+    goPage(e, category, id, src) {
+      if(e.type === 'tap' || e.type === 'pressup'){
+        this.$emit("push-page", {
+          ...playOptionPage,
+          onsNavigatorProps: {
+            category: category,
+            id: id,
+            src: src
+          }
+        });
+      }
     }
   }
 };

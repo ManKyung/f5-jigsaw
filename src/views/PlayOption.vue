@@ -1,11 +1,14 @@
 <template>
   <v-ons-page>
-    <v-ons-toolbar class="white" style="min-height:64px;">
+    <div class="left" style="min-height:64px;">
+      <v-ons-back-button class="pl-4"></v-ons-back-button>
+      <div class="pl-3 fo w-100" style="display:inline; font-size:42px;">Option</div>
+    </div>
+    <!-- <v-ons-toolbar class="white" style="min-height:64px;">
       <v-ons-back-button class="pt-2"></v-ons-back-button>
-      <div class="pl-3 fo w-100" style="font-size:42px;">Option</div>
-    </v-ons-toolbar>
+    </v-ons-toolbar> -->
 
-    <div class="pt-5">
+    <div>
       <div id="board-real-preview" :style="`max-height:${boardHeight}px; overflow:hidden`">
         <div
           v-for="(item, index) in boardItems"

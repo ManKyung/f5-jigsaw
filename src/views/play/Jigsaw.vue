@@ -242,7 +242,6 @@ export default {
   },
   methods: {
     panStart(e){
-        console.log(e)
       if(e.additionalEvent === 'panup') {
         this.isDragScroll = false;
       } else {
@@ -250,7 +249,6 @@ export default {
       }
     },
     panStop(e){
-        console.log('stop')
       this.isDragScroll = true;
     },
     setUI(){

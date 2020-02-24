@@ -80,9 +80,9 @@ export default {
   },
   methods: {
     init(){
-      if(this.$store.state.gameSet.isSound){
-        this.play();
-      }
+      // if(this.$store.state.gameSet.isSound){
+      //   this.play();
+      // }
       // if(!this.isPlayMusic && this.$store.state.gameSet.isBackgroundMusic){
       //   this.backgroudPlay();
       // }
