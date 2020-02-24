@@ -52,28 +52,21 @@ export default {
   },
   watch: {
     items() {
-      console.log(123123)
       this.myInit()
     }
   },
   methods: {
     myInit(){
-      let myItems = this.$store.state.gameSet.my;
-      console.log(myItems)
-      myItems = myItems.length > 0 ? myItems : '';
-      console.log(myItems)
-      
-      if(myItems !== ''){
-        let temp = [];
-        this.myItems = [];
-        for (let i = 0; i < myItems.length; i++) {
-          myItems[i].imageSrc = require(`../../assets/img/${myItems[i].category}/${myItems[i].src}`);
-          temp.push(myItems[i])
-        }
-        this.myItems = temp;
+      this.items = this.$store.state.gameSet.my;
+      let temp = [];
+      for (let i = 0; i < this.items.length; i++) {
+        this.items[i].imageSrc = require(`../../assets/img/${this.items[i].category}/${this.items[i].src}`);
+        temp.push(this.items[i])
       }
+      this.myItems = temp;
     },
     goPage(e, item) {
+      
       if(e.type === 'tap' || e.type === 'pressup'){
         let params = {
           gameType: item.gameType,
