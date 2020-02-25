@@ -1,7 +1,7 @@
 <template>
   <v-ons-page>
     <v-ons-toolbar class="white" style="min-height:64px;">
-      <div class="left pl-3 pt-1 fo w-100" style="font-size:42px;">{{title}}</div>
+      <div class="left pl-3 pt-3 fo w-100" style="font-size:32px;">{{title}}</div>
       <div class="right pt-2">
         <v-ons-button modifier="quiet" v-if="title === 'My'" @click="goPage">
           <v-ons-icon icon="ion-ios-settings" style="color:black; font-size:28px"></v-ons-icon>
@@ -42,7 +42,7 @@ export default {
           title: "My",
           page: myPage,
           key: "myPage"
-        }
+        },
       ]
     };
   },

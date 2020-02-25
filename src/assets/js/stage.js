@@ -5,67 +5,83 @@ export default {
     data: [
       {
         id: 1,
-        src: "1.jpg"
+        src: "1.jpg",
+        level: 1
       },
       {
         id: 2,
-        src: "2.jpg"
+        src: "2.jpg",
+        level: 2
       },
       {
         id: 3,
-        src: "3.jpg"
+        src: "3.jpg",
+        level: 3
       },
       {
         id: 4,
-        src: "4.jpg"
+        src: "4.jpg",
+        level: 2
       },
       {
         id: 5,
-        src: "5.jpg"
+        src: "5.jpg",
+        level: 4
       },
       {
         id: 6,
-        src: "6.jpg"
+        src: "6.jpg",
+        level: 3
       },
       {
         id: 7,
-        src: "7.jpg"
+        src: "7.jpg",
+        level: 2
       },
       {
         id: 8,
-        src: "8.jpg"
+        src: "8.jpg",
+        level: 2
       },
       {
         id: 9,
-        src: "9.jpg"
+        src: "9.jpg",
+        level: 1
       },
       {
         id: 10,
-        src: "10.jpg"
+        src: "10.jpg",
+        level: 3
       },
       {
         id: 11,
-        src: "11.jpg"
+        src: "11.jpg",
+        level: 1
       },
       {
         id: 12,
-        src: "12.jpg"
+        src: "12.jpg",
+        level: 2
       },
       {
         id: 13,
-        src: "13.jpg"
+        src: "13.jpg",
+        level: 3
       },
       {
         id: 14,
-        src: "14.jpg"
+        src: "14.jpg",
+        level: 3
       },
       {
         id: 15,
-        src: "15.jpg"
+        src: "15.jpg",
+        level: 4
       },
       {
         id: 16,
-        src: "16.jpg"
+        src: "16.jpg",
+        level: 3
       }
     ]
   },
@@ -75,91 +91,113 @@ export default {
     data: [
       {
         id: 1,
-        src: "1.jpg"
+        src: "1.jpg",
+        level: 3
       },
       {
         id: 2,
-        src: "2.jpg"
+        src: "2.jpg",
+        level: 1
       },
       {
         id: 3,
-        src: "3.jpg"
+        src: "3.jpg",
+        level: 2
       },
       {
         id: 4,
-        src: "4.jpg"
+        src: "4.jpg",
+        level: 3
       },
       {
         id: 5,
-        src: "5.jpg"
+        src: "5.jpg",
+        level: 3
       },
       {
         id: 6,
-        src: "6.jpg"
+        src: "6.jpg",
+        level: 3
       },
       {
         id: 7,
-        src: "7.jpg"
+        src: "7.jpg",
+        level: 3
       },
       {
         id: 8,
-        src: "8.jpg"
+        src: "8.jpg",
+        level: 3
       },
       {
         id: 9,
-        src: "9.jpg"
+        src: "9.jpg",
+        level: 3
       },
       {
         id: 10,
-        src: "10.jpg"
+        src: "10.jpg",
+        level: 2
       },
       {
         id: 11,
-        src: "11.jpg"
+        src: "11.jpg",
+        level: 3
       },
       {
         id: 12,
-        src: "12.jpg"
+        src: "12.jpg",
+        level: 2
       },
       {
         id: 13,
-        src: "13.jpg"
+        src: "13.jpg",
+        level: 1
       },
       {
         id: 14,
-        src: "14.jpg"
+        src: "14.jpg",
+        level: 3
       },
       {
         id: 15,
-        src: "15.jpg"
+        src: "15.jpg",
+        level: 1
       },
       {
         id: 16,
-        src: "16.jpg"
+        src: "16.jpg",
+        level: 2
       },
       {
         id: 17,
-        src: "17.jpg"
+        src: "17.jpg",
+        level: 3
       },
       {
         id: 18,
-        src: "18.jpg"
+        src: "18.jpg",
+        level: 1
       },
       {
         id: 19,
-        src: "19.jpg"
+        src: "19.jpg",
+        level: 3
       },
       {
         id: 20,
-        src: "20.jpg"
+        src: "20.jpg",
+        level: 3
       },
       {
         id: 21,
-        src: "21.jpg"
+        src: "21.jpg",
+        level: 4
       },
       {
         id: 22,
-        src: "22.jpg"
+        src: "22.jpg",
+        level: 3
       }
     ]
   },
@@ -169,178 +207,220 @@ export default {
     data: [
       {
         id: 1,
-        src: "1.jpg"
+        src: "1.jpg",
+        level: 4
       },
       {
         id: 2,
-        src: "2.jpg"
+        src: "2.jpg",
+        level: 3
       },
       {
         id: 3,
-        src: "3.jpg"
+        src: "3.jpg",
+        level: 2
       },
       {
         id: 4,
-        src: "4.jpg"
+        src: "4.jpg",
+        level: 4
       },
       {
         id: 5,
-        src: "5.jpg"
+        src: "5.jpg",
+        level: 4
       },
       {
         id: 6,
-        src: "6.jpg"
+        src: "6.jpg",
+        level: 4
       },
       {
         id: 7,
-        src: "7.jpg"
+        src: "7.jpg",
+        level: 4
       },
       {
         id: 8,
-        src: "8.jpg"
+        src: "8.jpg",
+        level: 4
       },
       {
         id: 9,
-        src: "9.jpg"
+        src: "9.jpg",
+        level: 5
       },
       {
         id: 10,
-        src: "10.jpg"
+        src: "10.jpg",
+        level: 4
       },
       {
         id: 11,
-        src: "11.jpg"
+        src: "11.jpg",
+        level: 2
       },
       {
         id: 12,
-        src: "12.jpg"
+        src: "12.jpg",
+        level: 3
       },
       {
         id: 13,
-        src: "13.jpg"
+        src: "13.jpg",
+        level: 4
       },
       {
         id: 14,
-        src: "14.jpg"
+        src: "14.jpg",
+        level: 4
       },
       {
         id: 15,
-        src: "15.jpg"
+        src: "15.jpg",
+        level: 4
       },
       {
         id: 16,
-        src: "16.jpg"
+        src: "16.jpg",
+        level: 4
       },
       {
         id: 17,
-        src: "17.jpg"
+        src: "17.jpg",
+        level: 3
       },
       {
         id: 18,
-        src: "18.jpg"
+        src: "18.jpg",
+        level: 4
       },
       {
         id: 19,
-        src: "19.jpg"
+        src: "19.jpg",
+        level: 5
       },
       {
         id: 20,
-        src: "20.jpg"
+        src: "20.jpg",
+        level: 3
       }
     ]
   },
-  
+
   pattern: {
     nameKR: "Pattern",
     expand: false,
     data: [
       {
         id: 1,
-        src: "1.jpg"
+        src: "1.jpg",
+        level: 4
       },
       {
         id: 2,
-        src: "2.jpg"
+        src: "2.jpg",
+        level: 5
       },
       {
         id: 3,
-        src: "3.jpg"
+        src: "3.jpg",
+        level: 5
       },
       {
         id: 4,
-        src: "4.jpg"
+        src: "4.jpg",
+        level: 5
       },
       {
         id: 5,
-        src: "5.jpg"
+        src: "5.jpg",
+        level: 3
       },
       {
         id: 6,
-        src: "6.jpg"
+        src: "6.jpg",
+        level: 5
       },
       {
         id: 7,
-        src: "7.jpg"
+        src: "7.jpg",
+        level: 3
       },
       {
         id: 8,
-        src: "8.jpg"
+        src: "8.jpg",
+        level: 5
       },
       {
         id: 9,
-        src: "9.jpg"
+        src: "9.jpg",
+        level: 4
       },
       {
         id: 10,
-        src: "10.jpg"
+        src: "10.jpg",
+        level: 3
       },
       {
         id: 11,
-        src: "11.jpg"
+        src: "11.jpg",
+        level: 5
       },
       {
         id: 12,
-        src: "12.jpg"
+        src: "12.jpg",
+        level: 4
       },
       {
         id: 13,
-        src: "13.jpg"
+        src: "13.jpg",
+        level: 5
       },
       {
         id: 14,
-        src: "14.jpg"
+        src: "14.jpg",
+        level: 5
       },
       {
         id: 15,
-        src: "15.jpg"
+        src: "15.jpg",
+        level: 5
       },
       {
         id: 16,
-        src: "16.jpg"
+        src: "16.jpg",
+        level: 5
       },
       {
         id: 17,
-        src: "17.jpg"
+        src: "17.jpg",
+        level: 3
       },
       {
         id: 18,
-        src: "18.jpg"
+        src: "18.jpg",
+        level: 3
       },
       {
         id: 19,
-        src: "19.jpg"
+        src: "19.jpg",
+        level: 5
       },
       {
         id: 20,
-        src: "20.jpg"
+        src: "20.jpg",
+        level: 5
       },
       {
         id: 21,
-        src: "21.jpg"
+        src: "21.jpg",
+        level: 4
       },
       {
         id: 22,
-        src: "22.jpg"
+        src: "22.jpg",
+        level: 5
       }
     ]
   },
@@ -350,51 +430,63 @@ export default {
     data: [
       {
         id: 1,
-        src: "1.jpg"
+        src: "1.jpg",
+        level: 2
       },
       {
         id: 2,
-        src: "2.jpg"
+        src: "2.jpg",
+        level: 3
       },
       {
         id: 3,
-        src: "3.jpg"
+        src: "3.jpg",
+        level: 2
       },
       {
         id: 4,
-        src: "4.jpg"
+        src: "4.jpg",
+        level: 3
       },
       {
         id: 5,
-        src: "5.jpg"
+        src: "5.jpg",
+        level: 4
       },
       {
         id: 6,
-        src: "6.jpg"
+        src: "6.jpg",
+        level: 3
       },
       {
         id: 7,
-        src: "7.jpg"
+        src: "7.jpg",
+        level: 3
       },
       {
         id: 8,
-        src: "8.jpg"
+        src: "8.jpg",
+        level: 3
       },
       {
         id: 9,
-        src: "9.jpg"
+        src: "9.jpg",
+        level: 4
       },
       {
         id: 10,
-        src: "10.jpg"
+        src: "10.jpg",
+        level: 2
       },
       {
         id: 11,
-        src: "11.jpg"
+        src: "11.jpg",
+        level: 4
       },
       {
         id: 12,
-        src: "12.jpg"
+        src: "12.jpg",
+        level: 3
       }
     ]
   },
@@ -404,31 +496,38 @@ export default {
     data: [
       {
         id: 1,
-        src: "1.jpg"
+        src: "1.jpg",
+        level: 4
       },
       {
         id: 2,
-        src: "2.jpg"
+        src: "2.jpg",
+        level: 5
       },
       {
         id: 3,
-        src: "3.jpg"
+        src: "3.jpg",
+        level: 4
       },
       {
         id: 4,
-        src: "4.jpg"
+        src: "4.jpg",
+        level: 4
       },
       {
         id: 5,
-        src: "5.jpg"
+        src: "5.jpg",
+        level: 4
       },
       {
         id: 6,
-        src: "6.jpg"
+        src: "6.jpg",
+        level: 5
       },
       {
         id: 7,
-        src: "7.jpg"
+        src: "7.jpg",
+        level: 5
       }
     ]
   },
@@ -438,43 +537,53 @@ export default {
     data: [
       {
         id: 1,
-        src: "1.jpg"
+        src: "1.jpg",
+        level: 3
       },
       {
         id: 2,
-        src: "2.jpg"
+        src: "2.jpg",
+        level: 3
       },
       {
         id: 3,
-        src: "3.jpg"
+        src: "3.jpg",
+        level: 3
       },
       {
         id: 4,
-        src: "4.jpg"
+        src: "4.jpg",
+        level: 4
       },
       {
         id: 5,
-        src: "5.jpg"
+        src: "5.jpg",
+        level: 4
       },
       {
         id: 6,
-        src: "6.jpg"
+        src: "6.jpg",
+        level: 3
       },
       {
         id: 7,
-        src: "7.jpg"
+        src: "7.jpg",
+        level: 3
       },
       {
         id: 8,
-        src: "8.jpg"
+        src: "8.jpg",
+        level: 3
       },
       {
         id: 9,
-        src: "9.jpg"
+        src: "9.jpg",
+        level: 3
       },
       {
         id: 10,
-        src: "10.jpg"
+        src: "10.jpg",
+        level: 3
       }
     ]
   }

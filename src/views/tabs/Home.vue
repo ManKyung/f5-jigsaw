@@ -1,16 +1,22 @@
 <template>
   <v-ons-page class="mt-5">
     <div v-for="(items, category) in categories" :key="category" :class="category === 'scenery' ? 'pb-10' : ''">
-      <div class="pl-3 py-2">{{items.nameKR}}</div>
+      <div class="pl-3 py-3 fs-20">{{items.nameKR}}</div>
       <v-ons-row>
         <v-ons-col style="width:50%">
           <v-ons-carousel swipeable overscrollable fullscreen item-width="48%">
             <v-ons-carousel-item style="width:48%" v-for="(item, index) in items.data" :key="index">
-              <v-ons-card class="pa-0">
+              <v-ons-card class="game-wrap pa-0">
+                
+                <div class="card-inner">
+                  <div style="font-size:14px; padding:2px;">
+                    <v-ons-icon v-for="i in item.level" :key="i" class="level-star" icon="ion-ios-star"></v-ons-icon>
+                  </div>
+                </div>
                 <img
-                  v-hammer:tap="(e)=> goPage(e, category, item.id, item.src)"
-                  v-hammer:press="(e)=> goPage(e, category, item.id, item.src)"
-                  v-hammer:pressup="(e)=> goPage(e, category, item.id, item.src)"
+                  v-hammer:tap="(e)=> goPage(e, category, item.id, item.src, item.level)"
+                  v-hammer:press="(e)=> goPage(e, category, item.id, item.src, item.level)"
+                  v-hammer:pressup="(e)=> goPage(e, category, item.id, item.src, item.level)"
                   :src="item.imageSrc"
                   class="game-img"
                 />
@@ -43,14 +49,15 @@ export default {
     }
   },
   methods: {
-    goPage(e, category, id, src) {
+    goPage(e, category, id, src, level) {
       if(e.type === 'tap' || e.type === 'pressup'){
         this.$emit("push-page", {
           ...playOptionPage,
           onsNavigatorProps: {
             category: category,
             id: id,
-            src: src
+            src: src,
+            level: level,
           }
         });
       }

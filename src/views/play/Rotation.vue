@@ -63,6 +63,14 @@
 <script>
 export default {
   props: {
+    gameType: {
+      type: String,
+      default: 'jigsaw'
+    },
+    level: {
+      type: Number,
+      default: 1
+    },
     category: {
       type: String,
       default: "cats"

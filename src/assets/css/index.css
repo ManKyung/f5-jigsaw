@@ -2,25 +2,18 @@
 primary color : #6c5ce7
 reverse color : #fb8c00
 */
-::-webkit-scrollbar {
-  /* width: 5px; */
-}
 
 @font-face{ 
-  font-family:'NanumOenSonJabIDoYeBbeo'; 
+  font-family:'baemin'; 
   src:url('font.ttf') format('truetype');
 }
 
 * {
-  font-family: NanumOenSonJabIDoYeBbeo;
-  font-size:32px;
-  font-weight: bold;
+  font-family: baemin;
 }
 
 .fo {
-  font-family: NanumOenSonJabIDoYeBbeo;
-  font-size:32px;
-  font-weight: bold;
+  font-family: baemin;
 }
 
 img {
@@ -31,6 +24,28 @@ html {
   touch-action: manipulation;
   box-sizing: content-box;
 }
+.fvw-1 { font-size: 1vw !important; }
+.fvw-2 { font-size: 2vw !important; }
+.fvw-3 { font-size: 3vw !important; }
+.fvw-4 { font-size: 4vw !important; }
+.fvw-5 { font-size: 5vw !important; }
+.fvw-6 { font-size: 6vw !important; }
+.fvw-7 { font-size: 7vw !important; }
+.fvw-8 { font-size: 8vw !important; }
+.fvw-9 { font-size: 9vw !important; }
+.fvw-10 { font-size: 10vw !important; }
+.fs-10 { font-size: 10px !important; }
+.fs-11 { font-size: 11px !important; }
+.fs-12 { font-size: 12px !important; }
+.fs-13 { font-size: 13px !important; }
+.fs-14 { font-size: 14px !important; }
+.fs-15 { font-size: 15px !important; }
+.fs-16 { font-size: 16px !important; }
+.fs-17 { font-size: 17px !important; }
+.fs-18 { font-size: 18px !important; }
+.fs-19 { font-size: 19px !important; }
+.fs-20 { font-size: 20px !important; }
+
 /* a {
   color: #6c5ce7 !important;
   text-decoration: none;
@@ -4017,7 +4032,6 @@ html {
 }
 #board-piece {
   background: #ffffff;
-  padding: 5px;
   display: flex;
   flex-wrap: nowrap;
   overflow-x: scroll;
@@ -4077,10 +4091,90 @@ html {
   border-radius: 8px;
   width: 100%;
 }
-.game-img:active {
+.game-wrap:active {
   transform: scale(0.98);
 }
 
 .next-text:active {
   transform: translateY(2px);
+}
+.level-star {
+  color: #faa741; 
+  margin-right:2px;
+}
+.card-inner {
+  position: absolute; background: rgba(0,0,0, 0.49);
+  border-top-left-radius: 8px;
+}
+
+.float-left {
+  float: left !important;
+}
+.float-right {
+  float: right !important;
+}
+.clear {
+  clear: both;
+}
+
+
+
+.my-clear .game-type {
+  min-width: 50px;
+}
+.my-clear .game-bar{
+  margin-top:5px;
+}
+.pg-bar .progress-bar {
+  height: 4px;
+}
+.pg-bar .progress-bar__secondary {
+  background-color: transparent;
+}
+.pg-bar .progress-bar__primary {
+  background-color: #fdbc6d;
+}
+.card-inner.bottom {
+  width: 100%;
+  bottom: 0;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.btn-group .button {
+  border-radius: 0px;
+  text-align: center;
+  background-color: white;
+  color: #fb8c00; /* White text */
+  border: 1px solid #fb8c00; /* Green border */
+  float: left; /* Float the buttons side by side */
+  width: 50%;
+  font-family: baemin;
+}
+.btn-group .button.on {
+  background-color: #fb8c00; /* Green background */
+  color: white;
+}
+.btn-group .button:active {
+  background-color: #fcaf50; /* Green background */
+  border: 1px solid #fb8c00; /* Green border */
+  color: white;
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.btn-group .button:not(:last-child) {
+  border-radius: 3px 0 0 3px;
+}
+.btn-group .button:not(:first-child) {
+  border-radius: 0 3px 3px 0;
+}
+
+.my-tab-item {
+  width: 50% !important;
+  display: inline-block !important;
 }

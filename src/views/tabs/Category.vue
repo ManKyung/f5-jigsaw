@@ -3,32 +3,46 @@
 
     <v-ons-list class="pb-10">
       <v-ons-list-item
-        v-for="(item, category) in categories"
+        v-for="(items, category) in categories"
         :key="category"
         expandable
-        :expanded.sync="item.expand"
+        :expanded.sync="items.expand"
         class="category-title"
       >
         <div class="left">
-          <img :src="item.data[0].imageSrc" class="list-item__thumbnail" />
+          <img :src="items.data[0].imageSrc" class="list-item__thumbnail" />
         </div>
         <div class="center">
-          <span class="list-item__title">{{item.nameKR}}</span>
+          <span class="list-item__title">{{items.nameKR}}</span>
         </div>
         <div class="expandable-content">
           <v-ons-row>
             <v-ons-col
-              class="mx-1 my-1 category-item"
-              v-for="(data, index) in item.data"
+              class="category-item"
+              v-for="(item, index) in items.data"
               :key="index"
             >
-              <img
+              <v-ons-card class="game-wrap pa-0" style="margin: 4px">
+                <div class="card-inner">
+                  <div style="font-size:14px; padding:2px;">
+                    <v-ons-icon v-for="i in item.level" :key="i" class="level-star" icon="ion-ios-star"></v-ons-icon>
+                  </div>
+                </div>
+                <img
+                  v-hammer:tap="(e)=> goPage(e, category, item.id, item.src)"
+                  v-hammer:press="(e)=> goPage(e, category, item.id, item.src)"
+                  v-hammer:pressup="(e)=> goPage(e, category, item.id, item.src)"
+                  :src="item.imageSrc"
+                  class="game-img"
+                />
+              </v-ons-card>
+              <!-- <img
                 class="game-img"
                 :src="data.imageSrc"
                 v-hammer:tap="(e)=> goPage(e, category, data.id, data.src)"
                 v-hammer:press="(e)=> goPage(e, category, data.id, data.src)"
                 v-hammer:pressup="(e)=> goPage(e, category, data.id, data.src)"
-              />
+              /> -->
             </v-ons-col>
           </v-ons-row>
         </div>
@@ -42,12 +56,12 @@
 .category-item {
   flex: 1 0 45%; /* explanation below */
 }
-.category-title:active {
+.list-item__top:active {
   transform: translateY(2px);
 }
 .category-title .list-item__title {
-  align-self: flex-start !important;
-  margin-top:-3px;
+  align-self: center !important;
+  /* margin-top:3px; */
 }
 .list,
 .list-item--expandable {

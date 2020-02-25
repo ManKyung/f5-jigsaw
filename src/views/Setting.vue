@@ -8,37 +8,42 @@
       <v-ons-list-item>
         <v-ons-list-item modifier="nodivider"></v-ons-list-item>
         <v-ons-list-item
-          class="setting-title"
+          class="setting-title fs-20"
           modifier="nodivider"
           v-hammer:tap="(e)=> goPage(e, 'review')"
+          v-hammer:pan.start="(e)=> goPage(e, 'review')"
           v-hammer:press="(e)=> goPage(e, 'review')"
           v-hammer:pressup="(e)=> goPage(e, 'review')"
         >Review</v-ons-list-item>
         <v-ons-list-item
-          class="setting-title"
+          class="setting-title fs-20"
           modifier="nodivider"
           v-hammer:tap="(e)=> goPage(e, 'background')"
+          v-hammer:pan.start="(e)=> goPage(e, 'background')"
           v-hammer:press="(e)=> goPage(e, 'background')"
           v-hammer:pressup="(e)=> goPage(e, 'background')"
         >Background</v-ons-list-item>
         <v-ons-list-item
-          class="setting-title"
+          class="setting-title fs-20"
           modifier="nodivider"
           v-hammer:tap="(e)=> goPage(e, 'share')"
+          v-hammer:pan.start="(e)=> goPage(e, 'share')"
           v-hammer:press="(e)=> goPage(e, 'share')"
           v-hammer:pressup="(e)=> goPage(e, 'share')"
         >Share</v-ons-list-item>
         <v-ons-list-item
-          class="setting-title"
+          class="setting-title fs-20"
           modifier="nodivider"
           v-hammer:tap="(e)=> goPage(e, 'gameSetting')"
+          v-hammer:pan.start="(e)=> goPage(e, 'gameSetting')"
           v-hammer:press="(e)=> goPage(e, 'gameSetting')"
           v-hammer:pressup="(e)=> goPage(e, 'gameSetting')"
         >Game Setting</v-ons-list-item>
         <v-ons-list-item
-          class="setting-title"
+          class="setting-title fs-20"
           modifier="nodivider"
           v-hammer:tap="(e)=> goPage(e, 'removeAd')"
+          v-hammer:pan.start="(e)=> goPage(e, 'removeAd')"
           v-hammer:press="(e)=> goPage(e, 'removeAd')"
           v-hammer:pressup="(e)=> goPage(e, 'removeAd')"
         >Remove AD</v-ons-list-item>
@@ -71,6 +76,9 @@
 <style>
 .setting-title:active {
   transform: translateY(2px);
+}
+.list-item {
+  padding-left: 8px !important;
 }
 .list-item__center {
   align-items: center !important;
@@ -133,12 +141,14 @@
 <script>
 import gameSettingPage from "@/views/settings/GameSetting";
 import backgroundPage from "@/views/settings/Background";
+import logoImage from "@/assets/logo.jpg";
 export default {
   name: "setting",
   data() {
     return {
       isSound: this.$store.state.gameSet.isSound,
-      isBackgroundMusic: this.$store.state.gameSet.isBackgroundMusic
+      isBackgroundMusic: this.$store.state.gameSet.isBackgroundMusic,
+      logoImage
     };
   },
   methods: {
@@ -151,7 +161,7 @@ export default {
       this.$store.commit("gameSet/setBackgroundMusic", this.isBackgroundMusic);
     },
     goPage(e, page) {
-      if(e.type === 'tap' || e.type === 'pressup'){
+      if(e.type === 'tap' || e.type === 'pressup' || e.type === 'panstart'){
         if (page === "review") {
           location.href =
             "https://play.google.com/store/apps/details?id=com.f5game.jigsaw";
@@ -162,10 +172,10 @@ export default {
           });
         } else if (page === "share") {
           window.plugins.socialsharing.share(
-            "Message, subject, image and link",
-            "The subject",
-            "https://www.google.nl/images/srpr/logo4w.png",
-            "http://www.x-services.nl"
+            "F5 Puzzle Games(Free)",
+            "Jigsaw, Switch, Slider, Rotate",
+            logoImage,
+            "https://play.google.com/store/apps/details?id=com.f5game.jigsaw"
           );
         } else if (page === "gameSetting") {
           this.$emit("push-page", {

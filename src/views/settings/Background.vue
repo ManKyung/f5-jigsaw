@@ -33,6 +33,7 @@
 .background-check {
   position: absolute;
   padding-left: 10px;
+  padding-top: 10px;
 }
 </style>
 

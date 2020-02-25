@@ -61,14 +61,17 @@
 .gamesetting-item {
   background: #eee;
   height: 120px;
+  font-size: 20px;
 }
 .gamesetting-item.on {
   background: #6c5ce7;
   color: white;
+  font-size: 28px;
 }
 .game-check {
   position: absolute;
   padding-left: 10px;
+  padding-top: 10px;
   color: white;
 }
 </style>

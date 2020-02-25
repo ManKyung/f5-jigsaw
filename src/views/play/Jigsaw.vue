@@ -69,7 +69,6 @@
           class="piece-item"
           v-for="(item, index) in pieceItems"
           :key="index"
-          :style="pieceItemStyle"
         >
           <div class="piece" :id="`piece-${index}`" :style="item.style"></div>
         </div>
@@ -125,9 +124,12 @@
   /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); */ 
 }
 
-/* #board-piece .piece-item {
-  margin: 30px 30px 0 0;
-} */
+@media (min-width: 320px) and (max-width: 480px) {
+  #board-piece .piece-item {
+    transform: scale(0.6);
+  }
+}
+  
 </style>
 <script>
 import draggable from "@/assets/js/vuedraggable";
@@ -137,6 +139,14 @@ export default {
     dragscroll
   },
   props: {
+    gameType: {
+      type: String,
+      default: 'jigsaw'
+    },
+    level: {
+      type: Number,
+      default: 1
+    },
     category: {
       type: String,
       default: "cats"
@@ -201,7 +211,6 @@ export default {
       isClearOn: false,
       isClearImage: false,
       prevNumber: [],
-      pieceItemStyle: 'margin: 10vw 10vw 0 0'
     };
   },
   created() {
@@ -218,6 +227,19 @@ export default {
     setTimeout(() => {
       this.setUI();
     }, 300);
+    setTimeout(() => {
+      
+      let params = {
+        gameType: this.gameType,
+        category: this.category,
+        id: this.id,
+        src: this.src,
+        pCount: this.pieceCount,
+        level: this.level
+      };
+
+      this.$store.commit("gameSet/setGameClear", params);
+    }, 1000)
   },
   watch: {
     isHint(){
@@ -225,7 +247,6 @@ export default {
       for(let i = 0 ; i < len ; i++){
         if(this.realBoardItems[i] !== 0 && i !== this.realBoardItems[i].id) {
           this.pieceItems.unshift(this.realBoardItems[i]);
-
           this.$set(this.realBoardItems, i, 0)
         }
       }

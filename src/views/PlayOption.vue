@@ -1,13 +1,9 @@
 <template>
   <v-ons-page>
     <div class="left" style="min-height:64px;">
-      <v-ons-back-button class="pl-4"></v-ons-back-button>
-      <div class="pl-3 fo w-100" style="display:inline; font-size:42px;">Option</div>
+      <v-ons-back-button class="pl-4 pt-2"></v-ons-back-button>
+      <div class="pl-3 fo w-100" style="display:inline; font-size:32px;">Option</div>
     </div>
-    <!-- <v-ons-toolbar class="white" style="min-height:64px;">
-      <v-ons-back-button class="pt-2"></v-ons-back-button>
-    </v-ons-toolbar> -->
-
     <div>
       <div id="board-real-preview" :style="`max-height:${boardHeight}px; overflow:hidden`">
         <div
@@ -30,9 +26,9 @@
         :width="80"
         :height="80"
       >
-        <slide class="text-center pt-2" v-for="(value, key) in items" :key="key" :index="key">
+        <slide class="text-center pt-3" v-for="(value, key) in items" :key="key" :index="key">
           <v-ons-icon icon="md-puzzle-piece"></v-ons-icon>
-          <div style="margin-top:-4px;">{{(value)*(value)}}</div>
+          <div>{{(value)*(value)}}</div>
         </slide>
       </carousel-3d>
 
@@ -66,8 +62,9 @@
 .carousel-3d-slide.current {
   background-color: #fb8c00 !important;
   color: white !important;
-  letter-spacing: 4px !important;
+  letter-spacing: 2px !important;
   border-radius: 20px;
+  font-size:28px;
   border: none;
 }
 .carousel-3d-slide.left-1,
@@ -78,7 +75,9 @@
   color: #fb8c00 !important;
   border: 1px solid #fcaf50 !important;
   border-radius: 10px;
-  letter-spacing: 3px !important;
+  padding-top:16px !important;
+  font-size:20px;
+  letter-spacing: 2px !important;
 }
 .btn-type {
   background-color: transparent !important;
@@ -89,15 +88,14 @@
 .btn-type.on {
   background-color: #fb8c00 !important;
   color: white !important;
-  letter-spacing: 2px !important;
+  letter-spacing: 1px !important;
+  font-weight: bold !important;
 }
 .type-text,
 .play-text {
   text-transform: capitalize !important;
-  font-family: NanumOenSonJabIDoYeBbeo !important;
-  font-size: 5vw !important;
-  letter-spacing: 2px !important;
-  font-weight: bold !important;
+  font-family: baemin !important;
+  letter-spacing: 0.5px !important;
 }
 .play-text:active, .type-text:active {
   transform: translateY(2px);
@@ -107,7 +105,7 @@
 import gamePage from "./play/Game.vue";
 import { Carousel3d, Slide } from "vue-carousel-3d";
 export default {
-  props: ["category", "id", "src"],
+  props: ["category", "id", "src", "level"],
   name: "playOption",
   components: {
     Carousel3d,
@@ -115,12 +113,11 @@ export default {
   },
   data() {
     return {
-      pieceCount: 4,
-      items: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+      pieceCount: 3,
+      items: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
       perviewImage: null,
       boardItems: [],
       selectedPiece: {},
-      // pieceNumber: 8,
       pWidth: 0,
       pHeight: 0,
       boardHeight: 0,
@@ -163,7 +160,7 @@ export default {
       }
     },
     setPieceCount(index) {
-      this.pieceCount = index + 4;
+      this.pieceCount = index + 3;
     },
     goPage(e) {
       if(e.type === 'tap' || e.type === 'pressup'){
@@ -172,7 +169,8 @@ export default {
           category: this.category,
           id: this.id,
           src: this.src,
-          pCount: this.pieceCount
+          pCount: this.pieceCount,
+          level: this.level
         };
 
         this.$store.commit("gameSet/setMy", params);
