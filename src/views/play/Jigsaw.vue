@@ -124,11 +124,11 @@
   /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); */ 
 }
 
-@media (min-width: 320px) and (max-width: 480px) {
+/* @media (min-width: 320px) and (max-width: 480px) {
   #board-piece .piece-item {
     transform: scale(0.6);
   }
-}
+} */
   
 </style>
 <script>

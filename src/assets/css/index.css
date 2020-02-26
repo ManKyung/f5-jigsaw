@@ -4060,7 +4060,7 @@ html {
 
 .clear-wrap {
   position:fixed;
-  bottom: -200px;
+  bottom: -400px;
   transition: 0.3s;
   transition-timing-function: cubic-bezier(0,-0.59,.65,-0.43);
 }
