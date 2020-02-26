@@ -22,7 +22,7 @@
 // import switchPage from "@/views/play/Switch";
 // import clearPage from "@/views/play/Clear";
 // import sliderPage from "@/views/play/Slider";
-import backgroundMusic from "@/assets/mp3/bensound-photoalbum.mp3";
+// import backgroundMusic from "@/assets/mp3/bensound-photoalbum.mp3";
 import clickSound from "@/assets/mp3/click.mp3";
 import MainPage from "@/views/Main";
 import { initAd, removeBanner } from "@/assets/js/admob.js";
@@ -104,11 +104,11 @@ export default {
       audio.play();
     },
     backgroudPlay() {
-      this.backgroundMusic = new Audio(backgroundMusic);
-      this.backgroundMusic.loop = true;
-      this.backgroundMusic.volume = 0.3;
-      this.backgroundMusic.play();
-      this.isPlayMusic = true;
+      // this.backgroundMusic = new Audio(backgroundMusic);
+      // this.backgroundMusic.loop = true;
+      // this.backgroundMusic.volume = 0.3;
+      // this.backgroundMusic.play();
+      // this.isPlayMusic = true;
     }
   }
 };

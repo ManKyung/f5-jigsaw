@@ -175,6 +175,16 @@ export default {
         }
       }
 
+      let params = {
+        gameType: this.gameType,
+        category: this.category,
+        id: this.id,
+        src: this.src,
+        pCount: this.pieceCount,
+        level: this.level
+      };
+      this.$store.dispatch("gameSet/setGameClear", params);
+
       return true;
     },
     transPiece(e, i){

@@ -19,7 +19,7 @@
           >Clear</v-ons-button>
         </div>
       </div>
-      <div v-if="myType !== 'todo'">
+      <div v-if="myType === 'todo'">
         <v-ons-row
           class="my-tab-item"
           v-for="(item, index) in myItems"
@@ -47,59 +47,62 @@
         </v-ons-row>
       </div>
       <div v-else class="my-clear">
-        <v-ons-row v-for="(item, index) in myItems" :key="index" class="pa-2">
-          <v-ons-col>
-            <v-ons-card class="pa-0 ma-0">
-              <div style="position: relative;">
-                <div class="card-inner bottom">
-                  <div style="font-size:14px; color:white; padding:4px; text-transform:capitalize;">
-                    <div class="mb-2 float-left">Category : Cats</div>
-                    <div class="float-right">
-                      <v-ons-icon
-                        v-for="i in [1,2,3,4,5]"
-                        :key="i"
-                        class="level-star"
-                        icon="ion-ios-star"
-                      ></v-ons-icon>
-                    </div>
-                    <div class="clear"></div>
-                    <div>
-                      <div class="pb-2" style="display: flex">
-                        <div style="flex: 1" class="game-type mr-2">Jigsaw</div>
-                        <div style="flex: 9" class="game-bar">
-                          <v-ons-progress-bar value="80" class="pg-bar"></v-ons-progress-bar>
-                        </div>
+        <div v-for="(items, category) in clearItems" :key="category">
+          <v-ons-row v-for="(item, index) in items" :key="index" class="pa-2">
+            <v-ons-col>
+              <v-ons-card class="pa-0 ma-0">
+                <!-- {{item}} -->
+                <div style="position: relative;">
+                  <div class="card-inner bottom">
+                    <div style="font-size:14px; color:white; padding:4px; text-transform:capitalize;">
+                      <div class="mb-2 float-left">Category : {{category}}</div>
+                      <div class="float-right">
+                        <v-ons-icon
+                          v-for="i in item.level"
+                          :key="i"
+                          class="level-star"
+                          icon="ion-ios-star"
+                        ></v-ons-icon>
                       </div>
                       <div class="clear"></div>
-                      <div class="pb-2" style="display: flex">
-                        <div style="flex: 1" class="game-type mr-2">Switch</div>
-                        <div style="flex: 9" class="game-bar">
-                          <v-ons-progress-bar value="300" class="pg-bar"></v-ons-progress-bar>
+                      <div>
+                        <div class="pb-2" style="display: flex">
+                          <div style="flex: 1" class="game-type mr-2">Jigsaw</div>
+                          <div style="flex: 9" class="game-bar">
+                            <v-ons-progress-bar :value="item.jigsaw.length * 10" class="pg-bar"></v-ons-progress-bar>
+                          </div>
                         </div>
-                      </div>
-                      <div class="clear"></div>
-                      <div class="pb-2" style="display: flex">
-                        <div style="flex: 1" class="game-type mr-2">Slider</div>
-                        <div style="flex: 9" class="game-bar">
-                          <v-ons-progress-bar value="70" class="pg-bar"></v-ons-progress-bar>
+                        <div class="clear"></div>
+                        <div class="pb-2" style="display: flex">
+                          <div style="flex: 1" class="game-type mr-2">Switch</div>
+                          <div style="flex: 9" class="game-bar">
+                            <v-ons-progress-bar :value="item.switch.length * 10" class="pg-bar"></v-ons-progress-bar>
+                          </div>
                         </div>
-                      </div>
-                      <div class="clear"></div>
-                      <div class="pb-2" style="display: flex">
-                        <div style="flex: 1" class="game-type mr-2">Rotate</div>
-                        <div style="flex: 9" class="game-bar">
-                          <v-ons-progress-bar value="90" class="pg-bar"></v-ons-progress-bar>
+                        <div class="clear"></div>
+                        <div class="pb-2" style="display: flex">
+                          <div style="flex: 1" class="game-type mr-2">Slider</div>
+                          <div style="flex: 9" class="game-bar">
+                            <v-ons-progress-bar :value="item.slider.length * 10" class="pg-bar"></v-ons-progress-bar>
+                          </div>
                         </div>
+                        <div class="clear"></div>
+                        <div class="pb-2" style="display: flex">
+                          <div style="flex: 1" class="game-type mr-2">Rotate</div>
+                          <div style="flex: 9" class="game-bar">
+                            <v-ons-progress-bar :value="item.rotate.length * 10" class="pg-bar"></v-ons-progress-bar>
+                          </div>
+                        </div>
+                        <div class="clear"></div>
                       </div>
-                      <div class="clear"></div>
                     </div>
                   </div>
+                  <img :src="require(`../../assets/img/${category}/${item.src}`)" class="game-img" />
                 </div>
-                <img :src="item.imageSrc" class="game-img" />
-              </div>
-            </v-ons-card>
-          </v-ons-col>
-        </v-ons-row>
+              </v-ons-card>
+            </v-ons-col>
+          </v-ons-row>
+        </div>
       </div>
     </div>
   </v-ons-page>
@@ -112,30 +115,51 @@ export default {
   data() {
     return {
       isExpanded: false,
-      items: this.$store.state.gameSet.my,
+      myStoreItems: this.$store.state.gameSet.my,
+      clearStoreItems: this.$store.state.gameSet.clear,
       myItems: [],
+      clearItems: [],
       myType: "todo"
     };
   },
   mounted() {
     setTimeout(() => {
       this.myInit();
-    }, 300);
+      this.clearInit();
+    }, 700);
   },
   watch: {
-    items() {
+    myStoreItems() {
       this.myInit();
+    },
+    clearStoreItems() {
+      this.clearInit();
     }
   },
   methods: {
     myInit() {
-      this.items = this.$store.state.gameSet.my;
+      this.myStoreItems = this.$store.state.gameSet.my;
       let temp = [];
-      for (let i = 0; i < this.items.length; i++) {
-        this.items[i].imageSrc = require(`../../assets/img/${this.items[i].category}/${this.items[i].src}`);
-        temp.push(this.items[i]);
+      for (let i = 0; i < this.myStoreItems.length; i++) {
+        this.myStoreItems[i].imageSrc = require(`../../assets/img/${this.myStoreItems[i].category}/${this.myStoreItems[i].src}`);
+        temp.push(this.myStoreItems[i]);
       }
       this.myItems = temp;
+    },
+    clearInit(){
+      this.clearItems = this.$store.state.gameSet.clear;
+      // let temp = [];
+      // for(const i in this.clearStoreItems){
+      //   console.log(this.clearStoreItems[i])
+
+      // }
+      // if(this.clearStoreItems !== undefined){
+      //   for (let i = 0; i < this.clearStoreItems.length; i++) {
+      //     // this.clearStoreItems[i].imageSrc = require(`../../assets/img/${this.clearStoreItems[i].category}/${this.clearStoreItems[i].src}`);
+      //     // temp.push(this.clearStoreItems[i]);
+      //   }
+      // }
+      // this.clearItems = temp;
     },
     setMyType(e, type) {
       if (e.type === "tap" || e.type === "pressup" || e.type === "panstart") {
@@ -149,7 +173,8 @@ export default {
           category: item.category,
           id: item.id,
           src: item.src,
-          pCount: item.pieceCount
+          pCount: item.pCount,
+          level: item.level,
         };
         this.$emit("push-page", { ...gamePage, onsNavigatorProps: params });
       }

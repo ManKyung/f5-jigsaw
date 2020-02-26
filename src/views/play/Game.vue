@@ -31,6 +31,8 @@
     </v-ons-toolbar>
 
     <component :is="component"
+    :gameType="gameType"
+    :level="level"
     :category="category"
     :src="src"
     :pCount="pCount"
@@ -75,13 +77,17 @@ export default {
       type: String,
       default: "jigsaw"
     },
+    level: {
+      type: Number,
+      default: 1
+    },
     category: {
       type: String,
       default: "cats"
     },
     src: {
       type: String,
-      default: "5.jpg"
+      default: "1.jpg"
     },
     pCount: {
       type: Number,

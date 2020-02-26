@@ -227,19 +227,6 @@ export default {
     setTimeout(() => {
       this.setUI();
     }, 300);
-    setTimeout(() => {
-      
-      let params = {
-        gameType: this.gameType,
-        category: this.category,
-        id: this.id,
-        src: this.src,
-        pCount: this.pieceCount,
-        level: this.level
-      };
-
-      this.$store.commit("gameSet/setGameClear", params);
-    }, 1000)
   },
   watch: {
     isHint(){
@@ -305,6 +292,17 @@ export default {
           return false;
         }
       }
+      
+      let params = {
+        gameType: this.gameType,
+        category: this.category,
+        id: this.id,
+        src: this.src,
+        pCount: this.pieceCount,
+        level: this.level
+      };
+      this.$store.dispatch("gameSet/setGameClear", params);
+
       this.isClearImage = true;
       setTimeout(() => {
         this.modalClear = true;
