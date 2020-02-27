@@ -60,6 +60,7 @@
 </style>
 
 <script>
+import { showRewardVideo } from "@/assets/js/admob.js";
 export default {
   props: {
     gameType: {
@@ -121,6 +122,7 @@ export default {
       modalClear: false,
       isClearOn: false,
       isClearImage: false,
+      length: 0,
     };
   },
   created() {
@@ -132,20 +134,36 @@ export default {
     setTimeout(() => {
       this.setBoard(true);
       this.setUI();
+      this.getPercent();
     }, 500);
+    document.addEventListener(
+      "admob.rewardvideo.events.REWARD",
+      this.getReward
+    );
+  },
+  destroyed() {
+    document.removeEventListener(
+      "admob.rewardvideo.events.REWARD",
+      this.getReward
+    );
   },
   watch: {
     isHint(){
-      this.realBoardItems = [];
-      setTimeout(() => {
-        this.setBoard(false);
-      }, 10)
+      showRewardVideo();
+      // this.getReward();
     },
     background(value){
       this.setBackground(value)
     }
   },
   methods: {
+    getReward(){
+      this.realBoardItems = [];
+      setTimeout(() => {
+        this.setBoard(false);
+        this.getPercent();
+      }, 10)
+    },
     setUI(){
       let gameContainer = this.$refs.gameContainer;
       let previewWrap = this.$refs.previewWrap;
@@ -166,12 +184,12 @@ export default {
       }
     },
     isClear(){
-      let len = this.realBoardItems.length;
-      if(this.emptyIndex !== len - 1) {
+      this.getPercent();
+      if(this.emptyIndex !== this.length - 1) {
         return false;
       }
 
-      for(let i = 0 ; i < len - 1 ; i++){
+      for(let i = 0 ; i < this.length - 1 ; i++){
         if(i !== this.realBoardItems[i].id) {
           return false;
         }
@@ -208,6 +226,21 @@ export default {
         BOTTOM: bottom,
         LEFT: left,
       }
+    },
+    getPercent(){
+      let count = 0;
+      for(let i = 0 ; i < this.length ; i++){
+        if(i === this.realBoardItems[i].id) {
+          count++;
+        }
+      }
+
+      let percent = count * 100 / this.length;
+      if(this.length - 1 === count) {
+        percent = 100;
+      }
+
+      this.$emit('setPercent', percent)
     },
     sliderPiece(e, item) {
       let i = Number(e.target.getAttribute('data-id'));
@@ -304,6 +337,7 @@ export default {
         }
       }
       this.realBoardItems = temp;
+      this.length = this.realBoardItems.length;
 
       for(const i in this.realBoardItems){
         if(this.realBoardItems[i].class === undefined){

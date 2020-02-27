@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import stage from "@/assets/js/stage.js";
+import bgMusic from "@/assets/mp3/background.mp3";
+import clickSound from "@/assets/mp3/click.mp3";
 
 Vue.use(Vuex)
 
@@ -11,12 +14,38 @@ export default new Vuex.Store({
         type: 'jigsaw',
         background: 'default',
         backgroundBorder: '#fff',
+        rewardCount: 0,
+        isShowAD: true,
+        my: [],
+        clear: {},
+        stage: [],
+        removeMode: false,
+        removeItems: [],
+        bgMusic: new Audio(bgMusic),
+        clickSound: new Audio(clickSound),
         isSound: true,
         isBackgroundMusic: true,
-        my: [],
-        clear: {}
       },
       mutations: {
+        setRemoveMode(state, value){
+          if(!value) {
+            state.removeItems = [];
+          }
+          state.removeMode = value;
+        },
+        setRemoveItems(state, value){
+          state.removeItems = value;
+        },
+        doRemoveItems(state){
+          let t = state.removeItems.sort().reverse()
+          for(const i of t){
+            state.my.splice(i, 1)
+          }
+          localStorage['game-my'] = JSON.stringify(state.my);
+        },
+        setState(state){
+          state.stage = stage;
+        },
         removeMy(state, obj) {
           let item = {};
           for(const i in state.my){
@@ -36,13 +65,33 @@ export default new Vuex.Store({
             localStorage['game-my'] = JSON.stringify(state.my);
           }
         },
+        // setReward Count
+        setRewardCount(state) {
+          state.rewardCount += 1;
+          if(state.rewardCount === 2) {
+            state.isShowAD = false;
+            state.rewardCount = 0;
+            localStorage['isReward'] = (new Date()).getTime() + 86400000; // 1 day
+          }
+        },
         // setting sound
         setSound(state, value) {
           state.isSound = value;
+          if(value) {
+            state.clickSound.play();
+          }
         },
         // setting background music
         setBackgroundMusic(state, value) {
           state.isBackgroundMusic = value;
+          if(value) {
+            state.bgMusic.loop = true;
+            state.bgMusic.volume = 0.3;
+            state.bgMusic.play();
+          } else {
+            state.bgMusic.currentTime = 0;
+            state.bgMusic.pause();
+          }
         },
         // jigsaw, switch, slider, rotate
         setGameType(state, value) {
@@ -64,6 +113,16 @@ export default new Vuex.Store({
           state.backgroundBorder = localStorage['background-border'] === undefined ? '#000' : localStorage['background-border'];
           state.my = localStorage['game-my'] === undefined ? [] : JSON.parse(localStorage['game-my']);
           state.clear = localStorage['game-clear'] === undefined ? {} : JSON.parse(localStorage['game-clear']);
+
+          let d = localStorage['isReward'];
+          let b = true;
+          if(d !== undefined) {
+            b = (new Date()).getTime() > Number(d);
+            if(b){
+              localStorage.removeItem('isReward');
+            }
+          } 
+          state.isShowAD = d === undefined || b ? true : false;
         }
       },
       actions: {

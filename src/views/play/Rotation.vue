@@ -61,6 +61,7 @@
 </style>
 
 <script>
+import { showRewardVideo } from "@/assets/js/admob.js";
 export default {
   props: {
     gameType: {
@@ -120,6 +121,7 @@ export default {
       modalClear: false,
       isClearOn: false,
       isClearImage: false,
+      length: 0,
     };
   },
   created() {
@@ -134,19 +136,33 @@ export default {
     setTimeout(() => {
       this.setUI();
     }, 1000);
+    document.addEventListener(
+      "admob.rewardvideo.events.REWARD",
+      this.getReward
+    );
+  },
+  destroyed() {
+    document.removeEventListener(
+      "admob.rewardvideo.events.REWARD",
+      this.getReward
+    );
   },
   watch: {
     isHint(){
-      let len = this.realBoardItems.length / 2;
-      for(let i = 0 ; i < len ; i++){
-        this.realBoardItems[i].style = `${this.realBoardItems[i].style}; transform:rotate(0deg);`;
-      }
+      showRewardVideo();
+      // this.getReward();
     },
     background(value){
       this.setBackground(value)
     }
   },
   methods: {
+    getReward(){
+      let len = this.realBoardItems.length / 2;
+      for(let i = 0 ; i < len ; i++){
+        this.realBoardItems[i].style = `${this.realBoardItems[i].style}; transform:rotate(0deg);`;
+      }
+    },
     setUI(){
       let gameContainer = this.$refs.gameContainer;
       let boardWrap = this.$refs.boardWrap;
@@ -167,9 +183,8 @@ export default {
       }
     },
     isClear(){
-      let len = this.realBoardItems.length;
-
-      for(let i = 0 ; i < len ; i++){
+      this.getPercent();
+      for(let i = 0 ; i < this.length ; i++){
         if(this.realBoardItems[i].angle !== 0) {
           return false;
         }
@@ -187,12 +202,20 @@ export default {
 
       return true;
     },
+    getPercent(){
+      let count = this.realBoardItems.filter(item => {
+        return item.angle === 0;
+      }).length;
+
+      let percent = count * 100 / this.length;
+      this.$emit('setPercent', percent)
+    },
     transPiece(e, i){
       let angle = this.realBoardItems[i].angle + 90;
       angle = angle / 360 === 1 ? 0 : angle;
       this.realBoardItems[i].angle = angle;
       this.realBoardItems[i].style = `${this.realBoardItems[i].style}; transform:rotate(${angle}deg);`;
-      
+
       if(this.isClear()) {
         this.isClearImage = true;
         setTimeout(() => {
@@ -213,7 +236,7 @@ export default {
       let temp = [];
       for (let i = 0; i < this.pieceCount; i++) {
         for (let j = 0; j < this.pieceCount; j++) {
-          let angle = 90 * Math.floor(Math.random() * 4);
+          let angle = 90 * this.getRandom(1, 4);
           let item = {};
           item.class = "piece-item";
           item.style = `width: ${this.pWidth}px; height: ${this.pHeight}px; transform:rotate(${angle}deg); background: url(${this.imageSrc}); background-size:${this.previewImage.clientWidth}px ${this.previewImage.clientHeight}px; background-position: -${j * this.pWidth}px -${i * this.pHeight}px;`;
@@ -222,7 +245,13 @@ export default {
         }
       }
       this.realBoardItems = temp;
-    }
+      this.length = this.realBoardItems.length;
+    },
+    getRandom(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    },
   }
 };
 </script>

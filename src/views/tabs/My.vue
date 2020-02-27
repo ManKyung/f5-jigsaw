@@ -20,88 +20,120 @@
         </div>
       </div>
       <div v-if="myType === 'todo'">
-        <v-ons-row
-          class="my-tab-item"
-          v-for="(item, index) in myItems"
-          :key="index"
-          :class="index % 2 === 0 ? 'pl-2 pr-1' : 'pl-1 pr-2'"
-        >
-          <v-ons-col>
-            <v-ons-card class="pa-0 ma-0">
-              <div>
-                <div class="card-inner">
-                  <div
-                    style="font-size:14px; color:white; padding:4px; text-transform:capitalize;"
-                  >{{item.gameType}} / {{item.pCount}}</div>
-                </div>
-                <img
-                  v-hammer:tap="(e)=> goPage(e, item)"
-                  v-hammer:press="(e)=> goPage(e, item)"
-                  v-hammer:pressup="(e)=> goPage(e, item)"
-                  :src="item.imageSrc"
-                  class="game-img"
-                />
-              </div>
-            </v-ons-card>
-          </v-ons-col>
-        </v-ons-row>
-      </div>
-      <div v-else class="my-clear">
-        <div v-for="(items, category) in clearItems" :key="category">
-          <v-ons-row v-for="(item, index) in items" :key="index" class="pa-2">
+        <div v-if="myItems.length > 0">
+          <v-ons-row
+            class="my-tab-item"
+            v-for="(item, index) in myItems"
+            :key="index"
+            :class="index % 2 === 0 ? 'pl-2 pr-1' : 'pl-1 pr-2'"
+          >
             <v-ons-col>
-              <v-ons-card class="pa-0 ma-0">
-                <!-- {{item}} -->
-                <div style="position: relative;">
-                  <div class="card-inner bottom">
-                    <div style="font-size:14px; color:white; padding:4px; text-transform:capitalize;">
-                      <div class="mb-2 float-left">Category : {{category}}</div>
-                      <div class="float-right">
-                        <v-ons-icon
-                          v-for="i in item.level"
-                          :key="i"
-                          class="level-star"
-                          icon="ion-ios-star"
-                        ></v-ons-icon>
-                      </div>
-                      <div class="clear"></div>
-                      <div>
-                        <div class="pb-2" style="display: flex">
-                          <div style="flex: 1" class="game-type mr-2">Jigsaw</div>
-                          <div style="flex: 9" class="game-bar">
-                            <v-ons-progress-bar :value="item.jigsaw.length * 10" class="pg-bar"></v-ons-progress-bar>
-                          </div>
-                        </div>
-                        <div class="clear"></div>
-                        <div class="pb-2" style="display: flex">
-                          <div style="flex: 1" class="game-type mr-2">Switch</div>
-                          <div style="flex: 9" class="game-bar">
-                            <v-ons-progress-bar :value="item.switch.length * 10" class="pg-bar"></v-ons-progress-bar>
-                          </div>
-                        </div>
-                        <div class="clear"></div>
-                        <div class="pb-2" style="display: flex">
-                          <div style="flex: 1" class="game-type mr-2">Slider</div>
-                          <div style="flex: 9" class="game-bar">
-                            <v-ons-progress-bar :value="item.slider.length * 10" class="pg-bar"></v-ons-progress-bar>
-                          </div>
-                        </div>
-                        <div class="clear"></div>
-                        <div class="pb-2" style="display: flex">
-                          <div style="flex: 1" class="game-type mr-2">Rotate</div>
-                          <div style="flex: 9" class="game-bar">
-                            <v-ons-progress-bar :value="item.rotate.length * 10" class="pg-bar"></v-ons-progress-bar>
-                          </div>
-                        </div>
-                        <div class="clear"></div>
-                      </div>
-                    </div>
+              <v-ons-card class="game-wrap pa-0 ma-0">
+                <div v-if="!$store.state.gameSet.removeMode">
+                  <div class="card-inner">
+                    <div
+                      style="font-size:14px; color:white; padding:4px; text-transform:capitalize;"
+                    >{{item.gameType}} / {{item.pCount}}</div>
                   </div>
-                  <img :src="require(`../../assets/img/${category}/${item.src}`)" class="game-img" />
+                  <img
+                    v-hammer:tap="(e)=> goPage(e, item)"
+                    v-hammer:press="(e)=> doRemove(e, index)"
+                    :src="item.imageSrc"
+                    class="game-img"
+                  />
+                </div>
+                <div v-else>
+                  <div class="card-inner check">
+                      <v-ons-icon
+                      v-if="removeItems.indexOf(index) !== -1" 
+                        icon="ion-ios-checkmark-circle-outline"
+                        class="fs-24"
+                      ></v-ons-icon>
+                  </div>
+                  <img
+                    v-hammer:tap="(e)=> setRemoveItem(e, index)"
+                    v-hammer:pan.start="(e)=> setRemoveItem(e, index)"
+                    :src="item.imageSrc"
+                    class="game-img remove"
+                  />
                 </div>
               </v-ons-card>
             </v-ons-col>
           </v-ons-row>
+        </div>
+        <div v-else>
+          <v-ons-card class="empty-card">
+            <div class="title">
+              You have to play the game first! <v-ons-icon class="ml-2" icon="md-puzzle-piece"></v-ons-icon>
+            </div>
+          </v-ons-card>
+        </div>
+      </div>
+      <div v-else class="my-clear">
+        <div v-if="clearItems !== undefined || clearItems !== {}">
+          <div v-for="(items, category) in clearItems" :key="category">
+            <v-ons-row v-for="(item, index) in items" :key="index" class="pa-2">
+              <v-ons-col>
+                <v-ons-card class="pa-0 ma-0">
+                  <div style="position: relative;">
+                    <div class="card-inner bottom">
+                      <div style="font-size:14px; color:white; padding:4px; text-transform:capitalize;">
+                        <div class="mb-2 float-left">Category : {{category === 'bw' ? 'Black & White' : category}}</div>
+                        <div class="float-right">
+                          <v-ons-icon
+                            v-for="i in item.level"
+                            :key="i"
+                            class="level-star"
+                            icon="ion-ios-star"
+                          ></v-ons-icon>
+                        </div>
+                        <div class="clear"></div>
+                        <div>
+                          <div class="pb-2" style="display: flex">
+                            <div style="flex: 1" class="game-type mr-2">Jigsaw</div>
+                            <div style="flex: 9" class="game-bar">
+                              <v-ons-progress-bar :value="item.jigsaw.length * 10" class="pg-bar"></v-ons-progress-bar>
+                            </div>
+                          </div>
+                          <div class="clear"></div>
+                          <div class="pb-2" style="display: flex">
+                            <div style="flex: 1" class="game-type mr-2">Switch</div>
+                            <div style="flex: 9" class="game-bar">
+                              <v-ons-progress-bar :value="item.switch.length * 10" class="pg-bar"></v-ons-progress-bar>
+                            </div>
+                          </div>
+                          <div class="clear"></div>
+                          <div class="pb-2" style="display: flex">
+                            <div style="flex: 1" class="game-type mr-2">Slider</div>
+                            <div style="flex: 9" class="game-bar">
+                              <v-ons-progress-bar :value="item.slider.length * 10" class="pg-bar"></v-ons-progress-bar>
+                            </div>
+                          </div>
+                          <div class="clear"></div>
+                          <div class="pb-2" style="display: flex">
+                            <div style="flex: 1" class="game-type mr-2">Rotate</div>
+                            <div style="flex: 9" class="game-bar">
+                              <v-ons-progress-bar :value="item.rotate.length * 10" class="pg-bar"></v-ons-progress-bar>
+                            </div>
+                          </div>
+                          <div class="clear"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <img :src="require(`../../assets/img/${category}/${item.src}`)" class="game-img" />
+                  </div>
+                </v-ons-card>
+              </v-ons-col>
+            </v-ons-row>
+          </div>
+        </div>
+        
+        <div v-else>
+          <v-ons-card class="empty-card">
+            <div class="title">
+              Please clear the game first! <v-ons-icon class="ml-2" icon="ion-ios-alert"></v-ons-icon>
+            </div>
+          </v-ons-card>
         </div>
       </div>
     </div>
@@ -119,7 +151,9 @@ export default {
       clearStoreItems: this.$store.state.gameSet.clear,
       myItems: [],
       clearItems: [],
-      myType: "todo"
+      myType: "todo",
+      removeMode: false,
+      removeItems: [],
     };
   },
   mounted() {
@@ -148,18 +182,6 @@ export default {
     },
     clearInit(){
       this.clearItems = this.$store.state.gameSet.clear;
-      // let temp = [];
-      // for(const i in this.clearStoreItems){
-      //   console.log(this.clearStoreItems[i])
-
-      // }
-      // if(this.clearStoreItems !== undefined){
-      //   for (let i = 0; i < this.clearStoreItems.length; i++) {
-      //     // this.clearStoreItems[i].imageSrc = require(`../../assets/img/${this.clearStoreItems[i].category}/${this.clearStoreItems[i].src}`);
-      //     // temp.push(this.clearStoreItems[i]);
-      //   }
-      // }
-      // this.clearItems = temp;
     },
     setMyType(e, type) {
       if (e.type === "tap" || e.type === "pressup" || e.type === "panstart") {
@@ -167,7 +189,7 @@ export default {
       }
     },
     goPage(e, item) {
-      if (e.type === "tap" || e.type === "pressup") {
+      if (e.type === "tap" || e.type === "panstart") {
         let params = {
           gameType: item.gameType,
           category: item.category,
@@ -177,6 +199,24 @@ export default {
           level: item.level,
         };
         this.$emit("push-page", { ...gamePage, onsNavigatorProps: params });
+      }
+    },
+    doRemove(e, i) {
+      if (e.type === "tap" || e.type === "press") {
+        this.removeItems = [];
+        this.$store.state.gameSet.removeMode = true;
+        this.removeItems.push(i)
+      }
+    },
+    setRemoveItem(e, i){
+      if (e.type === "tap" || e.type === "panstart") {
+        let index = this.removeItems.indexOf(i);
+        if(index === -1){
+          this.removeItems.push(i)
+        } else {
+          this.removeItems.splice(index, 1)
+        }
+        this.$store.commit('gameSet/setRemoveItems', this.removeItems);
       }
     }
   }

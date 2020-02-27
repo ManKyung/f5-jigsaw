@@ -132,6 +132,7 @@
   
 </style>
 <script>
+import { showRewardVideo } from "@/assets/js/admob.js";
 import draggable from "@/assets/js/vuedraggable";
 import { dragscroll } from 'vue-dragscroll'
 export default {
@@ -175,6 +176,12 @@ export default {
         return true;
       }
     },
+    isSwap: {
+      type: Boolean,
+      default: () => {
+        return true;
+      }
+    },
     background: {
       type: String,
       default: 'default',
@@ -184,7 +191,6 @@ export default {
       default: '#000',
     }
   },
-  // props: ["category", "id", "src", "pCount"],
   name: "jigsaw-play",
   components: {
     draggable,
@@ -211,6 +217,7 @@ export default {
       isClearOn: false,
       isClearImage: false,
       prevNumber: [],
+      length: 0,
     };
   },
   created() {
@@ -227,16 +234,33 @@ export default {
     setTimeout(() => {
       this.setUI();
     }, 300);
+    document.addEventListener(
+      "admob.rewardvideo.events.REWARD",
+      this.getReward
+    );
+  },
+  destroyed() {
+    document.removeEventListener(
+      "admob.rewardvideo.events.REWARD",
+      this.getReward
+    );
   },
   watch: {
-    isHint(){
-      let len = this.realBoardItems.length;
-      for(let i = 0 ; i < len ; i++){
-        if(this.realBoardItems[i] !== 0 && i !== this.realBoardItems[i].id) {
-          this.pieceItems.unshift(this.realBoardItems[i]);
-          this.$set(this.realBoardItems, i, 0)
+    isSwap(){
+      this.$ons.notification.confirm(`Clean up puzzle pieces that don't fit`, { title: "" }).then((response) => {
+        if (response) {
+          for(let i = 0 ; i < this.length ; i++){
+            if(this.realBoardItems[i] !== 0 && i !== this.realBoardItems[i].id) {
+              this.pieceItems.unshift(this.realBoardItems[i]);
+              this.$set(this.realBoardItems, i, 0)
+            }
+          }
         }
-      }
+      });
+    },
+    isHint(){
+      showRewardVideo();
+      // this.getReward();
     },
     background(value){
       this.setBackground(value)
@@ -246,6 +270,15 @@ export default {
     }
   },
   methods: {
+    getReward(){
+      for(let i = 0 ; i < this.pieceItems.length / 2 ; i++){
+        this.$set(this.realBoardItems, this.pieceItems[i].id, this.pieceItems[i]);
+        this.pieceItems.splice(i, 1)
+      }
+      setTimeout(() => {
+        this.getPercent();
+      }, 100)
+    },
     panStart(e){
       if(e.additionalEvent === 'panup') {
         this.isDragScroll = false;
@@ -285,9 +318,21 @@ export default {
         }, 400)
       }
     },
+    getPercent(){
+      let count = 0;
+      for(let i = 0 ; i < this.length ; i++){
+        if(i === this.realBoardItems[i].id) {
+          count++;
+        }
+      }
+
+      let percent = count * 100 / this.length;
+      this.$emit('setPercent', percent)
+    },
     isClear(){
-      let len = this.realBoardItems.length;
-      for(let i = 0 ; i < len ; i++){
+      this.getPercent();
+
+      for(let i = 0 ; i < this.length ; i++){
         if(i !== this.realBoardItems[i].id) {
           return false;
         }
@@ -388,6 +433,7 @@ export default {
         this.realBoardItems.push(0);
         this.boardItems.push(0);
       }
+      this.length = this.realBoardItems.length;
     },
     setPieceItem() {
       let temp = [];

@@ -56,6 +56,7 @@
 }
 </style>
 <script>
+import { showRewardVideo } from "@/assets/js/admob.js";
 export default {
   props: {
     gameType: {
@@ -116,6 +117,7 @@ export default {
       modalClear: false,
       isClearOn: false,
       isClearImage: false,
+      length: 0
     };
   },
   created() {
@@ -126,19 +128,38 @@ export default {
   mounted() {
     setTimeout(() => {
       this.setBoard();
+      this.getPercent();
     }, 200);
     setTimeout(() => {
       this.setUI();
     }, 1000);
+    document.addEventListener(
+      "admob.rewardvideo.events.REWARD",
+      this.getReward
+    );
+  },
+  destroyed() {
+    console.log('destroy')
+    document.removeEventListener(
+      "admob.rewardvideo.events.REWARD",
+      this.getReward
+    );
   },
   watch: {
     isHint(){
-      let len = this.realBoardItems.length;
-
+      showRewardVideo();
+      // this.getReward();
+    },
+    background(value){
+      this.setBackground(value)
+    }
+  },
+  methods: {
+    getReward(){
       let correctTemp = [];
       let shuffleTemp = [];
-      for(let i = 0 ; i < len ; i++){
-        if(this.realBoardItems[i].id < len / 2){
+      for(let i = 0 ; i < this.length ; i++){
+        if(this.realBoardItems[i].id < this.length / 2){
           correctTemp[this.realBoardItems[i].id] = this.realBoardItems[i];
         } else {
           shuffleTemp.push(this.realBoardItems[i])
@@ -154,12 +175,8 @@ export default {
         }
         this.realBoardItems.push(shuffleTemp[i])
       }
+      this.getPercent();
     },
-    background(value){
-      this.setBackground(value)
-    }
-  },
-  methods: {
     setUI(){
       let gameContainer = this.$refs.gameContainer;
       let boardWrap = this.$refs.boardWrap;
@@ -179,10 +196,20 @@ export default {
         }, 400)
       }
     },
-    isClear(){
-      let len = this.realBoardItems.length;
+    getPercent(){
+      let count = 0;
+      for(let i = 0 ; i < this.length ; i++){
+        if(i === this.realBoardItems[i].id) {
+          count++;
+        }
+      }
 
-      for(let i = 0 ; i < len ; i++){
+      let percent = count * 100 / this.length;
+      this.$emit('setPercent', percent)
+    },
+    isClear(){
+      this.getPercent();
+      for(let i = 0 ; i < this.length ; i++){
         if(i !== this.realBoardItems[i].id) {
           return false;
         }
@@ -256,6 +283,7 @@ export default {
         }
       }
       this.realBoardItems = this.shuffle(temp);
+      this.length = this.realBoardItems.length;
     },
     shuffle(a) {
       for (let i = a.length - 1; i > 0; i--) {

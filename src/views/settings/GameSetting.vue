@@ -15,7 +15,7 @@
           <div v-if="type === 'jigsaw'" class="game-check">
             <v-ons-icon icon="ion-ios-checkmark-circle-outline"></v-ons-icon>
           </div>
-          <div class="pl-5 pt-10">Jigsaw</div>
+          <div class="pl-5 pt-12">Jigsaw</div>
         </v-ons-col>
         <v-ons-col
           class="ml-1 mr-2 my-1 gamesetting-item"
@@ -26,7 +26,7 @@
           <div v-if="type === 'switch'" class="game-check">
             <v-ons-icon icon="ion-ios-checkmark-circle-outline"></v-ons-icon>
           </div>
-          <div class="pl-5 pt-10">Switch</div>
+          <div class="pl-5 pt-12">Switch</div>
         </v-ons-col>
       </v-ons-row>
       <v-ons-row>
@@ -39,7 +39,7 @@
           <div v-if="type === 'slider'" class="game-check">
             <v-ons-icon icon="ion-ios-checkmark-circle-outline"></v-ons-icon>
           </div>
-          <div class="pl-5 pt-10">Slider</div>
+          <div class="pl-5 pt-12">Slider</div>
         </v-ons-col>
         <v-ons-col
           class="ml-1 mr-2 my-1 gamesetting-item"
@@ -50,9 +50,13 @@
           <div v-if="type === 'rotate'" class="game-check">
             <v-ons-icon icon="ion-ios-checkmark-circle-outline"></v-ons-icon>
           </div>
-          <div class="pl-5 pt-10">Rotate</div>
+          <div class="pl-5 pt-12">Rotate</div>
         </v-ons-col>
       </v-ons-row>
+      
+      <div class="px-2 pt-4">
+        <img :src="require(`../../assets/img/gameset/${type}.jpg`)" class="w-100" />
+      </div>
     </div>
   </v-ons-page>
 </template>
@@ -81,11 +85,8 @@ export default {
   name: "game-setting",
   data() {
     return {
-      type: "",
+      type: this.$store.state.gameSet.type,
     };
-  },
-  mounted() {
-    this.type = this.$store.state.gameSet.type;
   },
   methods: {
     setGameType(e, type) {

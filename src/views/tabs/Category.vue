@@ -10,7 +10,7 @@
         class="category-title"
       >
         <div class="left">
-          <img :src="items.data[0].imageSrc" class="list-item__thumbnail" />
+          <img :src="require(`../../assets/img/${category}/${items.data[0].src}`)" class="list-item__thumbnail" />
         </div>
         <div class="center">
           <span class="list-item__title">{{items.nameKR}}</span>
@@ -24,25 +24,18 @@
             >
               <v-ons-card class="game-wrap pa-0" style="margin: 4px">
                 <div class="card-inner">
-                  <div style="font-size:14px; padding:2px;">
+                  <div style="font-size:14px; padding:1px 2px 3px 2px;">
                     <v-ons-icon v-for="i in item.level" :key="i" class="level-star" icon="ion-ios-star"></v-ons-icon>
                   </div>
                 </div>
                 <img
-                  v-hammer:tap="(e)=> goPage(e, category, item.id, item.src)"
-                  v-hammer:press="(e)=> goPage(e, category, item.id, item.src)"
-                  v-hammer:pressup="(e)=> goPage(e, category, item.id, item.src)"
-                  :src="item.imageSrc"
+                  v-hammer:tap="(e)=> goPage(e, category, item.id, item.src, item.level)"
+                  v-hammer:press="(e)=> goPage(e, category, item.id, item.src, item.level)"
+                  v-hammer:pressup="(e)=> goPage(e, category, item.id, item.src, item.level)"
+                  :src="require(`../../assets/img/${category}/${item.src}`)"
                   class="game-img"
                 />
               </v-ons-card>
-              <!-- <img
-                class="game-img"
-                :src="data.imageSrc"
-                v-hammer:tap="(e)=> goPage(e, category, data.id, data.src)"
-                v-hammer:press="(e)=> goPage(e, category, data.id, data.src)"
-                v-hammer:pressup="(e)=> goPage(e, category, data.id, data.src)"
-              /> -->
             </v-ons-col>
           </v-ons-row>
         </div>
@@ -61,7 +54,6 @@
 }
 .category-title .list-item__title {
   align-self: center !important;
-  /* margin-top:3px; */
 }
 .list,
 .list-item--expandable {
@@ -70,34 +62,26 @@
 </style>
 
 <script>
-import stage from "@/assets/js/stage.js";
 import playOptionPage from "../PlayOption.vue";
 export default {
   name: "category",
   data() {
     return {
       cIndex: 0,
-      categories: stage,
+      categories: this.$store.state.gameSet.stage,
       isExpanded: false
     };
   },
-  created() {
-    for (const key in this.categories) {
-      let data = this.categories[key].data;
-      for (let i in data) {
-        data[i].imageSrc = require(`../../assets/img/${key}/${data[i].src}`);
-      }
-    }
-  },
   methods: {
-    goPage(e, category, id, src) {
+    goPage(e, category, id, src, level) {
       if (e.type === "tap" || e.type === "pressup") {
         this.$emit("push-page", {
           ...playOptionPage,
           onsNavigatorProps: {
             category: category,
             id: id,
-            src: src
+            src: src,
+            level: level
           }
         });
       }

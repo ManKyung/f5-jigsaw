@@ -103,9 +103,19 @@ export function removeBanner() {
     }, 100)
   }
 }
+export function prepareInterstitial() {
+  if (admob) {
+    admob.interstitial.prepare();
+  }
+}
 export function showInterstitial() {
   if (admob) {
     admob.interstitial.show();
+  }
+}
+export function prepareRewardVideo() {
+  if (admob) {
+    admob.rewardvideo.prepare();
   }
 }
 export function showRewardVideo() {

@@ -7,18 +7,18 @@
     <div class="pt-4">
       <v-ons-row>
         <v-ons-col
-          class="mx-2 my-1 background-item"
+          class="background-item"
           v-for="(item, index) in items"
           :key="index"
           v-hammer:tap="(e)=> setBackground(e, item.key, item.borderColor)"
         >
-          <div v-if="item.key === background" class="background-check">
+          <div v-if="item.key === background" class="background-check" >
             <v-ons-icon
               icon="ion-ios-checkmark-circle-outline"
-              :style="background === 'default' ? 'color:#000213' : 'color:white'"
+              class="fs-24 primary--text"
             ></v-ons-icon>
           </div>
-          <img class="w-100" style="height:130px;" :src="item.imageSrc" />
+          <img class="w-100" :style="`height:${height}px`" :src="item.imageSrc" />
         </v-ons-col>
       </v-ons-row>
     </div>
@@ -27,8 +27,8 @@
 
 <style>
 .background-item {
-  flex: 1 0 45%; /* explanation below */
-  height: 130px;
+  flex: 1 0 33%; /* explanation below */
+  padding: 1px;
 }
 .background-check {
   position: absolute;
@@ -44,60 +44,58 @@ export default {
     return {
       items: [
         {
-          key: "default",
+          key: "1",
           borderColor: "#000",
-          src: "default-border.jpg"
+          src: "1.jpg"
         },
         {
-          key: "brand",
+          key: "2",
+          borderColor: "#000",
+          src: "2.jpg"
+        },
+        {
+          key: "3",
+          borderColor: "#000",
+          src: "3.jpg"
+        },
+        {
+          key: "4",
+          borderColor: "#000",
+          src: "4.jpg"
+        },
+        {
+          key: "5",
           borderColor: "#fff",
-          src: "brand.jpg"
+          src: "5.jpg"
         },
         {
-          key: "black",
+          key: "6",
+          borderColor: "#000",
+          src: "6.jpg"
+        },
+        {
+          key: "7",
           borderColor: "#fff",
-          src: "black.jpg"
+          src: "7.jpg"
         },
         {
-          key: "grass",
-          borderColor: "#000",
-          src: "grass.jpg"
+          key: "8",
+          borderColor: "#fff",
+          src: "8.jpg"
         },
         {
-          key: "paper",
-          borderColor: "#000",
-          src: "paper.jpg"
-        },
-        {
-          key: "polygon",
-          borderColor: "#000",
-          src: "polygon.jpg"
-        },
-        {
-          key: "texttile",
-          borderColor: "#000",
-          src: "texttile.jpg"
-        },
-        {
-          key: "texture",
-          borderColor: "#000",
-          src: "texture.jpg"
-        },
-        {
-          key: "wall",
-          borderColor: "#000",
-          src: "wall.jpg"
-        },
-        {
-          key: "wood",
-          borderColor: "#000",
-          src: "wood.jpg"
+          key: "9",
+          borderColor: "#fff",
+          src: "9.jpg"
         }
       ],
-      background: ""
+      background: "",
+      height: 100
     };
   },
   created() {
+    this.height = document.body.clientWidth / 3
+
     for (let i = 0; i < this.items.length; i++) {
       this.items[i].imageSrc = require(`../../assets/img/background/${this.items[i].src}`);
     }

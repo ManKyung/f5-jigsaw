@@ -536,7 +536,7 @@ export default {
       {
         id: 3,
         src: "3.jpg",
-        level: 3
+        level: 5
       },
       {
         id: 4,

@@ -16,11 +16,15 @@
         </div>
       </div>
 
-      <div>
-        <img ref="preview" class="w-100" :src="imageSrc" />
+      <div class="preview-image-wrap" :class="clearCheck ? 'on' : ''">
+        <div v-if="clearCheck">
+          Clear
+        </div>
+        <img ref="preview" :style="clearCheck ? 'opacity:0.3' : ''" class="w-100" :src="require(`../assets/img/${this.category}/${this.src}`)" />
       </div>
       <carousel-3d
         @after-slide-change="setPieceCount"
+        @before-slide-change="sound"
         :animationSpeed="200"
         :space="100"
         :width="80"
@@ -33,15 +37,15 @@
       </carousel-3d>
 
       <v-ons-row class="text-center">
-        <v-ons-col class="pa-1" v-for="(item, index) in gameTypeItems" :key="index">
+        <v-ons-col class="pa-1" v-for="type in gameTypeItems" :key="type">
           <v-ons-button
-            v-hammer:tap="(e)=> setGameType(e, item.type)"
-            v-hammer:press="(e)=> setGameType(e, item.type)"
-            v-hammer:pressup="(e)=> setGameType(e, item.type)"
-            v-hammer:pan.start="(e)=> setGameType(e, item.type)"
+            v-hammer:tap="(e)=> setGameType(e, type)"
+            v-hammer:press="(e)=> setGameType(e, type)"
+            v-hammer:pressup="(e)=> setGameType(e, type)"
+            v-hammer:pan.start="(e)=> setGameType(e, type)"
             class="w-100 btn-type type-text"
-            :class="gameType === item.type ? 'on' : ''"
-          >{{item.type}}</v-ons-button>
+            :class="gameType === type ? 'on' : ''"
+          >{{type}}</v-ons-button>
         </v-ons-col>
       </v-ons-row>
 
@@ -56,8 +60,20 @@
   </v-ons-page>
 </template>
 <style>
-.back-button__icon {
-  fill: black !important;
+.preview-image-wrap{
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  font-size:24px;
+}
+.preview-image-wrap div{
+  position: absolute;
+}
+.preview-image-wrap.on{
+  background: #fb8c00;
+  opacity: 0.7;
 }
 .carousel-3d-slide.current {
   background-color: #fb8c00 !important;
@@ -102,10 +118,28 @@
 }
 </style>
 <script>
+import changeSound from "@/assets/mp3/change.mp3";
 import gamePage from "./play/Game.vue";
 import { Carousel3d, Slide } from "vue-carousel-3d";
 export default {
-  props: ["category", "id", "src", "level"],
+  props: {
+    level: {
+      type: Number,
+      default: 1
+    },
+    category: {
+      type: String,
+      default: "cats"
+    },
+    src: {
+      type: String,
+      default: "1.jpg"
+    },
+    id: {
+      type: Number,
+      default: 1
+    },
+  },
   name: "playOption",
   components: {
     Carousel3d,
@@ -121,31 +155,18 @@ export default {
       pWidth: 0,
       pHeight: 0,
       boardHeight: 0,
-      imageSrc: "",
       gameType: this.$store.state.gameSet.type,
       my: this.$store.state.gameSet.my,
-      gameTypeItems: [
-        {
-          type: "jigsaw"
-        },
-        {
-          type: "switch"
-        },
-        {
-          type: "slider"
-        },
-        {
-          type: "rotate"
-        }
-      ]
+      audio: new Audio(changeSound),
+      clear: this.$store.state.gameSet.clear,
+      clearCheck: false,
+      gameTypeItems: ['jigsaw', 'switch', 'slider', 'rotate']
     };
-  },
-  created() {
-    this.imageSrc = require(`../assets/img/${this.category}/${this.src}`);
   },
   mounted() {
     setTimeout(() => {
       this.setBoard();
+      this.isClear();
     }, 100);
   },
   watch: {
@@ -154,13 +175,38 @@ export default {
     }
   },
   methods: {
+    sound(){
+      this.audio.play();
+    },
     setGameType(e, value) {
       if(e.type === 'tap' || e.type === 'pressup' || e.type === 'pan'){
         this.gameType = value;
+        this.$store.commit("gameSet/setGameType", value);
+        this.isClear();
       }
     },
     setPieceCount(index) {
       this.pieceCount = index + 3;
+      this.isClear();
+    },
+    isClear(){
+      if(this.clear[this.category] === undefined){
+        this.clearCheck = false;
+        return false;
+      }
+      if(this.clear[this.category][this.id] === undefined){
+        this.clearCheck = false;
+        return false;
+      } else {
+        this.clearCheck = false;
+        let cnt = this.clear[this.category][this.id][this.gameType].filter(item => {
+          return item === this.pieceCount;
+        }).length;
+        if(cnt){
+          this.clearCheck = true;
+        }
+        return false;
+      }
     },
     goPage(e) {
       if(e.type === 'tap' || e.type === 'pressup'){
