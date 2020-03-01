@@ -71,7 +71,7 @@ export default new Vuex.Store({
           if(state.rewardCount === 2) {
             state.isShowAD = false;
             state.rewardCount = 0;
-            localStorage['isReward'] = (new Date()).getTime() + 86400000; // 1 day
+            localStorage['isReward'] = (new Date()).getTime() + 3600000; // 1 day
           }
         },
         // setting sound

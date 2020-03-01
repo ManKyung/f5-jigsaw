@@ -48,13 +48,7 @@
       </v-ons-modal>
     </div>
 </template>
-<style>
-.switch-piece.on {
-  -webkit-box-shadow: inset 0px 0px 0px 3px #6c5ce7 !important;
-  -moz-box-shadow: inset 0px 0px 0px 3px #6c5ce7 !important;
-  box-shadow: inset 0px 0px 0px 3px #6c5ce7 !important;
-}
-</style>
+
 <script>
 import { showRewardVideo } from "@/assets/js/admob.js";
 export default {
@@ -98,7 +92,13 @@ export default {
     background: {
       type: String,
       default: 'default',
-    }
+    },
+    isLight: {
+      type: Boolean,
+      default: () => {
+        return true;
+      }
+    },
   },
   name: "switch-play",
   data() {
@@ -139,13 +139,15 @@ export default {
     );
   },
   destroyed() {
-    console.log('destroy')
     document.removeEventListener(
       "admob.rewardvideo.events.REWARD",
       this.getReward
     );
   },
   watch: {
+    isLight(value){
+      this.getLight(value);
+    },
     isHint(){
       showRewardVideo();
       // this.getReward();
@@ -155,27 +157,70 @@ export default {
     }
   },
   methods: {
+    getLight(value){
+      for(let i = 0 ; i < this.length ; i++){
+        if(this.realBoardItems[i].id !== i){
+          let curDom = document.getElementById(`piece-${i}`);
+          if(value) {
+            curDom.classList.add('search')
+          } else {
+            curDom.classList.remove('search')
+          }
+        }
+      }
+    },
+    getCorrect(index){
+      for(const i in this.realBoardItems){
+        if(this.realBoardItems[i].id === index){
+          return this.realBoardItems[i];
+        }
+      }
+      return false;
+    },
     getReward(){
+      if(this.isLight){
+        this.getLight(false);
+        this.$emit('isUpdateLight', false)
+      }
+
+      let i = 0;
       let correctTemp = [];
       let shuffleTemp = [];
+      let restCount = this.realBoardItems.filter(item => {
+        return item.id !== i++;
+      }).length;
+
+      let cnt = 0;
+      let flag = true;
+      let orderShuffle = [];
       for(let i = 0 ; i < this.length ; i++){
-        if(this.realBoardItems[i].id < this.length / 2){
-          correctTemp[this.realBoardItems[i].id] = this.realBoardItems[i];
-        } else {
-          shuffleTemp.push(this.realBoardItems[i])
+        if(flag && this.realBoardItems[i].id !== i) {
+          correctTemp.push(this.getCorrect(i));
+          cnt++;
+          flag = cnt === Math.ceil(restCount / 2) ? false : true;
+        } else if(!flag && this.realBoardItems[i].id !== i){
+          let d = this.getCorrect(i);
+          orderShuffle.push(d.id)
+          shuffleTemp.push(d);
         }
       }
-      this.realBoardItems = [];
+
+      let tempItems = [];
+
       for(let i = 0 ; i < correctTemp.length ; i++){
-        this.realBoardItems.push(correctTemp[i])
+        tempItems[correctTemp[i].id] = correctTemp[i];
       }
-      for(let i = 0 ; i < shuffleTemp.length ; i++){
-        if(shuffleTemp[i] && shuffleTemp[i].id === undefined){
-          this.emptyIndex = correctTemp.length + i
+      for(const i in orderShuffle){
+        tempItems[orderShuffle[i]] = shuffleTemp[shuffleTemp.length - 1 - i];
+      }
+      for(const i in tempItems){
+        if(tempItems[i] !== undefined){
+          this.$set(this.realBoardItems, i, tempItems[i])
         }
-        this.realBoardItems.push(shuffleTemp[i])
       }
+
       this.getPercent();
+      this.isClear();
     },
     setUI(){
       let gameContainer = this.$refs.gameContainer;
@@ -192,7 +237,7 @@ export default {
         }, 100)
         setTimeout(() => {
           this.modalClear = false;
-          this.$emit('goMainPage');
+          this.$emit('goPopPage');
         }, 400)
       }
     },
@@ -225,9 +270,20 @@ export default {
       };
       this.$store.dispatch("gameSet/setGameClear", params);
 
+      this.isClearImage = true;
+      setTimeout(() => {
+        this.modalClear = true;
+      }, 1000)
+      setTimeout(() => {
+        this.isClearOn = true;
+      }, 1300)
       return true;
     },
     changePiece(e, i) {
+      if(this.isLight){
+        this.getLight(false);
+        this.$emit('isUpdateLight', false)
+      }
       let curDom = document.getElementById(`piece-${i}`);
       if (this.selectedIndex === i) {
         curDom.classList.remove("on");
@@ -250,15 +306,7 @@ export default {
         curDom.classList.remove("on");
         selecDom.classList.remove("on");
           
-        if(this.isClear()) {
-          this.isClearImage = true;
-          setTimeout(() => {
-            this.modalClear = true;
-          }, 1000)
-          setTimeout(() => {
-            this.isClearOn = true;
-          }, 1300)
-        }
+        this.isClear();
       }
     },
     setBoard() {

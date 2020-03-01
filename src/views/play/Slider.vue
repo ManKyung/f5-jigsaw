@@ -17,11 +17,12 @@
       <div id="board-real" :style="`max-height:${boardHeight}px; overflow:hidden;`">
         <div
           v-for="(item, index) in realBoardItems"
-          class="board-item"
+          class="board-item slider-piece"
           :key="index"
           :style="`${item.style}; transition: all 0.08s; position:absolute;`"
           :data-id="`${index}`"
           v-hammer:pan.start="(event)=> sliderPiece(event, item)"
+          :id="`piece-${index}`" 
         >
         </div>
       </div>
@@ -102,7 +103,13 @@ export default {
     background: {
       type: String,
       default: 'default',
-    }
+    },
+    isLight: {
+      type: Boolean,
+      default: () => {
+        return true;
+      }
+    },
   },
   name: "slider-play",
   data() {
@@ -148,6 +155,9 @@ export default {
     );
   },
   watch: {
+    isLight(value){
+      this.getLight(value);
+    },
     isHint(){
       showRewardVideo();
       // this.getReward();
@@ -157,7 +167,23 @@ export default {
     }
   },
   methods: {
+    getLight(value){
+      for(let i = 0 ; i < this.length ; i++){
+        if(this.realBoardItems[i].id !== undefined && i !== this.realBoardItems[i].id && i !== this.emptyIndex) {
+          let curDom = document.querySelectorAll(`[data-id="${i}"]`)
+          if(value) {
+            curDom[0].classList.add('search')
+          } else {
+            curDom[0].classList.remove('search')
+          }
+        }
+      }
+    },
     getReward(){
+      if(this.isLight){
+        this.getLight(false);
+        this.$emit('isUpdateLight', false)
+      }
       this.realBoardItems = [];
       setTimeout(() => {
         this.setBoard(false);
@@ -179,7 +205,7 @@ export default {
         }, 100)
         setTimeout(() => {
           this.modalClear = false;
-          this.$emit('goMainPage');
+          this.$emit('goPopPage');
         }, 400)
       }
     },
@@ -243,6 +269,10 @@ export default {
       this.$emit('setPercent', percent)
     },
     sliderPiece(e, item) {
+      if(this.isLight){
+        this.getLight(false);
+        this.$emit('isUpdateLight', false)
+      }
       let i = Number(e.target.getAttribute('data-id'));
       let nearIndex = this.getNearIndex(i);
       if(e.additionalEvent === undefined || this.emptyIndex === i){

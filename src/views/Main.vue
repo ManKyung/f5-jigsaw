@@ -6,10 +6,10 @@
         <v-ons-button modifier="quiet" v-if="title === 'My' && this.$store.state.gameSet.removeMode" @click="setRemoveMode">
           <v-ons-icon icon="ion-ios-undo" style="color:black; font-size:28px"></v-ons-icon>
         </v-ons-button>
-        <v-ons-button modifier="quiet" v-if="title === 'My' && this.$store.state.gameSet.removeMode" @click="doRemove">
+        <v-ons-button modifier="quiet" v-if="title === 'My' && this.$store.state.gameSet.removeMode" @click="doRemove" class="mr-2">
           <v-ons-icon icon="ion-ios-trash" style="color:black; font-size:28px"></v-ons-icon>
         </v-ons-button>
-        <v-ons-button modifier="quiet" v-if="title === 'My' && !this.$store.state.gameSet.removeMode" @click="goPage">
+        <v-ons-button modifier="quiet" v-if="title === 'My' && !this.$store.state.gameSet.removeMode" @click="goPage" class="mr-2">
           <v-ons-icon icon="ion-ios-settings" style="color:black; font-size:28px"></v-ons-icon>
         </v-ons-button>
       </div>
@@ -76,8 +76,8 @@ export default {
       tabs: [
         {
           icon: "ion-ios-home",
-          page: homePage,
           title: "Daily Puzzle",
+          page: homePage,
           key: "homePage"
         },
         {

@@ -218,7 +218,7 @@ export default {
           window.plugins.socialsharing.share(
             "F5 Puzzle Games(Free)",
             "Jigsaw, Switch, Slider, Rotate",
-            "https://f5game.co.kr/img/f5-jigsaw.d15fc2e8.jpg",
+            "https://f5game.co.kr/img/f5-jigsaw.348f3276.jpg",
             "https://play.google.com/store/apps/details?id=com.f5game.jigsaw"
           );
         } else if (page === "gameSetting") {
@@ -227,11 +227,17 @@ export default {
             onsNavigatorProps: {}
           });
         } else if (page === "removeAd") {
-          this.$ons.notification.confirm(`If you watch an ad twice,<br/> you won't see banner AD it for a day<br/> (${this.$store.state.gameSet.rewardCount}/2)`, { title: "" }).then((response) => {
-            if (response) {
-              showRewardVideo()
-            }
-          });
+          if(!this.$store.state.gameSet.isShowAD) {
+            let d = new Date(Number(localStorage['isReward']) - 3600000);
+            this.$ons.notification.alert(`You have already watched the ad.<br/> ${d}`, {title: ''})
+          } else {
+            this.$ons.notification.confirm(`If you watch an ad twice,<br/> you won't see banner AD it for a hour<br/> (${this.$store.state.gameSet.rewardCount}/2)`, { title: "" }).then((response) => {
+              if (response) {
+                showRewardVideo()
+                // this.getReward()
+              }
+            });
+          }
         } else if (page === "about") {
           location.href = "https://f5game.co.kr/home";
         } else if (page === "privacy") {

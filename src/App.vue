@@ -6,6 +6,7 @@
       :page-stack="pageStack"
       @push-page="pushStack"
       @pop-page="popStack"
+      @main-page="mainStack"
       @deviceBackButton="deviceBack"
       v-hammer:tap="init"
     ></v-ons-navigator>
@@ -15,17 +16,17 @@
         <v-ons-card>
           <div class="black--text">Would you please leave a review<br/>before you exit?</div>
           <div class="pt-8 px-4">
-            <v-ons-button modifier="quiet" class="text-center" 
+            <v-ons-button modifier="quiet" class="text-center fo" 
             v-hammer:tap="(e)=> goClose(e, 'cancel')"
             v-hammer:press="(e)=> goClose(e, 'cancel')"
             v-hammer:pressup="(e)=> goClose(e, 'cancel')"
             v-hammer:pan.start="(e)=> goClose(e, 'cancel')">Cancel</v-ons-button>
-            <v-ons-button class="text-center"
+            <v-ons-button class="text-center fo"
             v-hammer:tap="(e)=> goClose(e, 'No')"
             v-hammer:press="(e)=> goClose(e, 'No')"
             v-hammer:pressup="(e)=> goClose(e, 'No')"
             v-hammer:pan.start="(e)=> goClose(e, 'No')">No, Thanks</v-ons-button>
-            <v-ons-button class="text-center"
+            <v-ons-button class="text-center fo"
             v-hammer:tap="(e)=> goClose(e, 'OK')"
             v-hammer:press="(e)=> goClose(e, 'OK')"
             v-hammer:pressup="(e)=> goClose(e, 'OK')"
@@ -38,16 +39,6 @@
 </template>
 
 <script>
-// import clearTestPage from "@/views/clearTest";
-// import backgroundPage from "@/views/settings/Background";
-// import settingPage from "@/views/Setting";
-// import jigsawPage from "@/views/play/Jigsaw";
-// import gamePage from "@/views/play/Game";
-// import playOption from "@/views/PlayOption";
-// import rotationPage from "@/views/play/Rotation";
-// import switchPage from "@/views/play/Switch";
-// import clearPage from "@/views/play/Clear";
-// import sliderPage from "@/views/play/Slider";
 import MainPage from "@/views/Main";
 import { initAd, removeBanner } from "@/assets/js/admob.js";
 export default {
@@ -91,11 +82,9 @@ export default {
         } else if(title === "No") {
           navigator.app.exitApp();
         } else if(title === "OK") {
-          location.href =
-            "https://play.google.com/store/apps/details?id=com.f5game.jigsaw";
+          location.href = "https://play.google.com/store/apps/details?id=com.f5game.jigsaw";
         }
       }
-
     },
     init(){
       if(this.$store.state.gameSet.isSound){
@@ -108,7 +97,11 @@ export default {
     pushStack(e){
       this.pageStack.push(e)
     },
-    popStack(){
+    popStack(e){
+      this.pageStack.pop();
+      removeBanner();
+    },
+    mainStack(){
       this.pageStack = [MainPage];
       removeBanner();
     },

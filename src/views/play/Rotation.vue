@@ -23,7 +23,7 @@
             v-hammer:tap="(event)=> transPiece(event, index)"
             v-hammer:pan="(event)=> transPiece(event, index)"
           >
-            <div v-if="item.style" :style="item.style"></div>
+            <div v-if="item.style" class="rotate-piece" :id="`piece-${index}`" :style="item.style"></div>
           </div>
         </div>
       </div>
@@ -103,7 +103,13 @@ export default {
     background: {
       type: String,
       default: 'default',
-    }
+    },
+    isLight: {
+      type: Boolean,
+      default: () => {
+        return true;
+      }
+    },
   },
   name: "rotation-play",
   data() {
@@ -148,6 +154,9 @@ export default {
     );
   },
   watch: {
+    isLight(value){
+      this.getLight(value);
+    },
     isHint(){
       showRewardVideo();
       // this.getReward();
@@ -157,11 +166,43 @@ export default {
     }
   },
   methods: {
-    getReward(){
-      let len = this.realBoardItems.length / 2;
-      for(let i = 0 ; i < len ; i++){
-        this.realBoardItems[i].style = `${this.realBoardItems[i].style}; transform:rotate(0deg);`;
+    getLight(value){
+      for(let i = 0 ; i < this.length ; i++){
+        if(this.realBoardItems[i].angle !== 0){
+          let curDom = document.getElementById(`piece-${i}`);
+          if(value) {
+            curDom.classList.add('search')
+          } else {
+            curDom.classList.remove('search')
+          }
+        }
       }
+    },
+    getReward(){
+      if(this.isLight){
+        this.getLight(false);
+        this.$emit('isUpdateLight', false)
+      }
+      // 남아있는 절반의 조각을 맞춰준다
+      let restCount = this.realBoardItems.filter(item => {
+        return item.angle !== 0
+      }).length;
+
+      let cnt = 0;
+
+      for(let i = 0 ; i < this.length ; i++){
+        if(this.realBoardItems[i].angle !== 0){
+          this.realBoardItems[i].style = `${this.realBoardItems[i].style}; transform:rotate(0deg);`;
+          this.realBoardItems[i].angle = 0;
+          cnt++;
+        }
+        if(cnt === Math.ceil(restCount / 2)) {
+          break;
+        }
+      }
+
+      this.getPercent();
+      this.isClear();
     },
     setUI(){
       let gameContainer = this.$refs.gameContainer;
@@ -178,7 +219,7 @@ export default {
         }, 100)
         setTimeout(() => {
           this.modalClear = false;
-          this.$emit('goMainPage');
+          this.$emit('goPopPage');
         }, 400)
       }
     },
@@ -200,6 +241,14 @@ export default {
       };
       this.$store.dispatch("gameSet/setGameClear", params);
 
+      this.isClearImage = true;
+      setTimeout(() => {
+        this.modalClear = true;
+      }, 1000)
+      setTimeout(() => {
+        this.isClearOn = true;
+      }, 1300)
+
       return true;
     },
     getPercent(){
@@ -211,20 +260,16 @@ export default {
       this.$emit('setPercent', percent)
     },
     transPiece(e, i){
+      if(this.isLight){
+        this.getLight(false);
+        this.$emit('isUpdateLight', false)
+      }
       let angle = this.realBoardItems[i].angle + 90;
       angle = angle / 360 === 1 ? 0 : angle;
       this.realBoardItems[i].angle = angle;
       this.realBoardItems[i].style = `${this.realBoardItems[i].style}; transform:rotate(${angle}deg);`;
 
-      if(this.isClear()) {
-        this.isClearImage = true;
-        setTimeout(() => {
-          this.modalClear = true;
-        }, 1000)
-        setTimeout(() => {
-          this.isClearOn = true;
-        }, 1300)
-      }
+      this.isClear();
     },
     setBoard() {
       this.previewImage = this.$refs.preview;

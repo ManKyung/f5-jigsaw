@@ -16,6 +16,15 @@
           <v-ons-icon icon="ion-ios-swap"></v-ons-icon>
         </v-ons-button>
         <v-ons-button
+          v-if="gameType !== 'jigsaw'"
+          modifier="quiet"
+          :style="isLight ? 'color:#6c5ce7' : 'color:#111'"
+          @click="isLight = !isLight"
+        >
+          <v-ons-icon icon="ion-ios-search"></v-ons-icon>
+        </v-ons-button>
+        
+        <v-ons-button
           modifier="quiet"
           style="color:#111"
           @click="isHint = !isHint"
@@ -30,12 +39,19 @@
           <v-ons-icon icon="ion-ios-albums"></v-ons-icon>
         </v-ons-button>
         <v-ons-button
-          class="mr-2"
           modifier="quiet"
           :style="isVisiblePreview ? 'color:#6c5ce7' : 'color:#111'"
           @click="isVisiblePreview = !isVisiblePreview"
         >
           <v-ons-icon icon="ion-ios-image"></v-ons-icon>
+        </v-ons-button>
+        <v-ons-button
+          class="mr-2"
+          modifier="quiet"
+          style="color:#111"
+          @click="goSettingPage"
+        >
+          <v-ons-icon icon="ion-ios-settings"></v-ons-icon>
         </v-ons-button>
       </div>
     </v-ons-toolbar>
@@ -50,10 +66,12 @@
     :isVisiblePreview="isVisiblePreview"
     :isHint="isHint"
     :isSwap="isSwap"
+    :isLight="isLight"
     :background="this.$store.state.gameSet.background"
     :backgroundBorder="this.$store.state.gameSet.backgroundBorder"
-    @goMainPage="goMainPage"    
+    @goPopPage="goPopPage"    
     @setPercent="setPercent"    
+    @isUpdateLight="isUpdateLight"    
     ></component>
     
   </v-ons-page>
@@ -74,6 +92,9 @@
 .game-button ons-button {
   font-size:3vh !important;
 }
+.game-button {
+  max-width: none;
+}
 .ad-badge {
   position: absolute;
   font-size: 14px;
@@ -90,6 +111,7 @@ import sliderPage from '@/views/play/Slider.vue'
 import switchPage from '@/views/play/Switch.vue'
 import rotationPage from '@/views/play/Rotation.vue'
 import backgroundPage from '@/views/settings/Background'
+import settingPage from '@/views/Setting'
 import { showBanner, removeBanner } from "@/assets/js/admob.js";
 export default {
   name: "play",
@@ -122,8 +144,9 @@ export default {
   data() {
     return {
       isVisiblePreview: true,
-      isHint: true,
-      isSwap: true,
+      isHint: false,
+      isSwap: false,
+      isLight: false,
       percentWidth: 0,
       totalWidth: 0
     };
@@ -159,11 +182,17 @@ export default {
     clickRemoveBanner(){
       removeBanner();
     },
-    goMainPage(){
+    isUpdateLight(value){
+      this.isLight = value;
+    },
+    goPopPage(){
       this.$emit('pop-page');
     },
     goBackgroundPage(){
       this.$emit("push-page", { ...backgroundPage });
+    },
+    goSettingPage(){
+      this.$emit("push-page", { ...settingPage });
     },
     setPercent(value){
       if(this.totalWidth === 0){

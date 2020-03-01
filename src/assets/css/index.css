@@ -13,7 +13,7 @@ reverse color : #fb8c00
 }
 
 .fo {
-  font-family: baemin;
+  font-family: baemin !important;
 }
 
 img {
@@ -2674,7 +2674,6 @@ html {
   caret-color: transparent !important;
 }
 
-
 .text-left {
   text-align: left !important;
 }
@@ -4219,6 +4218,9 @@ html {
 .alert-dialog-content{
   padding: 12px !important;
 }
+.alert-dialog-button{
+  font-family: baemin !important;
+}
 .alert-dialog-button--rowfooter:first-child{
   color: #777;
 }
@@ -4249,4 +4251,15 @@ html {
   bottom: 50%;
   transition: 0.3s;
   transition-timing-function: cubic-bezier(0,1.95,.84,.95);
+}
+
+.switch-piece.on {
+  -webkit-box-shadow: inset 0px 0px 0px 3px #6c5ce7 !important;
+  -moz-box-shadow: inset 0px 0px 0px 3px #6c5ce7 !important;
+  box-shadow: inset 0px 0px 0px 3px #6c5ce7 !important;
+}
+.switch-piece.search, .rotate-piece.search, .slider-piece.search {
+  -webkit-box-shadow: inset 0px 0px 0px 2px #fb8c00 !important;
+  -moz-box-shadow: inset 0px 0px 0px 2px #fb8c00 !important;
+  box-shadow: inset 0px 0px 0px 2px #fb8c00 !important;
 }

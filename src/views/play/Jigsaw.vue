@@ -123,7 +123,9 @@
   border-radius: 10px;
   /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); */ 
 }
-
+#board-piece .piece-item {
+  padding:30px 20px 10px 20px; 
+}
 /* @media (min-width: 320px) and (max-width: 480px) {
   #board-piece .piece-item {
     transform: scale(0.6);
@@ -249,12 +251,7 @@ export default {
     isSwap(){
       this.$ons.notification.confirm(`Clean up puzzle pieces that don't fit`, { title: "" }).then((response) => {
         if (response) {
-          for(let i = 0 ; i < this.length ; i++){
-            if(this.realBoardItems[i] !== 0 && i !== this.realBoardItems[i].id) {
-              this.pieceItems.unshift(this.realBoardItems[i]);
-              this.$set(this.realBoardItems, i, 0)
-            }
-          }
+          this.getSwap();
         }
       });
     },
@@ -270,13 +267,22 @@ export default {
     }
   },
   methods: {
+    getSwap(){
+      for(let i = 0 ; i < this.length ; i++){
+        if(this.realBoardItems[i] !== 0 && i !== this.realBoardItems[i].id) {
+          this.pieceItems.unshift(this.realBoardItems[i]);
+          this.$set(this.realBoardItems, i, 0)
+        }
+      }
+    },
     getReward(){
+      this.getSwap();
       for(let i = 0 ; i < this.pieceItems.length / 2 ; i++){
         this.$set(this.realBoardItems, this.pieceItems[i].id, this.pieceItems[i]);
         this.pieceItems.splice(i, 1)
       }
       setTimeout(() => {
-        this.getPercent();
+        this.isClear();
       }, 100)
     },
     panStart(e){
@@ -314,7 +320,7 @@ export default {
         }, 100)
         setTimeout(() => {
           this.modalClear = false;
-          this.$emit('goMainPage');
+          this.$emit('goPopPage');
         }, 400)
       }
     },
