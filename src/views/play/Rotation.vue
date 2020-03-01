@@ -269,6 +269,10 @@ export default {
       this.realBoardItems[i].angle = angle;
       this.realBoardItems[i].style = `${this.realBoardItems[i].style}; transform:rotate(${angle}deg);`;
 
+      if(angle === 0){ 
+        this.$store.commit('gameSet/setSuccessSound');
+      }
+
       this.isClear();
     },
     setBoard() {

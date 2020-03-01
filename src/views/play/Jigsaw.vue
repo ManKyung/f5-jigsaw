@@ -22,6 +22,7 @@
           group="board"
           :list="boardItems"
           @add="boardAdd"
+          @start="boardStart"
           @choose="boardChoose"
           @update="boardUpdate"
           :move="boardMove"
@@ -32,7 +33,8 @@
             :key="index"
             :id="`board-${index}`"
             class="board-item"
-            :style="`width: ${pWidth}px; height:${pHeight}px;`"
+            :class="item.success === 'Y' ? 'success' : ''"
+            :style="`width: ${pWidth}px; height:${pHeight}px; `"
           >
             <div v-if="item.style" :style="item.style"></div>
           </div>
@@ -212,6 +214,7 @@ export default {
       boardHeight: 0,
       isBoardAdd: false,
       paddingTop: 0,
+      isMoveStart: false,
 
       backgroundImage: '',
       backgroundBorderColor: '',
@@ -363,6 +366,12 @@ export default {
       }, 1300)
     },
     boardChoose(e) {
+      this.isMoveStart = false;
+      if(this.realBoardItems[e.oldIndex].success === 'Y'){
+        this.selectedPiece = -1;
+        this.isBoardMove = false;
+        return false;
+      }
       if (this.realBoardItems[e.oldIndex] === 0) {
         this.isBoardMove = false;
         return false;
@@ -370,11 +379,18 @@ export default {
       this.isBoardMove = true;
       let dom = document.getElementById(`board-${e.oldIndex}`);
 
-      dom.classList.add("on");
       dom.style.opacity = "1";
       if (dom.children[0] !== undefined) {
         dom.children[0].style.opacity = "0.5";
       }
+      setTimeout(() => {
+        if(!this.isMoveStart){
+          dom.style.opacity = "0";
+          if (dom.children[0] !== undefined) {
+            dom.children[0].style.opacity = "0";
+          }
+        }
+      }, 500)
 
       this.selectedPiece = this.realBoardItems[e.oldIndex];
     },
@@ -385,13 +401,26 @@ export default {
         this.boardItems = this.objClone(this.realBoardItems);
         this.isBoardAdd = true;
         this.isClear();
+
+        if(e.newIndex === this.boardItems[e.newIndex].id){
+          this.$store.commit('gameSet/setSuccessSound');
+          this.boardItems[e.newIndex].success = 'Y';
+        }
       }
     },
     boardUpdate(e) {
-      if (this.realBoardItems[e.newIndex] === 0) {
+      if(this.realBoardItems[e.newIndex].success === 'Y'){
+        let dom = document.getElementById(`board-${e.oldIndex}`);
+        dom.style.opacity = "0";
+        if (dom.children[0] !== undefined) {
+          dom.children[0].style.opacity = "0.5";
+        }
+        this.boardItems = this.objClone(this.realBoardItems);
+        return false;
+      } else if (this.realBoardItems[e.newIndex] === 0) { // 처음 들어오는 경우
         this.$set(this.realBoardItems, e.newIndex, this.selectedPiece);
         this.$set(this.realBoardItems, e.oldIndex, 0);
-      } else {
+      } else if(this.realBoardItems[e.newIndex].success === 'N'){
         let temp = this.realBoardItems[e.oldIndex]; 
         this.$set(this.realBoardItems, e.oldIndex, this.realBoardItems[e.newIndex]);
         this.$set(this.realBoardItems, e.newIndex, temp);
@@ -403,15 +432,23 @@ export default {
         dom.children[0].style.opacity = "0.5";
       }
       this.boardItems = this.objClone(this.realBoardItems);
+      
+      if(e.newIndex === this.boardItems[e.newIndex].id){
+        this.$store.commit('gameSet/setSuccessSound');
+        this.boardItems[e.newIndex].success = 'Y';
+        this.realBoardItems[e.newIndex].success = 'Y';
+      }
       this.isClear();
     },
     boardMove(e) {
-      if (!this.isBoardMove) {
+      if (!this.isBoardMove || this.selectedPiece === -1) {
         return false;
       }
     },
+    boardStart(e){
+      this.isMoveStart = true;
+    },
     pieceChoose(e) {
-      e.item.children[0].classList.add("on");
       this.selectedPiece = this.pieceItems[e.oldIndex];
     },
     pieceAdd(e) {
@@ -447,6 +484,7 @@ export default {
         for (let j = 0; j < this.pieceCount; j++) {
           let item = {};
           item.id = i * this.pieceCount + j;
+          item.success = 'N';
           item.class = "piece-item";
           item.style = this.setStyle(i, j, item.id);
 

@@ -302,10 +302,14 @@ export default {
         );
         this.$set(this.realBoardItems, i, temp);
 
+        if(this.realBoardItems[i].id === i || this.realBoardItems[this.selectedIndex].id === this.selectedIndex){
+          this.$store.commit('gameSet/setSuccessSound');
+        }
+
         this.selectedIndex = -1;
         curDom.classList.remove("on");
         selecDom.classList.remove("on");
-          
+
         this.isClear();
       }
     },

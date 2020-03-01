@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import stage from "@/assets/js/stage.js";
 import bgMusic from "@/assets/mp3/background.mp3";
 import clickSound from "@/assets/mp3/click.mp3";
+import success from "@/assets/mp3/success.mp3";
 
 Vue.use(Vuex)
 
@@ -23,6 +24,7 @@ export default new Vuex.Store({
         removeItems: [],
         bgMusic: new Audio(bgMusic),
         clickSound: new Audio(clickSound),
+        successSound: new Audio(success),
         isSound: true,
         isBackgroundMusic: true,
       },
@@ -80,6 +82,10 @@ export default new Vuex.Store({
           if(value) {
             state.clickSound.play();
           }
+        },
+        // setting success sound
+        setSuccessSound(state) {
+          state.successSound.play();
         },
         // setting background music
         setBackgroundMusic(state, value) {
